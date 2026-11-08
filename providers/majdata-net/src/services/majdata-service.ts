@@ -20,7 +20,7 @@ import {
 
 const resourceLoads = createInflightGuard<string>();
 const songLoads = createBoundedLoadQueue(4);
-const requestKey = (key: string) => `${resourceWriteGeneration('majdata-net')}:${key}`;
+const requestKey = (key: string) => `${resourceWriteGeneration('majdata-net')}:${resourceWriteGeneration('provider.majdata-net')}:${key}`;
 const repository = new SqliteSnapshotRepository();
 const songRequests = new Map<string, number>();
 const accountRequests = new Map<string, number>();
@@ -35,7 +35,8 @@ async function requestMajdataSong(id: string, signal: AbortSignal, foregroundSig
     const cancel = () => controller.abort(signal.aborted ? signal.reason : foregroundSignal.reason);
     signal.addEventListener('abort', cancel, { once: true });
     foregroundSignal.addEventListener('abort', cancel, { once: true });
-    const unsubscribe = subscribeResourceWrites('majdata-net', () => controller.abort(new Error('缓存请求已失效')));
+    const subscriptions = ['majdata-net', 'provider.majdata-net'].map(scope =>
+      subscribeResourceWrites(scope, () => controller.abort(new Error('缓存请求已失效'))));
     try {
       if (signal.aborted || foregroundSignal.aborted) cancel();
       if (controller.signal.aborted) throw controller.signal.reason;
@@ -46,7 +47,7 @@ async function requestMajdataSong(id: string, signal: AbortSignal, foregroundSig
     } finally {
       signal.removeEventListener('abort', cancel);
       foregroundSignal.removeEventListener('abort', cancel);
-      unsubscribe();
+      subscriptions.forEach(unsubscribe => unsubscribe());
     }
   });
 }
@@ -127,6 +128,7 @@ function cachedSongLoad(snapshot: MajdataSongSnapshot): MajdataSongLoad {
 
 async function loadMajdataSongCurrent(id: string, signal?: AbortSignal): Promise<MajdataSongLoad> {
   const assertCurrent = captureResourceWrites('majdata-net');
+  const assertSourceCurrent = captureResourceWrites('provider.majdata-net');
   return resourceLoads.share(requestKey(majdataSongKey(id)), async requestSignal => {
     const foregroundSignal = getForegroundAbortSignal();
     const generation = (songRequests.get(id) ?? 0) + 1;
@@ -135,6 +137,7 @@ async function loadMajdataSongCurrent(id: string, signal?: AbortSignal): Promise
       if (requestSignal.aborted) throw requestSignal.reason;
       if (foregroundSignal.aborted) throw foregroundSignal.reason;
       assertCurrent();
+      assertSourceCurrent();
       if (songRequests.get(id) !== generation) throw new Error('请求已失效');
     };
     const cached = await loadMajdataCachedSong(id);

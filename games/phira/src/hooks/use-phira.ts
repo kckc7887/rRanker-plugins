@@ -2,7 +2,7 @@ import { resolveGameResources, getGameResourceSource, usePluginRevision } from '
 import { resolveAccountClient } from '@rranker/sdk/state/session-provider-resolver';
 import type { PhiraResources, PhiraDataSource , PhiraBestRefreshResult, PhiraBestRefreshStatus, PhiraBestRefreshTarget } from '../data-source';
 import { useSession } from '@rranker/sdk/state/session-store';
-import { captureResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
+import { captureResourceWrites, subscribeResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
 import { useEffect, useMemo, useRef } from 'react';
 import { getForegroundAbortSignal } from '@rranker/sdk/state/app-lifecycle';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
@@ -87,14 +87,18 @@ export function useRefreshAllPhiraBests(playerId: number | null) {
   const runRefresh = async (
     run: (signal: AbortSignal, assertCurrent: () => void) => Promise<PhiraBestRefreshResult>,
   ): Promise<PhiraBestRefreshOutcome> => {
-    if (playerId === null) return refreshOutcome('noop');
+    const source = getGameResourceSource('phira');
+    if (playerId === null || !source) return refreshOutcome('noop');
     const controller = new AbortController();
     const foreground = getForegroundAbortSignal();
     const cancel = () => controller.abort();
     const signals = [foreground, lifetime.current.signal];
     signals.forEach((signal) => signal.addEventListener('abort', cancel, { once: true }));
     if (signals.some((signal) => signal.aborted)) cancel();
-    const assertCurrent = captureResourceWrites('phira', controller.signal, `phira:community:${playerId}`);
+    const scopes = ['phira', source.id, `account:phira:community:${playerId}`];
+    const guards = scopes.map(scope => captureResourceWrites(scope, controller.signal));
+    const subscriptions = scopes.map(scope => subscribeResourceWrites(scope, cancel));
+    const assertCurrent = () => { for (const guard of guards) guard(); };
     try {
       assertCurrent();
       const result = await run(controller.signal, assertCurrent);
@@ -108,6 +112,7 @@ export function useRefreshAllPhiraBests(playerId: number | null) {
       throw error;
     } finally {
       signals.forEach((signal) => signal.removeEventListener('abort', cancel));
+      subscriptions.forEach(unsubscribe => unsubscribe());
     }
   };
   const refreshAll = () => runRefresh(async (signal, assertCurrent) => {

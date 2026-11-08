@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "license": "AGPL-3.0-only",
   "files": [
-    "android",
-    "ios",
+    "android/src",
+    "android/build.gradle",
+    "android/CMakeLists.txt",
+    "ios/*.swift",
+    "ios/*.podspec",
     "expo-module.config.json"
   ],
   "peerDependencies": {

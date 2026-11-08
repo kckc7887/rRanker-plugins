@@ -10,6 +10,7 @@ import type { MajdataSong } from '@rranker/game-majdata-net/domain/majdata';
 import { useSession } from '@rranker/sdk/state/session-store';
 import { queryClient } from '@rranker/sdk/state/query-client';
 import { invalidateMajdataCatalog } from '../services/game-data';
+import { captureResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
 
 function resources(): MajdataResources {
  const value = resolveGameResources('majdata-net') as MajdataResources | undefined;
@@ -21,21 +22,25 @@ const options = { staleTime: Infinity, gcTime: 5 * 60_000, retry: false, refetch
 
 const majdataSongKey = (id: string) => ['majdata-net', 'song', id] as const;
 
-async function markMajdataSongFallback(id: string): Promise<void> {
+async function markMajdataSongFallback(id: string, assertCurrent: () => void): Promise<void> {
   const key = majdataSongKey(id);
   const displayed = queryClient.getQueryData<MajdataSong>(key);
   if (!displayed) return;
   const metadata = (await resources().readSongSnapshot(id))?.metadata;
+  try { assertCurrent(); } catch { return; }
   const fetchedAt = metadata ? Date.parse(metadata.fetchedAt) : Number.NaN;
   queryClient.setQueryData(key, displayed, Number.isFinite(fetchedAt) ? { updatedAt: fetchedAt } : undefined);
 }
 
 function loadMajdataSongQuery(id: string, signal: AbortSignal): Promise<MajdataSong> {
+  const source = getGameResourceSource('majdata-net');
+  const guards = ['majdata-net', ...(source ? [source.id] : [])].map(scope => captureResourceWrites(scope, signal));
+  const assertCurrent = () => { for (const guard of guards) guard(); };
   return resources().loadSong(
     id,
     signal,
-    (fresh) => queryClient.setQueryData(majdataSongKey(id), fresh),
-    () => { void markMajdataSongFallback(id).catch(error => recordRuntimeError('majdata-cache', error)); },
+    (fresh) => { try { assertCurrent(); } catch { return; } queryClient.setQueryData(majdataSongKey(id), fresh); },
+    () => { void markMajdataSongFallback(id, assertCurrent).catch(error => recordRuntimeError('majdata-cache', error)); },
   );
 }
 
@@ -56,11 +61,12 @@ export function useMajdataSong(id: string, enabled = true) {
 }
 export function useMajdataLibrarySongs(ids: string[]) {
   usePluginRevision();
-  const definitions = useMemo(() => [...new Set(ids)].map(id => ({ meta: { pluginId: 'game.majdata-net', gameId: 'majdata-net', sourcePluginId: getGameResourceSource('majdata-net')?.id },
+  const sourcePluginId = getGameResourceSource('majdata-net')?.id;
+  const definitions = useMemo(() => [...new Set(ids)].map(id => ({ meta: { pluginId: 'game.majdata-net', gameId: 'majdata-net', sourcePluginId },
     queryKey: majdataSongKey(id), queryFn: ({ signal }: { signal: AbortSignal }) => loadMajdataSongQuery(id, signal),
-    ...options, staleTime: 0, refetchOnMount: true,
-  })), [ids]);
-  return useBoundedQueries(definitions, 4).queries;
+    ...options, enabled: !!sourcePluginId, staleTime: 0, refetchOnMount: true,
+  })), [ids, sourcePluginId]);
+  return useBoundedQueries(definitions, 4, !!sourcePluginId).queries;
 }
 export function useMajdataParsedChart(song: MajdataSong | undefined, level: number) {
   usePluginRevision();

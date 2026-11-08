@@ -12,8 +12,8 @@ Pod::Spec.new do |s|
   s.description = 'rRanker score sync'
   s.license = 'AGPL-3.0-only'
   s.author = 'rRanker'
-  s.homepage = 'https://github.com/kckc7887/rRanker'
-  s.source = { git: 'https://github.com/kckc7887/rRanker.git' }
+  s.homepage = 'https://github.com/kckc7887/rRanker-plugins'
+  s.source = { git: 'https://github.com/kckc7887/rRanker-plugins.git' }
   s.platforms = { :ios => '16.4' }
   s.static_framework = true
   s.dependency 'ExpoModulesCore'
