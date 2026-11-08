@@ -4,13 +4,30 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./providers/phira-provider": "./src/providers/phira-provider.ts",
+    "./client": "./src/client.ts",
+    "./accounts": "./src/accounts.ts",
+    "./services/phira-service": "./src/services/phira-service.ts",
+    "./services/phira-cache": "./src/services/phira-cache.ts",
+    "./services/phira-query": "./src/services/phira-query.ts",
+    "./services/phira-chart-notes": "./src/services/phira-chart-notes.ts",
+    "./storage/phira-account-store": "./src/storage/phira-account-store.ts",
+    "./components/PhiraPlayerPickerSheet": "./src/components/PhiraPlayerPickerSheet.tsx"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-phira": "0.1.0",
     "@rranker/sdk": "0.1.0",
-    "@rranker/game-phira": "0.1.0"
+    "expo": "~57.0.28",
+    "react": "19.2.3"
+  },
+  "dependencies": {
+    "@rranker/chart-json": "0.1.0",
+    "@tanstack/react-query": "^5.101.2",
+    "jszip": "^3.10.1",
+    "zod": "^4.4.3"
   }
 }

@@ -4,14 +4,17 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./providers/example-test-provider": "./src/providers/example-test-provider.ts",
+    "./client": "./src/client.ts",
+    "./accounts": "./src/accounts.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
-    "@rranker/sdk": "0.1.0",
-    "@rranker/game-example": "0.1.0"
+    "@rranker/game-example": "0.1.0",
+    "@rranker/sdk": "0.1.0"
   },
   "dependencies": {
     "@rranker/plugin-assets": "0.1.0"

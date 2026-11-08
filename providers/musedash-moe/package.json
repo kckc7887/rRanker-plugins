@@ -4,13 +4,26 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./providers/muse-dash-provider": "./src/providers/muse-dash-provider.ts",
+    "./client": "./src/client.ts",
+    "./accounts": "./src/accounts.ts",
+    "./services/muse-dash-cache": "./src/services/muse-dash-cache.ts",
+    "./services/muse-dash-query": "./src/services/muse-dash-query.ts",
+    "./storage/musedash-account-store": "./src/storage/musedash-account-store.ts",
+    "./components/MuseDashPlayerPickerSheet": "./src/components/MuseDashPlayerPickerSheet.tsx"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-musedash": "0.1.0",
     "@rranker/sdk": "0.1.0",
-    "@rranker/game-musedash": "0.1.0"
+    "expo": "~57.0.28",
+    "react": "19.2.3"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.2",
+    "zod": "^4.4.3"
   }
 }

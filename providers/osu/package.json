@@ -4,13 +4,35 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./credential": "./src/credential.ts",
+    "./providers/osu-score-provider": "./src/providers/osu-score-provider.ts",
+    "./providers/osu-public-catalog-provider": "./src/providers/osu-public-catalog-provider.ts",
+    "./providers/osu-oauth": "./src/providers/osu-oauth.ts",
+    "./providers/osu-config": "./src/providers/osu-config.ts",
+    "./components/osu/OsuLoginPanel": "./src/components/osu/OsuLoginPanel.tsx",
+    "./services/osu-account-binding": "./src/services/osu-account-binding.ts",
+    "./pages/oauth": "./src/pages/oauth.tsx",
+    "./app.plugin.cjs": "./app.plugin.cjs",
+    "./client": "./src/client.ts",
+    "./services/osu-cache": "./src/services/osu-cache.ts"
   },
   "files": [
-    "src"
+    "src",
+    "app.plugin.cjs"
   ],
   "peerDependencies": {
+    "@rranker/game-osu": "0.1.0",
     "@rranker/sdk": "0.1.0",
-    "@rranker/game-osu": "0.1.0"
+    "expo": "~57.0.28",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "expo-constants": "~57.0.21",
+    "expo-crypto": "~57.0.4",
+    "expo-router": "~57.0.26",
+    "expo-secure-store": "~57.0.4",
+    "zod": "^4.4.3"
   }
 }

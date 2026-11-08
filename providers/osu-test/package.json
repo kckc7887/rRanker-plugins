@@ -4,16 +4,21 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./providers/maxed-osu-test-provider": "./src/providers/maxed-osu-test-provider.ts",
+    "./client": "./src/client.ts",
+    "./accounts": "./src/accounts.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-osu": "0.1.0",
     "@rranker/sdk": "0.1.0",
-    "@rranker/game-osu": "0.1.0"
+    "react": "19.2.3"
   },
   "dependencies": {
-    "@rranker/plugin-assets": "0.1.0"
+    "@rranker/plugin-assets": "0.1.0",
+    "@rranker/provider-osu": "0.1.0"
   }
 }
