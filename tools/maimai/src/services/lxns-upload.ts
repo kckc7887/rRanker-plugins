@@ -1,3 +1,4 @@
+import { parseCredential } from '@rranker/provider-lxns/credential';
 import type { Credential } from '@rranker/sdk/credentials';
 import { fetch as expoFetch } from 'expo/fetch';
 import { z } from 'zod';
@@ -19,9 +20,10 @@ export async function uploadRecordsToLxns(input: {
   assertEligible?: () => void;
   onTokensRotated?: (update: LxnsTokenRotationUpdate) => void | Promise<unknown>;
 }): Promise<UploadWriteResult & { session: LxnsOAuthSession }> {
-  if (input.session.mode !== 'lxns-oauth') throw new ProviderError('authentication', '落雪上传需要 OAuth 授权', false);
+  const parsed = parseCredential(input.session);
+  if (!parsed) throw new ProviderError('authentication', '落雪上传需要 OAuth 授权', false);
   if (!input.records.length) throw new ProviderError('no_data', '没有可上传到落雪的成绩', false);
-  let session = input.session;
+  let session = parsed;
   return withUploadAbortSignal(input.signal, async signal => {
     input.assertEligible?.();
     if (lxnsAccessTokenExpired(session)) {

@@ -2,10 +2,10 @@ import { createElement } from 'react';
 import { parseCredential, credentialMatches } from './credential';
 import type { DataSourcePlugin } from '@rranker/sdk';
 import { adapter, gameIds as gameIds0 } from '@rranker/game-osu';
-const osuIcon = adapter.games[0].familyIcon;
+const osuIcon = adapter.games[0].familyIcon!;
 
 export const provider = {
-cleanupAccount: (account, cleanup) => require('./cleanup').cleanupAccount(account, cleanup),
+cleanupAccount: async (account, cleanup) => (await import('./cleanup')).cleanupAccount(account, cleanup),
 onCredentialsReleased: () => require('./providers/osu-oauth').clearOsuRotationCache(),
 createClient: context => require('./client').createClient(context),
 loginPanel: props => createElement(require('./components/osu/OsuLoginPanel').OsuLoginPanel, props),

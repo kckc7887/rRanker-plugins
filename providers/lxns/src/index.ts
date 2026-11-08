@@ -1,3 +1,4 @@
+import * as syncStatus from './sync';
 import { createElement } from 'react';
 import { parseCredential, credentialMatches } from './credential';
 import type { DataSourcePlugin } from '@rranker/sdk';
@@ -6,9 +7,9 @@ import { gameIds as gameIds1 } from '@rranker/game-chunithm';
 import lxnsIcon from './assets/lxns.webp';
 
 export const provider = {
-syncFailureNotice: (gameId, result) => require('./sync').syncFailureNotice(gameId, result),
-cleanupAccount: (account, cleanup) => require('./cleanup').cleanupAccount(account, cleanup),
-hydrateAccount: context => require('./hydration').hydrateAccount(context),
+syncFailureNotice: (gameId, result) => syncStatus.syncFailureNotice(gameId, result),
+cleanupAccount: async (account, cleanup) => (await import('./cleanup')).cleanupAccount(account, cleanup),
+hydrateAccount: async context => (await import('./hydration')).hydrateAccount(context),
 createResources: gameId => require('./resources').createResources(gameId),
 resourcePriority: 100,
 createClient: context => require('./client').createClient(context),

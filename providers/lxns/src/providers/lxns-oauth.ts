@@ -1,3 +1,4 @@
+import { rotationAncestors } from '../rotation-history';
 import type { LxnsOAuthSession } from '@rranker/provider-lxns/credential';
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
@@ -224,7 +225,7 @@ export async function refreshLxnsAccessToken(refreshToken: string, signal?: Abor
 /** refresh_token 单次使用；旧实例沿轮换链取得最新会话。 */
 const inFlightRefreshes = new Map<string, Promise<LxnsOAuthSession>>();
 const recentRotations = new Map<string, LxnsOAuthSession>();
-const rotationAncestors = new Map<string, Set<string>>();
+
 const RECENT_ROTATIONS_LIMIT = 64;
 
 function liveRotationTokens(): Set<string> {

@@ -1,3 +1,4 @@
+import { rotationAncestors } from '../rotation-history';
 import type { OsuOAuthSession } from '@rranker/provider-osu/credential';
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
@@ -189,7 +190,7 @@ async function refreshOsuAccessToken(refreshToken: string): Promise<OsuOAuthSess
 /** refresh_token 单次使用；旧实例沿轮换链取得最新会话。 */
 const inFlightRefreshes = new Map<string, Promise<OsuOAuthSession>>();
 const recentRotations = new Map<string, OsuOAuthSession>();
-const rotationAncestors = new Map<string, Set<string>>();
+
 const RECENT_ROTATIONS_LIMIT = 64;
 let rotationEpoch = 0;
 

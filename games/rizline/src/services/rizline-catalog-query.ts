@@ -40,10 +40,12 @@ export async function refreshRizlineCatalog(queryClient: QueryClient, signal?: A
     if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
     await queryClient.invalidateQueries({ queryKey: RIZLINE_CATALOG_QUERY_KEY, refetchType: 'none' });
     if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
-    return await queryClient.fetchQuery({ queryKey: RIZLINE_CATALOG_QUERY_KEY, ...RIZLINE_CATALOG_QUERY_OPTIONS, queryFn: async ({ signal }) => {
+    const result = await queryClient.fetchQuery({ queryKey: RIZLINE_CATALOG_QUERY_KEY, ...RIZLINE_CATALOG_QUERY_OPTIONS, queryFn: async ({ signal }) => {
       const data = await rizlineResources.loadFresh(signal);
       if (!signal.aborted) void applyRizlineCatalog(queryClient, data, captureResourceWrites('rizline', signal));
       return data;
     } });
+    if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
+    return result;
   } finally { signal?.removeEventListener('abort', cancel); }
 }

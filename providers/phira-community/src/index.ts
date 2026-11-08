@@ -6,8 +6,8 @@ const phiraIcon = adapter.games[0].icon;
 export const provider = {
 createResources: () => require('./client').createResources(), resourcePriority: 100,
 bindingSheet: props => createElement(require('./BindingSheet').BindingSheet, props),
-restoreAccounts: (gameId) => require('./accounts').restoreAccounts(gameId),
-removeAccount: (account, plan) => require('./accounts').removeAccount(account, plan),
+restoreAccounts: async () => (await import('./accounts')).restoreAccounts(),
+removeAccount: async (account, plan) => (await import('./accounts')).removeAccount(account, plan),
 createClient: context => require('./client').createClient(context), kind: 'provider', id: 'provider.phira-community', providerId: 'phira-community', gameIds: gameIds0,
 bindingKind: 'public-player',
 title: 'Phira社区',

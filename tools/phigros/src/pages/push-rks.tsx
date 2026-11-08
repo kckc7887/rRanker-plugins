@@ -22,7 +22,7 @@ import { useSession } from '@rranker/sdk/state/session-store';
 import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 import { parseNumericInput } from '@rranker/sdk/utils/numeric-input';
 
-const DELTA_ERROR = `加值至少为 ${PHIGROS_PUSH_LIMITS.minDelta}，且最多两位小数。`;
+const DELTA_ERROR = `加值至少为 ${PHIGROS_PUSH_LIMITS.minDelta}，按两位小数计算。`;
 const CHART_COST_ERROR = `成本须为 ${PHIGROS_PUSH_LIMITS.minChartCost}–${PHIGROS_PUSH_LIMITS.maxChartCost} 的整数（愿意打几张谱面）。`;
 
 export default function PushRksToolScreen() {

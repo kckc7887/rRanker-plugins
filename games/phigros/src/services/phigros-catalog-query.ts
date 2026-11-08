@@ -104,11 +104,13 @@ export async function refreshPhigrosCatalog(queryClient: QueryClient, signal?: A
   try {
     await queryClient.invalidateQueries({ queryKey: PHIGROS_CATALOG_QUERY_KEY, refetchType: 'none' });
     if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
-    return await queryClient.fetchQuery({
+    const result = await queryClient.fetchQuery({
       queryKey: PHIGROS_CATALOG_QUERY_KEY,
       meta: { pluginId: 'game.phigros', sourcePluginId: getGameResourceSource('phigros')?.id, gameId: 'phigros' },
       queryFn: ({ signal }) => loadAliasedCatalog(phigrosCatalogOptions(queryClient), signal),
       staleTime: Infinity, gcTime: Infinity, retry: false,
     });
+    if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
+    return result;
   } finally { signal?.removeEventListener('abort', cancel); }
 }

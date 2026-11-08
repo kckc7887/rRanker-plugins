@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Linking } from 'react-native';
 import type { BoundAccount } from '@rranker/sdk/account';
 import { boundModesOfCredential, familyForGameId } from '@rranker/sdk/domain/game-mode-family';
-import { OSU_FAMILY, type OsuGameId } from '@rranker/game-osu';
+import { OSU_FAMILY, isOsuGameId, type OsuGameId } from '@rranker/game-osu';
 import { reusablePartiallyBoundAccounts } from '@rranker/sdk/domain/shared-credential-account-reuse';
 import { OsuModeSelectSheet } from '@rranker/game-osu/components/OsuModeSelectSheet';
 import { providerErrorToUserMessage, runProviderOperation } from '@rranker/sdk/providers/errors';
@@ -64,7 +64,7 @@ export function OsuLoginPanel({
     const credentialId = credentialIdsByAccountId[osuModeAccount.id];
     if (!credentialId) return [];
     return [...boundModesOfCredential(boundAccounts, credentialIdsByAccountId, credentialId)]
-      .filter((gameId): gameId is OsuGameId => OSU_FAMILY.modeGameIds.includes(gameId));
+      .filter(isOsuGameId);
   }, [boundAccounts, credentialIdsByAccountId, osuModeAccount]);
 
   const reset = () => {

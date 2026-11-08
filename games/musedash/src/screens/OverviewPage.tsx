@@ -7,6 +7,7 @@ export function presentOverview(bundle: GameDataBundle | undefined): OverviewPre
   const payload = bundle?.payload;
   if (payload?.kind !== 'musedash') return {
     displayName: payload?.kind === 'empty' ? payload.displayName : '',
+    isEmpty: true, emptyText: '请在游戏管理中绑定喵斯快跑玩家',
 
   };
 

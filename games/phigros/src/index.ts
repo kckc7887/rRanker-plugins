@@ -1,3 +1,5 @@
+import * as targets from './domain/targets';
+import * as gameData from './domain/game-data';
 import { createElement } from 'react';
 import type { GameAdapter } from '@rranker/sdk';
 import phigrosIcon from './assets/phigros.webp';
@@ -7,7 +9,7 @@ export const gameIds = ["phigros"] as const;
 
 export const adapter = {
   capabilities: ['chart.phigros'],
-  refreshResources: async ({ queryClient, signal }) => { await require('./services/phigros-catalog-query').refreshPhigrosCatalog(queryClient, signal); return {}; },
+  refreshResources: async ({ queryClient, signal }) => { await (await import('./services/phigros-catalog-query')).refreshPhigrosCatalog(queryClient, signal); return {}; },
   accountRating: props => { const { AccountRating } = require('./components/PhigrosAccountTags') as typeof import('./components/PhigrosAccountTags'); return createElement(AccountRating, props); },
   storage: gameId => require('./storage').storage(gameId),
   pages: {
@@ -18,8 +20,8 @@ export const adapter = {
     catalog: props => { const { PhigrosSearchScreen } = require('./screens/CatalogScreen') as typeof import('./screens/CatalogScreen'); return createElement(PhigrosSearchScreen, props); },
     detail: props => { const { DetailPage } = require('./screens/DetailPage') as typeof import('./screens/DetailPage'); return createElement(DetailPage, props); },
   },
-  parseDetailParams: (gameId, params) => require('./domain/targets').parseDetailParams(gameId, params),
-  parseLibraryTarget: value => require('./domain/targets').parseLibraryTarget(value), kind: 'game', id: 'game.phigros', title: "Phigros", loadData: context => require('./services/game-data').loadData(context), getDataStatus: bundle => require('./domain/game-data').getDataStatus(bundle), summarizeData: bundle => require('./domain/game-data').summarizeData(bundle), games: [
+  parseDetailParams: (gameId, params) => targets.parseDetailParams(gameId, params),
+  parseLibraryTarget: value => targets.parseLibraryTarget(value), kind: 'game', id: 'game.phigros', title: "Phigros", loadData: async context => (await import('./services/game-data')).loadData(context), getDataStatus: bundle => gameData.getDataStatus(bundle), summarizeData: bundle => gameData.summarizeData(bundle), games: [
 { id: 'phigros', accountOrder: 2, title: 'Phigros', icon: phigrosIcon, profile: { ratingLabel: 'RKS', ratingDigits: 4, bestSections: [
       { id: 'phi3', title: 'Phi3', size: 3 },
       { id: 'b27', title: 'Best27', size: 27 },

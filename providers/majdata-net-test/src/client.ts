@@ -2,8 +2,6 @@ import { resolveGameResources } from '@rranker/sdk/registry';
 import type { MajdataResources , MajdataDataSource } from '@rranker/game-majdata-net/data-source';
 import { MAJDATA_ORDER, type MajdataScore } from '@rranker/game-majdata-net/domain/majdata';
 import { loadItemsBounded } from '@rranker/sdk/services/offset-pagination';
-import { getAvailableDifficulties, parseSimaiChartAsync, SimaiParseError } from '@rranker/chart-simai/features/simai-chart-preview/engine/core/parser/SimaiParser';
-import { simaiStatistics } from '@rranker/chart-simai/features/simai-chart-preview/statistics';
 import type { SourceClientContext } from '@rranker/sdk/credentials';
 import { maxedMajdataSnapshot, buildMaxedMajdataScore } from './providers/maxed-majdata-test-provider';
 export function createClient({ account }: SourceClientContext): MajdataDataSource {
@@ -14,6 +12,10 @@ export function createClient({ account }: SourceClientContext): MajdataDataSourc
 export async function loadMajdataDemoScoresPage(page: number, signal: AbortSignal) {
   const resources = resolveGameResources('majdata-net') as MajdataResources | undefined;
   if (!resources) throw new Error('Majdata 曲库来源不可用');
+  const [{ getAvailableDifficulties, parseSimaiChartAsync, SimaiParseError }, { simaiStatistics }] = await Promise.all([
+    import('@rranker/chart-simai/features/simai-chart-preview/engine/core/parser/SimaiParser'),
+    import('@rranker/chart-simai/features/simai-chart-preview/statistics'),
+  ]);
   const songs = await resources.getSongs(page, 'timep', '', signal);
   const records: MajdataScore[][] = Array.from({ length: songs.length }, () => []);
   await loadItemsBounded({

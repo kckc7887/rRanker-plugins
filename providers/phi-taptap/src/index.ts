@@ -5,7 +5,7 @@ import { gameIds as gameIds0 } from '@rranker/game-phigros';
 import taptapIcon from './assets/taptap.webp';
 
 export const provider = {
-hydrateAccount: context => require('./hydration').hydrateAccount(context),
+hydrateAccount: async context => (await import('./hydration')).hydrateAccount(context),
 createResources: gameId => require('./resources').createResources(gameId),
 resourcePriority: 100,
 createClient: context => require('./client').createClient(context),

@@ -55,12 +55,14 @@ export async function refreshMaimaiCatalog(
     requireDetailedCatalogProvider(provider);
     await queryClient.invalidateQueries({ queryKey: MAIMAI_CATALOG_QUERY_KEY, refetchType: 'none' });
     if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
-    return await queryClient.fetchQuery({
+    const result = await queryClient.fetchQuery({
       queryKey: MAIMAI_CATALOG_QUERY_KEY,
       meta: { pluginId: 'game.maimai', sourcePluginId: getGameResourceSource('maimai')?.id, gameId: 'maimai' },
       queryFn: ({ signal }) => loadAliasedCatalog(maimaiCatalogOptions(queryClient, provider), signal),
       staleTime: Infinity,
     });
+    if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
+    return result;
   } finally { signal?.removeEventListener('abort', cancel); }
 }
 

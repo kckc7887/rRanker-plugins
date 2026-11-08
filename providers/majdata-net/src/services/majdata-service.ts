@@ -11,9 +11,6 @@ import { SqliteSnapshotRepository } from '@rranker/sdk/storage/sqlite-snapshot-r
 import { cacheSourceSchema, snapshotSource, captureResourceWrites, createInflightGuard, resourceWriteGeneration, subscribeResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
 import { getForegroundAbortSignal } from '@rranker/sdk/state/app-lifecycle-core';
 import { createBoundedLoadQueue } from '@rranker/sdk/services/offset-pagination';
-import { parseSimaiChartAsync } from '@rranker/chart-simai/features/simai-chart-preview/engine/core/parser/SimaiParser';
-import { simaiStatistics } from '@rranker/chart-simai/features/simai-chart-preview/statistics';
-import { simaiDifficultyScores } from '@rranker/chart-simai/features/simai-difficulty/index';
 import { cacheFirstLoad } from '@rranker/sdk/services/cache-first';
 import {
   cachedSnapshotSource,
@@ -231,6 +228,11 @@ export async function loadMajdataParsedChart(song: MajdataSong, level: number, s
     assertCurrent();
     if (cached) return cached;
     const text = await loadMajdataChart(song, requestSignal);
+    const [{ parseSimaiChartAsync }, { simaiStatistics }, { simaiDifficultyScores }] = await Promise.all([
+      import('@rranker/chart-simai/features/simai-chart-preview/engine/core/parser/SimaiParser'),
+      import('@rranker/chart-simai/features/simai-chart-preview/statistics'),
+      import('@rranker/chart-simai/features/simai-difficulty/index'),
+    ]);
     const statistics = simaiStatistics(await parseSimaiChartAsync(text, level + 1, requestSignal));
     const parsed = { statistics, difficultyScores: await simaiDifficultyScores(text, level + 1, requestSignal) };
     if (requestSignal.aborted) throw requestSignal.reason;

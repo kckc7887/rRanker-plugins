@@ -1,3 +1,5 @@
+import * as targets from './domain/targets';
+import * as gameData from './domain/game-data';
 import { createElement } from 'react';
 import type { GameAdapter } from '@rranker/sdk';
 import osuStandardIcon from './assets/osu-standard.webp';
@@ -26,8 +28,8 @@ export const adapter = {
     catalog: props => { const { OsuCatalogScreen } = require('./screens/OsuScreens') as typeof import('./screens/OsuScreens'); return createElement(OsuCatalogScreen, props); },
     detail: props => { const { DetailPage } = require('./screens/DetailPage') as typeof import('./screens/DetailPage'); return createElement(DetailPage, props); },
   },
-  parseDetailParams: (gameId, params) => require('./domain/targets').parseDetailParams(gameId, params),
-  parseLibraryTarget: value => require('./domain/targets').parseLibraryTarget(value), kind: 'game', id: 'game.osu', title: "osu!", loadData: context => require('./services/game-data').loadData(context), getDataStatus: bundle => require('./domain/game-data').getDataStatus(bundle), summarizeData: bundle => require('./domain/game-data').summarizeData(bundle), games: [
+  parseDetailParams: (gameId, params) => targets.parseDetailParams(gameId, params),
+  parseLibraryTarget: value => targets.parseLibraryTarget(value), kind: 'game', id: 'game.osu', title: "osu!", loadData: async context => (await import('./services/game-data')).loadData(context), getDataStatus: bundle => gameData.getDataStatus(bundle), summarizeData: bundle => gameData.summarizeData(bundle), games: [
 { id: 'osu-standard', accountOrder: 6, title: 'osu!standard', icon: osuStandardIcon, familyId: 'osu', familyIcon: osuIcon, profile: { ratingLabel: 'PP', ratingDigits: 0, bestSections: [{ id: 'top100', title: 'Top 100', size: 100 }] } },
 { id: 'osu-mania', accountOrder: 7, title: 'osu!mania', icon: osuManiaIcon, familyId: 'osu', hiddenInPicker: true, profile: { ratingLabel: 'PP', ratingDigits: 0, bestSections: [{ id: 'top100', title: 'Top 100', size: 100 }] } },
 { id: 'osu-catch', accountOrder: 8, title: 'osu!catch', icon: osuCatchIcon, familyId: 'osu', hiddenInPicker: true, profile: { ratingLabel: 'PP', ratingDigits: 0, bestSections: [{ id: 'top100', title: 'Top 100', size: 100 }] } },

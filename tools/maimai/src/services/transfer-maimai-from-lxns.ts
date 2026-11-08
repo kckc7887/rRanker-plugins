@@ -1,3 +1,4 @@
+import { parseCredential as parseDivingFishCredential } from '@rranker/provider-diving-fish/credential';
 import type { Credential } from '@rranker/sdk/credentials';
 import type { BoundAccount } from '@rranker/sdk/account';
 import type { CatalogSnapshot, Player, ScoreSnapshot } from '@rranker/game-maimai/domain/models';
@@ -89,6 +90,7 @@ export async function transferMaimaiFromLxns(input: {
     ...input.selected.map((target) => target.account),
   ]);
   assertNotCanceled(input.signal);
+  assertAccount(input.sourceAccount.id);
   input.onPhase?.({ kind: 'reading', account: input.sourceAccount });
   const sourceProvider = new LxnsScoreProvider(
     sourceSession,
@@ -146,7 +148,7 @@ export async function transferMaimaiFromLxns(input: {
         written = snapshot.records.length;
       } else if (target.account.providerId === 'diving-fish') {
         targetSkipped = skippedCount(divingFishMapped);
-        const session = input.sessionsByAccountId[target.account.id];
+        const session = parseDivingFishCredential(input.sessionsByAccountId[target.account.id]);
         if (!session || session.mode !== 'import-token') {
           throw new ProviderError('authentication', '水鱼上传需要 Import-Token', false);
         }

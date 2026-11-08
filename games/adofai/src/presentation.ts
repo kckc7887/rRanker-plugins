@@ -8,7 +8,7 @@ import type {
   ChartCardPresentation,
   ScoreCardPresentation,
   SongRowPresentation,
-} from '../presentation';
+} from '@rranker/sdk/features/game-content/presentation';
 
 function tufLevelLabel(level: TufLevel): string {
   return level.difficulty?.name ?? 'Unranked';

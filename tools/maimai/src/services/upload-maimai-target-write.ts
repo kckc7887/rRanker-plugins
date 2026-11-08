@@ -1,3 +1,4 @@
+import { parseCredential as parseDivingFishCredential } from '@rranker/provider-diving-fish/credential';
 import { ProviderError } from '@rranker/sdk/providers/errors';
 import { uploadRecordsToDivingFish } from '@rranker/tool-maimai/services/diving-fish-upload';
 import { uploadRecordsToLxns } from '@rranker/tool-maimai/services/lxns-upload';
@@ -108,7 +109,7 @@ export async function uploadMaimaiScoresToTargets(input: UploadCommonInput & {
         targetSkipped = divingFishMapped.skippedNoTitle
           + divingFishMapped.skippedBadScore
           + divingFishMapped.skippedUnsupportedChart;
-        const session = input.sessionsByAccountId[target.account.id];
+        const session = parseDivingFishCredential(input.sessionsByAccountId[target.account.id]);
         if (!session || session.mode !== 'import-token') {
           throw new ProviderError('authentication', '水鱼上传需要 Import-Token', false);
         }

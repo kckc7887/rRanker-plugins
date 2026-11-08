@@ -52,12 +52,14 @@ export async function refreshChunithmCatalog(queryClient: QueryClient, signal?: 
     const options = chunithmCatalogOptions(queryClient);
     await queryClient.invalidateQueries({ queryKey: CHUNITHM_CATALOG_QUERY_KEY, refetchType: 'none' });
     if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
-    return await queryClient.fetchQuery({
+    const result = await queryClient.fetchQuery({
       queryKey: CHUNITHM_CATALOG_QUERY_KEY,
       meta: { pluginId: 'game.chunithm', sourcePluginId: getGameResourceSource('chunithm')?.id, gameId: 'chunithm' },
       queryFn: ({ signal }) => loadAliasedCatalog(options, signal),
       staleTime: Infinity,
     });
+    if (signal?.aborted) throw signal.reason ?? new Error('资源请求已取消');
+    return result;
   } finally { signal?.removeEventListener('abort', cancel); }
 }
 

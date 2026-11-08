@@ -9,16 +9,18 @@ import { chartVersionKey } from '@rranker/game-maimai/domain/catalog';
 import { detailHref } from '@rranker/sdk/navigation';
 import type { Chart } from '@rranker/game-maimai/domain/models';
 import { useMaimaiStrength } from '@rranker/game-maimai/hooks/use-maimai-strength';
+import { useSession } from '@rranker/sdk/state/session-store';
 import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 export function MaimaiStrengthAnalysisScreen() {
   const theme = useAppTheme();
   const focused = useIsFocused();
-  const [selectedAxis, setSelectedAxis] = useState<number | null>(null);
+  const accountId = useSession(state => state.activeAccountId);
+  const [selection, setSelection] = useState<{ accountId: string; axis: number } | null>(null);
   const query = useMaimaiStrength(focused);
-  const selected = selectedAxis === null ? undefined : query.analysis?.axes[selectedAxis];
+  const selected = selection?.accountId === accountId ? query.analysis?.axes[selection.axis] : undefined;
   const openChart = (chart: Chart) => {
-    setSelectedAxis(null);
+    setSelection(null);
     router.push(detailHref({ gameId: 'maimai', params: { songId: String(chart.songId), ...(chart.type === undefined ? {} : { chartType: String(chart.type) }), levelIndex: String(chart.levelIndex) } }));
   };
   return <View style={[styles.page, { backgroundColor: theme.background }]}>
@@ -35,7 +37,7 @@ export function MaimaiStrengthAnalysisScreen() {
         ) : <>
           <StrengthConclusion title={`分析：${analysis.conclusion}`}>
             <SimaiDifficultyRadar scores={analysis.axes.map(axis => axis.value)} color={theme.accent}
-              difficulty="strength" onAxisPress={setSelectedAxis} />
+              difficulty="strength" onAxisPress={axis => setSelection({ accountId, axis })} />
           </StrengthConclusion>
           <StrengthPractice title="薄弱项练习">
             {analysis.recommendations.map(item => (
@@ -47,7 +49,7 @@ export function MaimaiStrengthAnalysisScreen() {
           </StrengthPractice>
         </>}
       </ScrollView>} />
-    <StrengthSongsSheet visible={selected !== undefined} title={selected?.name ?? ''} onClose={() => setSelectedAxis(null)}
+    <StrengthSongsSheet visible={selected !== undefined} title={selected?.name ?? ''} onClose={() => setSelection(null)}
       data={selected?.samples ?? []}
       keyExtractor={item => chartVersionKey(item.record.songId, item.record.type, item.record.levelIndex)}
       ListEmptyComponent={<Text style={{ color: theme.textSecondary }}>暂无达标谱面</Text>}

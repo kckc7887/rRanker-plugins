@@ -5,8 +5,8 @@ import { adapter, gameIds as gameIds0 } from '@rranker/game-rizline';
 const rizlineIcon = adapter.games[0].icon;
 
 export const provider = {
-cleanupCredential: (accountId, cleanup) => cleanup('密码', () => require('./storage/rizline-password-store').deleteRizlinePassword(accountId)),
-cleanupAccount: (account, cleanup) => cleanup('成绩缓存', () => require('./services/rizline-service').clearRizlineAccount(account.id)),
+cleanupCredential: (accountId, cleanup) => cleanup('密码', async () => (await import('./storage/rizline-password-store')).deleteRizlinePassword(accountId)),
+cleanupAccount: (account, cleanup) => cleanup('成绩缓存', async () => (await import('./services/rizline-service')).clearRizlineAccount(account.id)),
 createClient: context => require('./client').createClient(context),
 loginPanel: props => createElement(require('./components/rizline/RizlineLoginPanel').RizlineLoginPanel, props),
  parseCredential, credentialMatches, kind: 'provider', id: 'provider.rizline-official', providerId: 'rizline-official', gameIds: gameIds0,

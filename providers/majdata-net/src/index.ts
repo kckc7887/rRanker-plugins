@@ -6,7 +6,7 @@ const majdataIcon = adapter.games[0].icon;
 
 export const provider = {
 createResources: () => require('./client').createResources(), resourcePriority: 100,
-cleanupAccount: (account, cleanup) => cleanup('成绩缓存', () => require('./services/majdata-service').clearMajdataAccount(account.id)),
+cleanupAccount: (account, cleanup) => cleanup('成绩缓存', async () => (await import('./services/majdata-service')).clearMajdataAccount(account.id)),
 createClient: context => require('./client').createClient(context),
 loginPanel: props => createElement(require('./components/majdata/MajdataLoginPanel').MajdataLoginPanel, props),
  parseCredential, kind: 'provider', id: 'provider.majdata-net', providerId: 'majdata-net', gameIds: gameIds0,

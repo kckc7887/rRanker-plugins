@@ -1,3 +1,5 @@
+import * as targets from './domain/targets';
+import * as gameData from './domain/game-data';
 import { createElement } from 'react';
 import type { GameAdapter, RatingTheme } from '@rranker/sdk';
 import appIcon from './assets/icon.png';
@@ -19,8 +21,8 @@ export const adapter = {
     catalog: props => { const { ExampleCatalogScreen } = require('./screens/ExampleScreens') as typeof import('./screens/ExampleScreens'); return createElement(ExampleCatalogScreen, props); },
     detail: props => { const { DetailPage } = require('./screens/DetailPage') as typeof import('./screens/DetailPage'); return createElement(DetailPage, props); },
   },
-  parseDetailParams: (gameId, params) => require('./domain/targets').parseDetailParams(gameId, params),
-  parseLibraryTarget: value => require('./domain/targets').parseLibraryTarget(value), kind: 'game', id: 'game.example', title: "示例游戏", loadData: context => require('./services/game-data').loadData(context), getDataStatus: bundle => require('./domain/game-data').getDataStatus(bundle), summarizeData: bundle => require('./domain/game-data').summarizeData(bundle), games: [
+  parseDetailParams: (gameId, params) => targets.parseDetailParams(gameId, params),
+  parseLibraryTarget: value => targets.parseLibraryTarget(value), kind: 'game', id: 'game.example', title: "示例游戏", loadData: async context => (await import('./services/game-data')).loadData(context), getDataStatus: bundle => gameData.getDataStatus(bundle), summarizeData: bundle => gameData.summarizeData(bundle), games: [
 { id: 'example', title: '示例游戏', icon: appIcon, accountScoreTheme: EXAMPLE_RATING_THEME, fixture: true, profile: { ratingLabel: 'EXAMPLE RATING', ratingDigits: 0, bestSections: [{ id: 'best30', title: 'Best 30', size: 30 }, { id: 'ranked10', title: 'Ranked 10', size: 10 }] } }
 ] } satisfies GameAdapter;
 

@@ -6,9 +6,9 @@ import tufIcon from './assets/tuf.webp';
 export const provider = {
 createResources: () => require('./client').createResources(), resourcePriority: 100,
 bindingSheet: props => createElement(require('./BindingSheet').BindingSheet, props),
-restoreAccounts: (gameId) => require('./accounts').restoreAccounts(gameId),
-removeAccount: (account, plan) => require('./accounts').removeAccount(account, plan),
-hydrateAccount: context => require('./hydration').hydrateAccount(context),
+restoreAccounts: async () => (await import('./accounts')).restoreAccounts(),
+removeAccount: async (account, plan) => (await import('./accounts')).removeAccount(account, plan),
+hydrateAccount: async context => (await import('./hydration')).hydrateAccount(context),
 createClient: context => require('./client').createClient(context), kind: 'provider', id: 'provider.tuf', providerId: 'tuf', gameIds: gameIds0,
 bindingKind: 'public-player',
 title: 'TUF 社区',

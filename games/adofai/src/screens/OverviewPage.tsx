@@ -7,6 +7,7 @@ export function presentOverview(bundle: GameDataBundle | undefined): OverviewPre
   const payload = bundle?.payload;
   if (payload?.kind !== 'adofai') return {
     displayName: payload?.kind === 'empty' ? payload.displayName : '',
+    isEmpty: true, emptyText: '请在游戏管理中绑定 TUF 玩家',
 
   };
 

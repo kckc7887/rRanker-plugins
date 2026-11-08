@@ -1,3 +1,5 @@
+import * as targets from './domain/targets';
+import * as gameData from './domain/game-data';
 import { createElement } from 'react';
 import type { GameAdapter } from '@rranker/sdk';
 import phiraIcon from './assets/phira.webp';
@@ -16,8 +18,8 @@ export const adapter = {
     catalog: props => { const { PhiraCatalogScreen } = require('./screens/PhiraScreens') as typeof import('./screens/PhiraScreens'); return createElement(PhiraCatalogScreen, props); },
     detail: props => { const { DetailPage } = require('./screens/DetailPage') as typeof import('./screens/DetailPage'); return createElement(DetailPage, props); },
   },
-  parseDetailParams: (gameId, params) => require('./domain/targets').parseDetailParams(gameId, params),
-  parseLibraryTarget: value => require('./domain/targets').parseLibraryTarget(value), kind: 'game', id: 'game.phira', title: "Phira", loadData: context => require('./services/game-data').loadData(context), getDataStatus: bundle => require('./domain/game-data').getDataStatus(bundle), summarizeData: bundle => require('./domain/game-data').summarizeData(bundle), games: [
+  parseDetailParams: (gameId, params) => targets.parseDetailParams(gameId, params),
+  parseLibraryTarget: value => targets.parseLibraryTarget(value), kind: 'game', id: 'game.phira', title: "Phira", loadData: async context => (await import('./services/game-data')).loadData(context), getDataStatus: bundle => gameData.getDataStatus(bundle), summarizeData: bundle => gameData.summarizeData(bundle), games: [
 { id: 'phira', accountOrder: 3, title: 'Phira', icon: phiraIcon, profile: { ratingLabel: 'Ranking Score', ratingDigits: 2, bestSections: [{ id: 'best20', title: 'Best20', size: 20 }] } }
 ] } satisfies GameAdapter;
 

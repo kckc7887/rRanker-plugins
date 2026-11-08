@@ -1,3 +1,4 @@
+import { rotationAncestors } from './rotation-history';
 import { parseOAuthCredential, type OAuthCredential } from '@rranker/sdk/credentials';
 
 export type OsuOAuthSession = OAuthCredential<'osu-oauth'>;
@@ -6,5 +7,5 @@ export const parseCredential = (value: unknown): OsuOAuthSession | null => parse
 export function credentialMatches(current: unknown, expected: unknown): boolean {
   const left = parseCredential(current), right = parseCredential(expected);
   return !!left && !!right && (left.refreshToken === right.refreshToken
-    || require('./providers/osu-oauth').osuRotationAncestors(right.refreshToken).includes(left.refreshToken));
+    || rotationAncestors.get(right.refreshToken)?.has(left.refreshToken) === true);
 }

@@ -5,9 +5,9 @@ import { exampleAccountIcon } from '@rranker/plugin-assets';
 
 export const provider = {
 bindingSheet: props => createElement(require('./BindingSheet').BindingSheet, props),
-restoreAccounts: (gameId) => require('./accounts').restoreAccounts(gameId),
-createAccount: (gameId, accounts, assertCurrent) => require('./accounts').createAccount(gameId, accounts, assertCurrent),
-removeAccount: (account, plan) => require('./accounts').removeAccount(account, plan),
+restoreAccounts: async (gameId) => (await import('./accounts')).restoreAccounts(gameId),
+createAccount: async (gameId, accounts, assertCurrent) => (await import('./accounts')).createAccount(gameId, accounts, assertCurrent),
+removeAccount: async (account, plan) => (await import('./accounts')).removeAccount(account, plan),
 createClient: context => require('./client').createClient(context), kind: 'provider', id: 'provider.osu-test', providerId: 'osu-test', gameIds: gameIds0,
 bindingKind: 'fixture',
 title: '示例查分器',

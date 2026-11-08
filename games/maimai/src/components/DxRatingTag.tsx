@@ -1,6 +1,6 @@
 import type { BoundAccount } from '@rranker/sdk/account';
 import { StyleSheet, Text, View } from 'react-native';
-import { resolveDxRatingTheme } from '@rranker/game-maimai/domain/dx-rating-theme';
+import { resolveRatingTheme } from '@rranker/game-maimai/domain/dx-rating-theme';
 import { TintedRatingTag } from '@rranker/sdk/components/TintedRatingTag';
 
 export function DxRatingTag({
@@ -12,7 +12,7 @@ export function DxRatingTag({
   if (rating == null) {
     return <View accessibilityLabel="DX Rating —" style={styles.empty}><Text style={styles.emptyValue}>—</Text></View>;
   }
-  const theme = resolveDxRatingTheme(rating);
+  const theme = resolveRatingTheme(rating);
   const value = String(Math.max(0, Math.floor(rating)));
   const stars = '★'.repeat(theme.starCount);
 

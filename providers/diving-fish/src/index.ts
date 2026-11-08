@@ -5,7 +5,7 @@ import { gameIds as gameIds0 } from '@rranker/game-maimai';
 import divingFishIcon from './assets/diving-fish.webp';
 
 export const provider = {
-sync: context => require('./sync').sync(context),
+sync: async context => (await import('./sync')).sync(context),
 createClient: context => require('./client').createClient(context),
 loginPanel: props => createElement(require('./components/maimai/DivingFishLoginPanel').DivingFishLoginPanel, props),
  parseCredential, kind: 'provider', id: 'provider.diving-fish', providerId: 'diving-fish', gameIds: gameIds0,
