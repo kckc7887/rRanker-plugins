@@ -1,0 +1,16 @@
+{
+  "name": "@rranker/maimai-save",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-only",
+  "files": [
+    "android",
+    "ios",
+    "expo-module.config.json"
+  ],
+  "peerDependencies": {
+    "expo": "~57.0.28"
+  },
+  "dependencies": {
+    "@kckc7887/maimai-save-mobile": "https://github.com/kckc7887/maimaiSave/releases/download/v0.1.0/kckc7887-maimai-save-mobile-0.1.0.tgz"
+  }
+}

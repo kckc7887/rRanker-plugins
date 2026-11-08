@@ -1,0 +1,52 @@
+{
+  "name": "@rranker/chart-json",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./features/chart-format": "./src/features/chart-format.ts",
+    "./features/pgr-preview-config": "./src/features/pgr-preview-config.ts",
+    "./features/phigros-chart-preview/phigros-chart-preview-inject": "./src/features/phigros-chart-preview/phigros-chart-preview-inject.ts",
+    "./features/phigros-chart-preview/webview-player/hit-sound": "./src/features/phigros-chart-preview/webview-player/hit-sound.ts",
+    "./features/phigros-chart-preview/webview-player/index.html": "./src/features/phigros-chart-preview/webview-player/index.html",
+    "./features/phigros-chart-preview/webview-player/main": "./src/features/phigros-chart-preview/webview-player/main.ts",
+    "./features/phigros-chart-preview/webview-player/pgr-block-renderer": "./src/features/phigros-chart-preview/webview-player/pgr-block-renderer.ts",
+    "./features/phigros-chart-preview/webview-player/pgr-blocks": "./src/features/phigros-chart-preview/webview-player/pgr-blocks.ts",
+    "./features/phigros-chart-preview/webview-player/pgr-core": "./src/features/phigros-chart-preview/webview-player/pgr-core.ts",
+    "./features/phigros-chart-preview/webview-player/playback": "./src/features/phigros-chart-preview/webview-player/playback.ts",
+    "./features/phigros-chart-preview/webview-player/renderer": "./src/features/phigros-chart-preview/webview-player/renderer.ts",
+    "./features/phigros-chart-preview/webview-player/rpe-core": "./src/features/phigros-chart-preview/webview-player/rpe-core.ts",
+    "./features/phigros-chart-preview/webview-player/rpe-preset-shaders": "./src/features/phigros-chart-preview/webview-player/rpe-preset-shaders.ts",
+    "./features/phigros-chart-preview/webview-player/rpe-renderer": "./src/features/phigros-chart-preview/webview-player/rpe-renderer.ts",
+    "./features/phigros-chart-preview/webview-player/timelineView": "./src/features/phigros-chart-preview/webview-player/timelineView.ts",
+    "./features/rizline-chart-preview/configuration": "./src/features/rizline-chart-preview/configuration.ts",
+    "./features/rizline-chart-preview/rizline-chart-preview-inject": "./src/features/rizline-chart-preview/rizline-chart-preview-inject.ts",
+    "./features/rizline-chart-preview/webview-player/chart-prepare": "./src/features/rizline-chart-preview/webview-player/chart-prepare.ts",
+    "./features/rizline-chart-preview/webview-player/easing": "./src/features/rizline-chart-preview/webview-player/easing.ts",
+    "./features/rizline-chart-preview/webview-player/frame-layout": "./src/features/rizline-chart-preview/webview-player/frame-layout.ts",
+    "./features/rizline-chart-preview/webview-player/hitsounds": "./src/features/rizline-chart-preview/webview-player/hitsounds.ts",
+    "./features/rizline-chart-preview/webview-player/index.html": "./src/features/rizline-chart-preview/webview-player/index.html",
+    "./features/rizline-chart-preview/webview-player/main": "./src/features/rizline-chart-preview/webview-player/main.ts",
+    "./features/rizline-chart-preview/webview-player/playback": "./src/features/rizline-chart-preview/webview-player/playback.ts",
+    "./features/rizline-chart-preview/webview-player/renderer": "./src/features/rizline-chart-preview/webview-player/renderer.ts",
+    "./domain/phira-chart-preview": "./src/domain/phira-chart-preview.ts",
+    "./assets/phigros-chart-preview/index.html": "./src/assets/phigros-chart-preview/index.html",
+    "./assets/phigros-chart-preview/player.bundle": "./src/assets/phigros-chart-preview/player.bundle",
+    "./assets/phigros-chart-preview/rpe.bundle": "./src/assets/phigros-chart-preview/rpe.bundle",
+    "./assets/rizline-chart-preview/index.html": "./src/assets/rizline-chart-preview/index.html",
+    "./assets/rizline-chart-preview/player.bundle": "./src/assets/rizline-chart-preview/player.bundle",
+    "./scripts/build-phigros-chart-preview.mjs": "./scripts/build-phigros-chart-preview.mjs",
+    "./scripts/build-rizline-chart-preview.mjs": "./scripts/build-rizline-chart-preview.mjs",
+    "./domain/phira-chart-info": "./src/domain/phira-chart-info.ts",
+    "./domain/rpe-resource-path": "./src/domain/rpe-resource-path.ts"
+  },
+  "files": [
+    "src",
+    "scripts",
+    "LICENSES"
+  ],
+  "peerDependencies": {
+    "@rranker/sdk": "0.1.0"
+  }
+}
