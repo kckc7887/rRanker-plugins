@@ -4,13 +4,26 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./credential": "./src/credential.ts",
+    "./providers/diving-fish-auth": "./src/providers/diving-fish-auth.ts",
+    "./providers/diving-fish-provider": "./src/providers/diving-fish-provider.ts",
+    "./components/maimai/DivingFishLoginPanel": "./src/components/maimai/DivingFishLoginPanel.tsx",
+    "./client": "./src/client.ts",
+    "./domain/*": "./src/domain/*.ts",
+    "./services/session-validation": "./src/services/session-validation.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-maimai": "0.1.0",
     "@rranker/sdk": "0.1.0",
-    "@rranker/game-maimai": "0.1.0"
+    "expo": "~57.0.28",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
   }
 }

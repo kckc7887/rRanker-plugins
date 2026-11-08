@@ -4,13 +4,22 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./providers/local-score-provider": "./src/providers/local-score-provider.ts",
+    "./client": "./src/client.ts",
+    "./services/player-display": "./src/services/player-display.ts",
+    "./hydration": "./src/hydration.ts",
+    "./accounts": "./src/accounts.ts",
+    "./storage/local-account-store": "./src/storage/local-account-store.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
-    "@rranker/sdk": "0.1.0",
-    "@rranker/game-maimai": "0.1.0"
+    "@rranker/game-maimai": "0.1.0",
+    "@rranker/sdk": "0.1.0"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.2"
   }
 }

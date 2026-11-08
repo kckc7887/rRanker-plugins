@@ -1,0 +1,55 @@
+import type { BoundAccount } from '@rranker/sdk/account';
+import { StyleSheet, Text, View } from 'react-native';
+import { resolveChunithmRatingCardTheme } from '@rranker/game-chunithm/domain/chunithm-rating-theme';
+import { TintedRatingTag } from '@rranker/sdk/components/TintedRatingTag';
+
+export function ChunithmRatingTag({
+  display,
+  ratingPossession,
+}: {
+  display: string;
+  ratingPossession?: string | null;
+}) {
+  const rating = Number(display);
+  if (!Number.isFinite(rating)) {
+    return (
+      <View accessibilityLabel="Rating —" style={styles.empty}>
+        <Text style={styles.emptyValue}>—</Text>
+      </View>
+    );
+  }
+
+  const value = rating.toFixed(2);
+  const theme = resolveChunithmRatingCardTheme(rating, ratingPossession);
+  return (
+    <TintedRatingTag
+      theme={theme}
+      display={value}
+      accessibilityLabel={`Rating ${value}，背景 ${theme.label}`}
+      testID="chunithm-rating-tag-border"
+      fillTestID="chunithm-rating-tag"
+      tagStyle={styles.tag}
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  tag: { minHeight: 0, paddingHorizontal: 10, paddingVertical: 5 },
+  empty: {
+    alignSelf: 'flex-start',
+    minWidth: 70,
+    marginTop: 2,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+    backgroundColor: '#E5E7EB',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  emptyValue: { color: '#6B7280', fontSize: 13, fontWeight: '800', letterSpacing: 0.5, fontVariant: ['tabular-nums'] },
+});
+
+export function AccountRating({ account }: { account: BoundAccount }) {
+  const possession = account.displayData?.ratingPossession;
+  return <ChunithmRatingTag display={account.scoreDisplay} ratingPossession={typeof possession === 'string' ? possession : null} />;
+}

@@ -1,0 +1,74 @@
+import { normalizeSimaiFc, normalizeSimaiFs } from '@rranker/sdk/domain/simai-score';
+import type { Song } from '@rranker/game-maimai/domain/models';
+
+export function maimaiGenres(songs: readonly Song[]): string[] {
+  return [...new Set(songs.flatMap(song => song.genre ? [song.genre] : []))]
+    .sort((left, right) => left.localeCompare(right, 'zh-CN'));
+}
+
+export function matchesMaimaiGenre(genre: string | undefined, selected: string): boolean {
+  return selected === 'all' || genre === selected;
+}
+
+export type MaimaiFcAchievement = 'fc' | 'fcp' | 'ap' | 'app';
+export type MaimaiFsAchievement = 'fs' | 'fsp' | 'fsd' | 'fsdp';
+export type MaimaiAchievementStatus =
+  | { family: 'fc'; value: MaimaiFcAchievement }
+  | { family: 'fs'; value: MaimaiFsAchievement }
+  | null;
+
+export const MAIMAI_FC_ACHIEVEMENTS: readonly { value: MaimaiFcAchievement; label: string }[] = [
+  { value: 'app', label: 'AP+' }, { value: 'ap', label: 'AP' },
+  { value: 'fcp', label: 'FC+' }, { value: 'fc', label: 'FC' },
+];
+
+export const MAIMAI_FS_ACHIEVEMENTS: readonly { value: MaimaiFsAchievement; label: string }[] = [
+  { value: 'fsdp', label: 'FDX+' }, { value: 'fsd', label: 'FDX' },
+  { value: 'fsp', label: 'FS+' }, { value: 'fs', label: 'FS' },
+];
+
+/** 档位从 1 开始，避免最低档被当作未选。 */
+const FC_RANK: Record<MaimaiFcAchievement, number> = { fc: 1, fcp: 2, ap: 3, app: 4 };
+const FS_RANK: Record<MaimaiFsAchievement, number> = { fs: 1, fsp: 2, fsd: 3, fsdp: 4 };
+
+export function matchesAchievementStatus(
+  record: { fc?: string | null; fs?: string | null; rawFc?: string; rawFs?: string },
+  filter: MaimaiAchievementStatus,
+  strict = false,
+): boolean {
+  if (!filter) return true;
+  if (filter.family === 'fc') {
+    const actual = normalizeSimaiFc(record.fc) ?? normalizeSimaiFc(record.rawFc);
+    if (actual === null) return false;
+    return strict ? actual === filter.value : FC_RANK[actual] >= FC_RANK[filter.value];
+  }
+  const actual = normalizeSimaiFs(record.fs) ?? normalizeSimaiFs(record.rawFs);
+  if (actual === null) return false;
+  return strict ? actual === filter.value : FS_RANK[actual] >= FS_RANK[filter.value];
+}
+
+export function maimaiFcAchievementLabel(value: MaimaiFcAchievement | null): string {
+  if (!value) return '全部';
+  return MAIMAI_FC_ACHIEVEMENTS.find((item) => item.value === value)?.label ?? '全部';
+}
+
+export function maimaiFsAchievementLabel(value: MaimaiFsAchievement | null): string {
+  if (!value) return '全部';
+  return MAIMAI_FS_ACHIEVEMENTS.find((item) => item.value === value)?.label ?? '全部';
+}
+
+export function matchesSoloAchievementFilter(
+  record: { fc?: string | null; fs?: string | null; rawFc?: string; rawFs?: string },
+  filter: MaimaiFcAchievement | null,
+): boolean {
+  if (!filter) return true;
+  return matchesAchievementStatus(record, { family: 'fc', value: filter }, true);
+}
+
+export function matchesMultiAchievementFilter(
+  record: { fc?: string | null; fs?: string | null; rawFc?: string; rawFs?: string },
+  filter: MaimaiFsAchievement | null,
+): boolean {
+  if (!filter) return true;
+  return matchesAchievementStatus(record, { family: 'fs', value: filter }, true);
+}

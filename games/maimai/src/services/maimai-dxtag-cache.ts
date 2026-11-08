@@ -1,0 +1,39 @@
+import { maimaiDxTagChartId, type MaimaiDxTagLibrary, type MaimaiDxTagSnapshot } from '@rranker/game-maimai/domain/maimai-dxtag';
+import type { CatalogSnapshot } from '@rranker/game-maimai/domain/models';
+import { z } from 'zod';
+import { loadMaimaiDxTag, maimaiDxTagLibrarySchema } from '@rranker/game-maimai/providers/maimai-dxtag';
+import { staleCached } from '@rranker/sdk/services/cache-first';
+import { cacheSourceSchema, captureResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
+import { SqliteSnapshotRepository } from '@rranker/sdk/storage/sqlite-snapshot-repository';
+
+export const MAIMAI_DXTAG_RESOURCE_PREFIX = 'maimai:dxtag:';
+const RESOURCE_KEY = `${MAIMAI_DXTAG_RESOURCE_PREFIX}all`;
+const SCHEMA_VERSION = 1;
+const repository = new SqliteSnapshotRepository();
+const cachedSchema = z.object({ library: maimaiDxTagLibrarySchema, source: cacheSourceSchema('generated') });
+
+export async function loadCachedMaimaiDxTag(catalog: CatalogSnapshot, signal?: AbortSignal): Promise<MaimaiDxTagSnapshot & { coversCatalog: boolean }> {
+  const assertCurrent = captureResourceWrites('maimai', signal);
+  const cached = await repository.getResource(RESOURCE_KEY, SCHEMA_VERSION, cachedSchema);
+  assertCurrent();
+  const coversCatalog = (library: MaimaiDxTagLibrary) => catalog.songs.every(song => song.charts.every(chart => {
+    const id = maimaiDxTagChartId(song.id, chart.type);
+    return id === null || library[id]?.some(row => row.difficulty === chart.levelIndex);
+  }));
+  if (cached && coversCatalog(cached.library)) return { ...cached, coversCatalog: true };
+  let library: MaimaiDxTagLibrary;
+  try {
+    library = await loadMaimaiDxTag(signal);
+  } catch (error) {
+    assertCurrent();
+    if (cached) return { ...staleCached(cached), coversCatalog: false };
+    throw error;
+  }
+  assertCurrent();
+  const fresh: MaimaiDxTagSnapshot = {
+    library,
+    source: { kind: 'generated', label: 'DXTag', updatedAt: new Date().toISOString(), isStale: false },
+  };
+  await repository.saveResource(RESOURCE_KEY, SCHEMA_VERSION, fresh.source.updatedAt, fresh, assertCurrent);
+  return { ...fresh, coversCatalog: coversCatalog(library) };
+}

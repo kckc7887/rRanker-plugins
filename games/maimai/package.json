@@ -4,12 +4,46 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./domain/game-data": "./src/domain/game-data.ts",
+    "./targets": "./src/domain/targets.ts",
+    "./domain/*": "./src/domain/*.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./screens/*": "./src/screens/*.tsx",
+    "./presentation": "./src/presentation.ts",
+    "./services/game-data": "./src/services/game-data.ts",
+    "./assets/*": "./src/assets/*",
+    "./data-source": "./src/data-source.ts",
+    "./domain/maimai-chart-preview": "./src/domain/maimai-chart-preview.ts",
+    "./storage/score-repository": "./src/storage/score-repository.ts",
+    "./storage": "./src/storage.ts",
+    "./durable-maimai-account": "./src/durable-maimai-account.ts",
+    "./services/maimai-catalog-query": "./src/services/maimai-catalog-query.ts",
+    "./services/maimai-dxtag-cache": "./src/services/maimai-dxtag-cache.ts",
+    "./services/score-service": "./src/services/score-service.ts",
+    "./providers/maimai-dxtag": "./src/providers/maimai-dxtag.ts",
+    "./providers/dxrating-chart-tags-provider": "./src/providers/dxrating-chart-tags-provider.ts",
+    "./accounts": "./src/accounts.ts",
+    "./domain/account-avatar": "./src/domain/account-avatar.ts",
+    "./state/*": "./src/state/*.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
-    "@rranker/sdk": "0.1.0"
+    "@rranker/sdk": "0.1.0",
+    "expo": "~57.0.28",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "@expo/vector-icons": "^15.0.2",
+    "@react-native-masked-view/masked-view": "0.3.2",
+    "@tanstack/react-query": "^5.101.2",
+    "expo-linear-gradient": "~57.0.2",
+    "expo-router": "~57.0.26",
+    "expo-status-bar": "~57.0.1",
+    "zod": "^4.4.3"
   }
 }

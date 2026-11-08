@@ -1,0 +1,83 @@
+import type { Song , ScoreRecord } from '@rranker/game-maimai/domain/models';
+import type { SongRowPresentation ,
+  BadgePresentation,
+  ScoreCardPresentation,
+} from '@rranker/sdk/features/game-content/presentation';
+import { formatAchievement, scoreRateEffect, scoreRateLabel } from '@rranker/sdk/domain/simai-score';
+
+function scoreEffectToPresentation(effect: ReturnType<typeof scoreRateEffect>) {
+  return effect === 'flowing-gold' || effect === 'flowing-rainbow'
+    ? 'flowing-gradient' as const
+    : effect === 'gold' || effect === 'rainbow'
+      ? 'gradient' as const
+      : 'plain' as const;
+}
+
+export type MaimaiScorePresentationInput = Pick<
+  ScoreRecord,
+  'songId' | 'title' | 'type' | 'levelIndex' | 'difficulty' | 'difficultyConstant'
+> & {
+  achievements?: number;
+  dxScore?: number | null;
+  rating?: number;
+  fc?: string | null;
+  fs?: string | null;
+  rate?: string | null;
+};
+
+export function presentMaimaiScore(
+  record: MaimaiScorePresentationInput,
+  position?: number,
+): ScoreCardPresentation<'maimai'> {
+  const rate = record.rate ? scoreRateLabel(record.rate) : '';
+  const badges: BadgePresentation[] = [
+    ...(record.rate ? [{
+      key: 'rate',
+      label: rate,
+      tone: record.rate,
+      effect: scoreEffectToPresentation(scoreRateEffect(record.rate)),
+    }] : []),
+    ...(record.fc ? [{ key: 'fc', label: record.fc.toUpperCase(), tone: record.fc }] : []),
+    ...(record.fs ? [{ key: 'fs', label: record.fs.toUpperCase(), tone: record.fs }] : []),
+  ];
+  return {
+    key: `${record.songId}:${record.type}:${record.levelIndex}`,
+    gameId: 'maimai',
+    route: { gameId: 'maimai', params: { songId: String(record.songId), ...(record.type === undefined ? {} : { chartType: String(record.type) }), levelIndex: String(record.levelIndex) } },
+    position,
+    title: record.title,
+    accessibilityLabel: `查看谱面 ${record.title} ${record.type} ${record.difficulty}`,
+    primaryMetric: {
+      key: 'achievement',
+      label: '达成率',
+      text: record.achievements === undefined ? '—' : formatAchievement(record.achievements),
+      effect: record.achievements !== undefined && record.achievements >= 100.5
+        ? 'flowing-gradient'
+        : record.achievements !== undefined && record.achievements >= 99.9999
+          ? 'gradient'
+          : 'plain',
+    },
+    secondaryMetrics: [{
+      key: 'rating',
+      label: 'Rating',
+      text: record.rating === undefined ? '—' : String(record.rating),
+      tone: record.rating === undefined ? 'muted' : 'accent',
+    }],
+    difficulty: {
+      key: 'difficulty',
+      label: record.difficulty,
+      value: record.difficultyConstant.toFixed(1),
+      tone: record.difficulty,
+    },
+    grade: record.rate ? badges[0] : undefined,
+    achievementRows: [badges.slice(record.rate ? 1 : 0)],
+  };
+}
+
+export function presentMaimaiSong(song: Song): SongRowPresentation<'maimai'> {
+  return { key: song.id, gameId: 'maimai', route: { gameId: 'maimai', params: { songId: song.id } },
+    title: song.title, subtitle: `${song.artist ?? '曲师未知'} · ${song.version}`, accessibilityLabel: `查看歌曲 ${song.title}`,
+    chartBadges: song.charts.map(chart => ({ key: `${chart.type}:${chart.levelIndex}`, label: chart.level,
+      value: chart.difficultyConstant.toFixed(1), tone: chart.difficulty })),
+  };
+}
