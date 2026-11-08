@@ -4,13 +4,27 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./credential": "./src/credential.ts",
+    "./http-cookies": "./src/http-cookies.ts",
+    "./providers/majdata-provider": "./src/providers/majdata-provider.ts",
+    "./components/majdata/MajdataLoginPanel": "./src/components/majdata/MajdataLoginPanel.tsx",
+    "./client": "./src/client.ts",
+    "./services/majdata-service": "./src/services/majdata-service.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-majdata-net": "0.1.0",
     "@rranker/sdk": "0.1.0",
-    "@rranker/game-majdata-net": "0.1.0"
+    "expo": "~57.0.28",
+    "react": "19.2.3"
+  },
+  "dependencies": {
+    "@rranker/chart-simai": "0.1.0",
+    "@types/crypto-js": "^4.2.2",
+    "crypto-js": "^4.2.0",
+    "zod": "^4.4.3"
   }
 }

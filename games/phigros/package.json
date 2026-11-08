@@ -4,12 +4,42 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./domain/game-data": "./src/domain/game-data.ts",
+    "./targets": "./src/domain/targets.ts",
+    "./domain/*": "./src/domain/*.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./screens/*": "./src/screens/*.tsx",
+    "./presentation": "./src/presentation.ts",
+    "./services/game-data": "./src/services/game-data.ts",
+    "./data-source": "./src/data-source.ts",
+    "./domain/phigros-chart-preview": "./src/domain/phigros-chart-preview.ts",
+    "./storage": "./src/storage.ts",
+    "./services/phigros-resources": "./src/services/phigros-resources.ts",
+    "./services/phigros-avatar-resolver": "./src/services/phigros-avatar-resolver.ts",
+    "./services/phigros-catalog-query": "./src/services/phigros-catalog-query.ts",
+    "./services/phigros-chart-preview-resources": "./src/services/phigros-chart-preview-resources.ts",
+    "./accounts": "./src/accounts.ts",
+    "./domain/account-avatar": "./src/domain/account-avatar.ts",
+    "./state/*": "./src/state/*.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
-    "@rranker/sdk": "0.1.0"
+    "@rranker/sdk": "0.1.0",
+    "expo": "~57.0.28",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.2",
+    "crypto-js": "^4.2.0",
+    "expo-status-bar": "~57.0.1",
+    "jszip": "^3.10.1",
+    "react-native-gesture-handler": "~2.32.0",
+    "react-native-svg": "15.15.4",
+    "zod": "^4.4.3"
   }
 }

@@ -4,12 +4,39 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./domain/game-data": "./src/domain/game-data.ts",
+    "./targets": "./src/domain/targets.ts",
+    "./domain/*": "./src/domain/*.ts",
+    "./hooks/*": "./src/hooks/*.ts",
+    "./components/*": "./src/components/*.tsx",
+    "./screens/*": "./src/screens/*.tsx",
+    "./presentation": "./src/presentation.ts",
+    "./services/game-data": "./src/services/game-data.ts",
+    "./data-source": "./src/data-source.ts",
+    "./domain/rizline-chart-preview": "./src/domain/rizline-chart-preview.ts",
+    "./storage": "./src/storage.ts",
+    "./services/rizline-resources": "./src/services/rizline-resources.ts",
+    "./services/rizline-catalog-query": "./src/services/rizline-catalog-query.ts",
+    "./services/rizline-chart-preview-resources": "./src/services/rizline-chart-preview-resources.ts",
+    "./providers/rizline-catalog-schema": "./src/providers/rizline-catalog-schema.ts",
+    "./accounts": "./src/accounts.ts",
+    "./state/*": "./src/state/*.ts"
   },
   "files": [
-    "src"
+    "src",
+    "LICENSES"
   ],
   "peerDependencies": {
-    "@rranker/sdk": "0.1.0"
+    "@rranker/sdk": "0.1.0",
+    "expo": "~57.0.28",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.101.2",
+    "expo-router": "~57.0.26",
+    "expo-status-bar": "~57.0.1",
+    "zod": "^4.4.3"
   }
 }

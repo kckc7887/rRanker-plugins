@@ -1,0 +1,243 @@
+import type { SourceClientContext } from '@rranker/sdk/credentials';
+import { parseCredential } from '../credential';
+import { ProviderError } from '@rranker/sdk/providers/errors';
+import { z } from 'zod';
+import { MajdataSongSchema, MajdataScoreSchema, MajdataRecentSchema } from '@rranker/game-majdata-net/domain/majdata';
+import { DataSourceSchema } from '@rranker/sdk/data-schema';
+import { type MajdataSnapshot, type MajdataSong } from '@rranker/game-majdata-net/domain/majdata';
+import type { DataSource } from '@rranker/sdk/data';
+import { MajdataProvider, majdataProvider } from '@rranker/provider-majdata-net/providers/majdata-provider';
+import { SqliteSnapshotRepository } from '@rranker/sdk/storage/sqlite-snapshot-repository';
+import { cacheSourceSchema, snapshotSource, captureResourceWrites, createInflightGuard, resourceWriteGeneration, subscribeResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
+import { getForegroundAbortSignal } from '@rranker/sdk/state/app-lifecycle-core';
+import { createBoundedLoadQueue } from '@rranker/sdk/services/offset-pagination';
+import { parseSimaiChartAsync } from '@rranker/chart-simai/features/simai-chart-preview/engine/core/parser/SimaiParser';
+import { simaiStatistics } from '@rranker/chart-simai/features/simai-chart-preview/statistics';
+import { simaiDifficultyScores } from '@rranker/chart-simai/features/simai-difficulty/index';
+import { cacheFirstLoad } from '@rranker/sdk/services/cache-first';
+import {
+  cachedSnapshotSource,
+  snapshotMetadataOf,
+  type SnapshotMetadata,
+} from '@rranker/sdk/domain/refresh-result';
+
+const resourceLoads = createInflightGuard<string>();
+const songLoads = createBoundedLoadQueue(4);
+const requestKey = (key: string) => `${resourceWriteGeneration('majdata-net')}:${key}`;
+const repository = new SqliteSnapshotRepository();
+const songRequests = new Map<string, number>();
+const accountRequests = new Map<string, number>();
+export const majdataSource = () => snapshotSource({ kind: 'majdata-net', label: 'Majdata Net' });
+export const majdataAccountKey = (id: string) => `majdata-net:account:${id}`;
+export const majdataSongKey = (id: string) => `majdata-net:song:${id}`;
+
+async function requestMajdataSong(id: string, signal: AbortSignal, foregroundSignal: AbortSignal, assertCurrent: () => void): Promise<MajdataSong> {
+  return songLoads(async () => {
+    assertCurrent();
+    const controller = new AbortController();
+    const cancel = () => controller.abort(signal.aborted ? signal.reason : foregroundSignal.reason);
+    signal.addEventListener('abort', cancel, { once: true });
+    foregroundSignal.addEventListener('abort', cancel, { once: true });
+    const unsubscribe = subscribeResourceWrites('majdata-net', () => controller.abort(new Error('缓存请求已失效')));
+    try {
+      if (signal.aborted || foregroundSignal.aborted) cancel();
+      if (controller.signal.aborted) throw controller.signal.reason;
+      const song = await majdataProvider.getSong(id, controller.signal);
+      assertCurrent();
+      if (controller.signal.aborted) throw controller.signal.reason;
+      return song;
+    } finally {
+      signal.removeEventListener('abort', cancel);
+      foregroundSignal.removeEventListener('abort', cancel);
+      unsubscribe();
+    }
+  });
+}
+
+const songSnapshotSchema = z.object({
+  song: MajdataSongSchema,
+  source: DataSourceSchema.extend({ kind: z.literal('majdata-net') }),
+});
+type MajdataSongSnapshot = z.infer<typeof songSnapshotSchema>;
+const accountSnapshotSchema = z.object({
+  player: z.object({ username: z.string() }), records: z.array(MajdataScoreSchema), recent: z.array(MajdataRecentSchema),
+  source: cacheSourceSchema('majdata-net'),
+});
+
+export function loadMajdataCached(id: string) { return repository.getResource(majdataAccountKey(id), 1, accountSnapshotSchema); }
+export function clearMajdataAccount(id: string) {
+  accountRequests.set(id, (accountRequests.get(id) ?? 0) + 1);
+  return repository.clearResources([majdataAccountKey(id)]);
+}
+
+export async function loadMajdataFresh(context: SourceClientContext, signal?: AbortSignal): Promise<MajdataSnapshot> {
+  const id = context.account.id;
+  context.assertCurrent();
+  const session = parseCredential(context.credential);
+  if (!session) throw new ProviderError('authentication', '登录已失效，请重新登录', false);
+  const generation = (accountRequests.get(id) ?? 0) + 1;
+  accountRequests.set(id, generation);
+  const assertGeneration = captureResourceWrites('majdata-net', signal, id);
+  const assertCurrent = () => {
+    assertGeneration(); context.assertCurrent();
+    if (accountRequests.get(id) !== generation) throw new Error('请求已失效');
+  };
+  let expected = session;
+  const provider = new MajdataProvider(session, async next => {
+    assertCurrent();
+    if (context.credential !== expected) return;
+    await context.commitCredential(next, expected);
+    assertCurrent();
+    expected = parseCredential(context.credential) ?? expected;
+  });
+  const player = await provider.getPlayer(signal);
+  const records = await provider.getRecords(signal);
+  const recent = await provider.getRecent(player.username, signal);
+  assertCurrent();
+  const snapshot = { player, records, recent, source: majdataSource() };
+  await repository.saveResource(majdataAccountKey(id), 1, snapshot.source.updatedAt, snapshot, assertCurrent);
+  assertCurrent();
+  return snapshot;
+}
+
+function loadMajdataCachedSong(id: string): Promise<MajdataSongSnapshot | null> {
+  return repository.getResource(majdataSongKey(id), 1, songSnapshotSchema);
+}
+
+export async function loadMajdataSongSnapshot(id: string): Promise<{
+  song: MajdataSong;
+  source: DataSource;
+  metadata: SnapshotMetadata;
+} | null> {
+  const cached = await loadMajdataCachedSong(id);
+  if (!cached) return null;
+  return {
+    song: cached.song,
+    source: cached.source,
+    metadata: snapshotMetadataOf(cached.source, cached.song.hash),
+  };
+}
+
+type MajdataSongLoad = { song: MajdataSong; fromCache: boolean; source: DataSource };
+
+function cachedSongLoad(snapshot: MajdataSongSnapshot): MajdataSongLoad {
+  return {
+    song: snapshot.song,
+    fromCache: true,
+    source: cachedSnapshotSource(snapshot.source),
+  };
+}
+
+async function loadMajdataSongCurrent(id: string, signal?: AbortSignal): Promise<MajdataSongLoad> {
+  const assertCurrent = captureResourceWrites('majdata-net');
+  return resourceLoads.share(requestKey(majdataSongKey(id)), async requestSignal => {
+    const foregroundSignal = getForegroundAbortSignal();
+    const generation = (songRequests.get(id) ?? 0) + 1;
+    songRequests.set(id, generation);
+    const assertSongCurrent = () => {
+      if (requestSignal.aborted) throw requestSignal.reason;
+      if (foregroundSignal.aborted) throw foregroundSignal.reason;
+      assertCurrent();
+      if (songRequests.get(id) !== generation) throw new Error('请求已失效');
+    };
+    const cached = await loadMajdataCachedSong(id);
+    try {
+      const song = await requestMajdataSong(id, requestSignal, foregroundSignal, assertSongCurrent);
+      assertSongCurrent();
+      const source = majdataSource();
+      const snapshot = { song, source };
+      await repository.saveResource(majdataSongKey(id), 1, source.updatedAt, snapshot, assertSongCurrent);
+      assertSongCurrent();
+      await repository.saveResource(`${majdataSongKey(id)}:${song.hash}`, 1, source.updatedAt, snapshot, assertSongCurrent);
+      assertSongCurrent();
+      return { song, fromCache: false, source };
+    } catch (error) {
+      assertSongCurrent();
+      if (cached) return cachedSongLoad(cached);
+      throw error;
+    }
+  }, signal);
+}
+
+export async function loadMajdataSong(
+  id: string,
+  signal?: AbortSignal,
+  onFresh?: (song: MajdataSong) => void,
+  onFallback?: (song: MajdataSong) => void,
+): Promise<MajdataSong> {
+  if (onFresh || onFallback) {
+    const assertCurrent = captureResourceWrites('majdata-net');
+    const result = await cacheFirstLoad<MajdataSongLoad>({
+      loadCached: async () => {
+        const cached = await loadMajdataSongSnapshot(id);
+        return cached ? { song: cached.song, fromCache: true, source: cachedSnapshotSource(cached.source) } : null;
+      },
+      loadFresh: requestSignal => loadMajdataSongCurrent(id, requestSignal),
+      isFallback: value => value.fromCache,
+      onFresh: value => { assertCurrent(); onFresh?.(value.song); },
+      onFallback: value => { assertCurrent(); onFallback?.(value.song); },
+      markStale: value => ({ ...value, source: cachedSnapshotSource(value.source) }),
+      signal,
+    });
+    assertCurrent();
+    return result.song;
+  }
+  return (await loadMajdataSongCurrent(id, signal)).song;
+}
+
+export async function loadMajdataChart(song: MajdataSong, signal?: AbortSignal): Promise<string> {
+  const key = `majdata-net:chart:${song.id}:${song.hash}`;
+  const assertCurrent = captureResourceWrites('majdata-net');
+  return resourceLoads.share(requestKey(key), async requestSignal => {
+    const foregroundSignal = getForegroundAbortSignal();
+    const assertChartCurrent = () => {
+      if (requestSignal.aborted) throw requestSignal.reason;
+      if (foregroundSignal.aborted) throw foregroundSignal.reason;
+      assertCurrent();
+    };
+    const cached = await repository.getResource<string>(key, 1);
+    if (requestSignal.aborted) throw requestSignal.reason;
+    assertCurrent();
+    if (cached) return cached;
+    const text = await majdataProvider.getChart(song.id, requestSignal);
+    const current = await requestMajdataSong(song.id, requestSignal, foregroundSignal, assertChartCurrent);
+    if (current.hash !== song.hash) throw new Error('谱面已更新，请刷新歌曲后重试');
+    if (requestSignal.aborted) throw requestSignal.reason;
+    assertCurrent();
+    await repository.saveResource(key, 1, new Date().toISOString(), text, () => { assertCurrent(); if (requestSignal.aborted) throw new Error('已取消'); });
+    if (requestSignal.aborted) throw requestSignal.reason;
+    assertCurrent();
+    return text;
+  }, signal);
+}
+
+const difficultyScoreSchema = z.number().finite().min(0).max(10);
+const noteCountSchema = z.object({
+  tap: z.number().int().nonnegative(), hold: z.number().int().nonnegative(),
+  slide: z.number().int().nonnegative(), touch: z.number().int().nonnegative(), break: z.number().int().nonnegative(),
+});
+const parsedChartSchema = z.object({
+  statistics: z.object({ counts: noteCountSchema.extend({ mine: z.number().int().nonnegative() }), mines: noteCountSchema }),
+  difficultyScores: z.tuple([difficultyScoreSchema, difficultyScoreSchema, difficultyScoreSchema, difficultyScoreSchema, difficultyScoreSchema]).nullable(),
+});
+
+export async function loadMajdataParsedChart(song: MajdataSong, level: number, signal?: AbortSignal) {
+  if (!Number.isInteger(level) || level < 0 || level > 6) throw new Error('所选难度不存在');
+  const key = `majdata-net:parsed:${song.id}:${song.hash}:${level}`;
+  const assertCurrent = captureResourceWrites('majdata-net');
+  return resourceLoads.share(requestKey(key), async requestSignal => {
+    const cached = await repository.getResource(key, 2, parsedChartSchema);
+    if (requestSignal.aborted) throw requestSignal.reason;
+    assertCurrent();
+    if (cached) return cached;
+    const text = await loadMajdataChart(song, requestSignal);
+    const statistics = simaiStatistics(await parseSimaiChartAsync(text, level + 1, requestSignal));
+    const parsed = { statistics, difficultyScores: await simaiDifficultyScores(text, level + 1, requestSignal) };
+    if (requestSignal.aborted) throw requestSignal.reason;
+    assertCurrent();
+    await repository.saveResource(key, 2, new Date().toISOString(), parsed, () => { assertCurrent(); if (requestSignal.aborted) throw new Error('已取消'); });
+    if (requestSignal.aborted) throw requestSignal.reason;
+    assertCurrent();
+    return parsed;
+  }, signal);
+}

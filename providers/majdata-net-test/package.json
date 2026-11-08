@@ -4,16 +4,20 @@
   "license": "AGPL-3.0-only",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./providers/maxed-majdata-test-provider": "./src/providers/maxed-majdata-test-provider.ts",
+    "./client": "./src/client.ts",
+    "./accounts": "./src/accounts.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
-    "@rranker/sdk": "0.1.0",
-    "@rranker/game-majdata-net": "0.1.0"
+    "@rranker/game-majdata-net": "0.1.0",
+    "@rranker/sdk": "0.1.0"
   },
   "dependencies": {
+    "@rranker/chart-simai": "0.1.0",
     "@rranker/plugin-assets": "0.1.0"
   }
 }
