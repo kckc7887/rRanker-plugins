@@ -1,5 +1,5 @@
-import { mapCoverId } from '@/domain/rating';
-import { loadImageFiles, type BestImageAssetSession } from '@/features/best-image/load-best-image-session';
+import { mapCoverId } from '@rranker/game-maimai/domain/rating';
+import { loadImageFiles, type BestImageAssetSession } from '@rranker/sdk/features/best-image/load-best-image-session';
 
 const JACKET_ROOT = 'https://assets2.lxns.net/maimai/jacket';
 

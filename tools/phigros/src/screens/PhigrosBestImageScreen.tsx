@@ -1,43 +1,38 @@
-import { bestImageUiProgress } from '@/features/best-image/best-image-ui-cache';
+import { bestImageUiProgress } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 import { startTransition, useEffect, useMemo, useState } from 'react';
 import { File } from 'expo-file-system';
 import {
   Image, StyleSheet, Text, TextInput, View,
 } from 'react-native';
-import { PhigrosRateBadge } from '@/components/phigros/PhigrosRateBadge';
-import { formatPhigrosChallengeBadge } from '@/domain/phigros-challenge-theme';
+import { PhigrosRateBadge } from '@rranker/game-phigros/components/PhigrosRateBadge';
+import { formatPhigrosChallengeBadge } from '@rranker/game-phigros/domain/phigros-challenge-theme';
 import {
   PHIGROS_LEVELS, PHIGROS_RANK_FILTERS, phigrosRankFilterLabel,
-} from '@/domain/phigros-filters';
-import type { PhigrosXingKind } from '@/domain/phigros-xing';
-import { MetricFilterChoiceRow } from '@/components/game-content/MetricFilterRows';
-import { LevelChip } from '@/components/phigros/PhigrosFilterBar';
-import { loadPhigrosAvatarCatalog } from '@/services/phigros-avatar-resolver';
-import { bestImageExportFilename } from '@/features/best-image/best-image-export';
+} from '@rranker/game-phigros/domain/phigros-filters';
+import type { PhigrosXingKind } from '@rranker/game-phigros/domain/phigros-xing';
+import { MetricFilterChoiceRow } from '@rranker/sdk/components/game-content/MetricFilterRows';
+import { LevelChip } from '@rranker/game-phigros/components/PhigrosFilterBar';
+import { loadPhigrosAvatarCatalog } from '@rranker/game-phigros/services/phigros-avatar-resolver';
+import { bestImageExportFilename } from '@rranker/sdk/features/best-image/best-image-export';
 import {
   BestImageChoiceChip,
   BestImageStyleSwitch,
   BestImageQuantity, BestImageStyleRow, BestImageExtraCount, BestImageScreenShell,
   bestImageScreenSharedStyles,
-} from '@/features/best-image/best-image-screen-shell';
-import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate } from '@/features/best-image/use-best-image-screen-controller';
-import { useBestImageAssets } from '@/features/best-image/use-best-image-assets';
+} from '@rranker/sdk/features/best-image/best-image-screen-shell';
+import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate } from '@rranker/sdk/features/best-image/use-best-image-screen-controller';
+import { useBestImageAssets } from '@rranker/sdk/features/best-image/use-best-image-assets';
 import { buildPhigrosBestImageAppHtml } from '../features/phigros-best-image/build-phigros-best-image-app-html';
 import { buildPhigrosBestImageHtml } from '../features/phigros-best-image/build-phigros-best-image-html';
 import { collectPhigrosBestImageVisibleStrings } from '../features/phigros-best-image/collect-phigros-best-image-visible-strings';
 import { loadPhigrosAccAverages } from '../features/phigros-best-image/load-phigros-acc-averages';
-import {
-  buildCustomPhigrosBestImageSections, buildPhigrosNoteTotalByKey,
-  DEFAULT_CUSTOM_PHIGROS_BEST_IMAGE_FILTERS,
-  isCustomPhigrosBestImageFiltersValid, parseBestImageQuantity,
-  parsePhigrosBestImageScoreBound,
-  type CustomPhigrosBestImageFilters,
-} from '../features/phigros-best-image/phigros-best-image-custom';
+import { buildCustomPhigrosBestImageSections, DEFAULT_CUSTOM_PHIGROS_BEST_IMAGE_FILTERS, isCustomPhigrosBestImageFiltersValid, parseBestImageQuantity, parsePhigrosBestImageScoreBound, type CustomPhigrosBestImageFilters } from '../features/phigros-best-image/phigros-best-image-custom';
+import { buildPhigrosNoteTotalByKey } from '@rranker/game-phigros/domain/phigros-xing';
 import {
   appendPhigrosOverflowRecords, paginatePhigrosBestImageSections,
   type PhigrosBestImageOverflowCount, type PhigrosBestImageType,
 } from '../features/phigros-best-image/phigros-best-image';
-import { copyBestImageAsset, loadImageFiles, loadRemoteImageFile } from '@/features/best-image/load-best-image-session';
+import { copyBestImageAsset, loadImageFiles, loadRemoteImageFile } from '@rranker/sdk/features/best-image/load-best-image-session';
 import { loadPhigrosReferenceTemplateAssets } from '../features/phigros-best-image/load-phigros-reference-template-assets';
 import { preparePhigrosUi, buildPhigrosAppCardAssets } from '../features/phigros-best-image/phigros-ui-cache';
 import { preparePhigrosFonts } from '../features/phigros-best-image/phigros-font-cache';
@@ -52,10 +47,10 @@ import {
   PhigrosBestImageStylePicker, type PhigrosBestImagePickerItem,
   type PhigrosBestImagePickerKind,
 } from '../features/phigros-best-image/phigros-best-image-style-picker';
-import { useGameData } from '@/hooks/use-game-data';
-import { usePhigrosCatalog } from '@/hooks/use-phigros-catalog';
-import { useAppTheme } from '@/theme/app-theme';
-import { RangeSelector } from '@/components/game-content/RangeSelector';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { usePhigrosCatalog } from '@rranker/game-phigros/hooks/use-phigros-catalog';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { RangeSelector } from '@rranker/sdk/components/game-content/RangeSelector';
 
 const WIDTHS = [1080, 1440, 2160] as const;
 const OVERFLOW_COUNTS: readonly PhigrosBestImageOverflowCount[] = [0, 3, 6, 9];
@@ -99,7 +94,7 @@ export function PhigrosBestImageScreen() {
 
   const controller = useBestImageScreenController<PhigrosBestImageType, PhigrosBestImageStylePreferences, PhigrosBestImagePickerKind>({
     accountId: gameData.activeAccountId,
-    game: 'phigros',
+    game: 'phigros', pluginId: 'tool.phigros',
     defaultType: 'best30',
     defaultWidth: 1080,
     defaultQuantityText: String(DEFAULT_CUSTOM_PHIGROS_BEST_IMAGE_FILTERS.quantity),

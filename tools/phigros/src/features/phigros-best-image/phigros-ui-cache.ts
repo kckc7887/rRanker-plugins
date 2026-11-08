@@ -1,14 +1,14 @@
-import type { ScoreRecord } from '@/domain/models';
-import type { BestImageAssetSession } from '@/features/best-image/load-best-image-session';
-import type { BestImageTemplateAsset } from '@/features/best-image/use-best-image-screen-controller';
+import type { ScoreRecord } from '@rranker/game-phigros/domain/models';
+import type { BestImageAssetSession } from '@rranker/sdk/features/best-image/load-best-image-session';
+import type { BestImageTemplateAsset } from '@rranker/sdk/features/best-image/use-best-image-screen-controller';
 import { buildPhigrosAppCardBackground } from './build-phigros-best-image-app-html';
 import { Directory, File } from 'expo-file-system';
-import { invalidateResourceWrites } from '@/services/snapshot-cache-utils';
-import { PHIGROS_UI_ROOT } from '@/features/storage-management/fs-storage';
-import { prepareBestImageUi, type UiProgress } from '@/features/best-image/best-image-ui-cache';
+import { invalidateResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
+import { PHIGROS_UI_ROOT } from '@rranker/tool-phigros/paths';
+import { prepareBestImageUi, type UiProgress } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 import { PHIGROS_UI_ENTRIES, PHIGROS_UI_ZIP } from './phigros-ui-manifest';
 import { PHIGROS_APP_UI_ENTRIES, PHIGROS_APP_UI_ZIP } from './phigros-app-ui-manifest';
-import type { BestImageRatingStyle } from "@/features/best-image/best-image-controller-types";
+import type { BestImageRatingStyle } from "@rranker/sdk/features/best-image/best-image-controller-types";
 
 export const PHIGROS_UI_CACHE_VERSION = 'v1';
 

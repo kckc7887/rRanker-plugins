@@ -1,32 +1,32 @@
-import { CollectionImage } from '@/components/CollectionImage';
-import { MaimaiFilterBar, dxRatingTagFilterState } from '@/components/MaimaiFilterBar';
+import { CollectionImage } from '@rranker/game-maimai/components/CollectionImage';
+import { MaimaiFilterBar, dxRatingTagFilterState } from '@rranker/game-maimai/components/MaimaiFilterBar';
 import type { GameDataBundle } from '@rranker/sdk/data';
-import type { Player } from '@/domain/models';
-import { TrophyBadge } from '@/components/TrophyBadge';
+import type { Player } from '@rranker/game-maimai/domain/models';
+import { TrophyBadge } from '@rranker/sdk/components/TrophyBadge';
 import { BestImageCollectionPicker } from '../../features/best-image/best-image-collection-picker';
-import { parseBestImageQuantity } from "@/features/best-image/best-image-custom";
+import { parseBestImageQuantity } from "@rranker/sdk/features/best-image/best-image-custom";
 import { DEFAULT_CUSTOM_BEST_IMAGE_FILTERS } from "../../features/maimai-best-image/maimai-best-image-custom";
-import { bestImageExportFilename } from '@/features/best-image/best-image-export';
+import { bestImageExportFilename } from '@rranker/sdk/features/best-image/best-image-export';
 import {
   BestImageChoiceChip,
   BestImageStyleSwitch,
   BestImageQuantity, BestImageStyleRow, BestImageScreenShell,
   bestImageScreenSharedStyles,
-} from '@/features/best-image/best-image-screen-shell';
+} from '@rranker/sdk/features/best-image/best-image-screen-shell';
 import { bestImageStylePreferencesStore, type AppliedBestImageStyleSelection, type BestImageCollectionChoice, type BestImageCollectionKind, type BestImageStyleSelections } from "../../features/best-image/best-image-style-preferences";
-import { type BestImageRatingStyle } from "@/features/best-image/best-image-controller-types";
-import { minimumBestImageHeight } from '@/features/best-image/build-best-image-html';
-import type { BestImageWebViewSource } from '@/features/best-image/prepare-best-image-webview-sources';
+import { type BestImageRatingStyle } from "@rranker/sdk/features/best-image/best-image-controller-types";
+import { minimumBestImageHeight } from '@rranker/sdk/features/best-image/build-best-image-html';
+import type { BestImageWebViewSource } from '@rranker/sdk/features/best-image/prepare-best-image-webview-sources';
 import { useBestImageCollections } from '../../features/best-image/use-best-image-collections';
-import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate } from '@/features/best-image/use-best-image-screen-controller';
+import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate } from '@rranker/sdk/features/best-image/use-best-image-screen-controller';
 import {
   buildBestImageHtml,
   type BestImageType
 } from '../../features/maimai-best-image/build-maimai-best-image-html';
 import { useMaimaiBestImageFilters } from '../../features/maimai-best-image/use-maimai-best-image-filters';
 import { useMaimaiEmbeddedAssets, useMaimaiExportAssets, useMaimaiCollectionAssets, useMaimaiImageCovers, buildMaimaiCardBackgroundAssets } from '../../features/maimai-best-image/use-maimai-best-image-resources';
-import { useGameData } from '@/hooks/use-game-data';
-import { useAppTheme } from '@/theme/app-theme';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 import { useEffect, useMemo, useRef } from 'react';
 import {
   StyleSheet,
@@ -98,7 +98,7 @@ export function MaimaiBestImageScreen() {
   const controller = useBestImageScreenController<BestImageType, MaimaiBestImagePrefs, BestImageCollectionKind>(
     {
       accountId: activeAccountId,
-      game: 'maimai',
+      game: 'maimai', pluginId: 'tool.maimai',
       defaultType: 'best50',
       defaultWidth: 1080,
       defaultQuantityText: String(DEFAULT_CUSTOM_BEST_IMAGE_FILTERS.quantity),

@@ -1,5 +1,5 @@
-import { downloadChartResource } from '@/features/chart-download-shared/chart-download-shared';
-import { invalidateResourceWrites } from '@/services/snapshot-cache-utils';
+import { downloadChartResource } from '@rranker/sdk/features/chart-download-shared/chart-download-shared';
+import { invalidateResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
 import { Directory, File } from 'expo-file-system';
 import {
   clearFontCacheDirectory,
@@ -7,7 +7,7 @@ import {
   createFontCacheGuard,
   errorMessage,
   sha256FileAsync,
-} from '@/features/best-image/best-image-font-cache-core';
+} from '@rranker/sdk/features/best-image/best-image-font-cache-core';
 
 const FONT_BASE_URL = 'https://rranker-maimai-data.cn-nb1.rains3.com/fonts';
 export const MAIMAI_FONT_CACHE_VERSION = 'v1';

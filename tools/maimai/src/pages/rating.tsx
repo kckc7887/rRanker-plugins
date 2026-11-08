@@ -1,10 +1,10 @@
-import { RatingCalculator, RatingFields, RatingMessage, RatingTable } from '@/components/game-content/RatingCalculator';
+import { RatingCalculator, RatingFields, RatingMessage, RatingTable } from '@rranker/sdk/components/game-content/RatingCalculator';
 import { useMemo, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import { Card } from '@/components/Card';
-import { FormField } from '@/components/FormField';
-import { calculateChartRating, minimumAchievementForRating, ratingTableDescending } from '@/domain/rating';
-import { parseNumericInput } from '@/utils/numeric-input';
+import { Card } from '@rranker/sdk/components/Card';
+import { FormField } from '@rranker/sdk/components/FormField';
+import { calculateChartRating, minimumAchievementForRating, ratingTableDescending } from '@rranker/game-maimai/domain/rating';
+import { parseNumericInput } from '@rranker/sdk/utils/numeric-input';
 
 export default function RatingToolScreen() {
   const { constant: routeConstant } = useLocalSearchParams<{ constant?: string }>();

@@ -8,18 +8,18 @@ import {
   View,
 } from 'react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { useNotification } from '@/components/AppNotification';
-import { ArcadeBusinessStatusLabel } from '@/components/ArcadeBusinessStatusLabel';
-import { Card } from '@/components/Card';
-import { ExpandableText } from '@/components/ExpandableText';
+import { useNotification } from '@rranker/sdk/components/AppNotification';
+import { ArcadeBusinessStatusLabel } from '@rranker/tool-arcade-finder/components/ArcadeBusinessStatusLabel';
+import { Card } from '@rranker/sdk/components/Card';
+import { ExpandableText } from '@rranker/sdk/components/ExpandableText';
 import {
   formatArcadeAddress,
   formatArcadeOpeningHoursLines,
   type ArcadeShopDetail,
-} from '@/domain/arcade-shops';
-import { fetchNearcadeShop } from '@/services/nearcade-client';
-import { useAppTheme } from '@/theme/app-theme';
-import { openArcadeNavigation } from '@/utils/open-arcade-navigation';
+} from '@rranker/tool-arcade-finder/domain/arcade-shops';
+import { fetchNearcadeShop } from '@rranker/tool-arcade-finder/services/nearcade-client';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { openArcadeNavigation } from '@rranker/tool-arcade-finder/utils/open-arcade-navigation';
 
 export default function ArcadeShopDetailScreen() {
   const theme = useAppTheme();

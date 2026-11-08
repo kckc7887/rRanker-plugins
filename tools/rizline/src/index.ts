@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { ToolPlugin } from '@rranker/sdk';
 import { pages } from './pages';
 
 export const tool = {
-  kind: 'tool', id: 'tool.rizline', title: "Rizline 工具",
+  kind: 'tool',
+  cache: gameId => require('./storage').cache(gameId), id: 'tool.rizline', title: "Rizline 工具",
+  gameIds: ["rizline"],
   tools: [
   {
     "id": "best-image",

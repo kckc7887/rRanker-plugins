@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
-import type { RandomChartsCount } from '@/domain/random-charts';
-import type { TufDifficultyBand, TufPassAchievementFilter } from '@/domain/tuf';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
+import type { RandomChartsCount } from '@rranker/sdk/domain/random-charts';
+import type { TufDifficultyBand, TufPassAchievementFilter } from '@rranker/game-adofai/domain/tuf';
 
 export type TufRandomChartsPreferences = {
   count: RandomChartsCount;

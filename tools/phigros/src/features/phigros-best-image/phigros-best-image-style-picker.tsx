@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
-import { BestImageResourcePicker } from '@/features/best-image/best-image-picker-shell';
-import { RemoteNativeImage as Image } from '@/components/RemoteNativeImage';
+import { BestImageResourcePicker } from '@rranker/sdk/features/best-image/best-image-picker-shell';
+import { RemoteNativeImage as Image } from '@rranker/sdk/components/RemoteNativeImage';
 import type { ImageSourcePropType } from 'react-native';
 import type { PhigrosImageStyleChoice } from './phigros-best-image-preferences';
 

@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
 import type { PhigrosBestImageOverflowCount } from './phigros-best-image';
-import type { BestImageRatingStyle } from "@/features/best-image/best-image-controller-types";
+import type { BestImageRatingStyle } from "@rranker/sdk/features/best-image/best-image-controller-types";
 
 export type PhigrosImageStyleMode = 'current' | 'item' | 'random' | 'off';
 export type PhigrosImageStyleChoice = { mode: PhigrosImageStyleMode; key?: string };

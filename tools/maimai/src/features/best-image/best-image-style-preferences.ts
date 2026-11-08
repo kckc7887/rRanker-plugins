@@ -1,8 +1,8 @@
-import type { BestImageRatingStyle } from '@/features/best-image/best-image-controller-types';
+import type { BestImageRatingStyle } from '@rranker/sdk/features/best-image/best-image-controller-types';
 import { z } from 'zod';
-import Storage, { type KeyValueStore } from '@/storage/key-value-storage';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
-import type { CollectionItem } from '@/domain/models';
+import Storage, { type KeyValueStore } from '@rranker/sdk/storage/key-value-storage';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
+import type { CollectionItem } from '@rranker/game-maimai/domain/models';
 
 export type BestImageCollectionKind = 'icon' | 'plate' | 'trophy' | 'frame';
 export type BestImageCollectionSelectionMode = 'current' | 'random' | 'off' | 'item';

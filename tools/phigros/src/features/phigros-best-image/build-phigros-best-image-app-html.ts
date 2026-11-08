@@ -1,5 +1,5 @@
-import { bestImageBrandFooter, bestImageTitleScript } from '@/features/best-image/build-best-image-html';
-import { bestImageBridgeRuntimeScript, bestImageBridgeMeasureScript, bestImageBridgeReadyScript } from '@/features/best-image/best-image-bridge-script';
+import { bestImageBrandFooter, bestImageTitleScript } from '@rranker/sdk/features/best-image/build-best-image-html';
+import { bestImageBridgeRuntimeScript, bestImageBridgeMeasureScript, bestImageBridgeReadyScript } from '@rranker/sdk/features/best-image/best-image-bridge-script';
 import { preparePhigrosBestImageCards, ratingName, suggestion } from './phigros-best-image';
 import { escapePhigrosBestImageHtml as escape, type PhigrosBestImageHtmlInput } from './build-phigros-best-image-html';
 
@@ -45,7 +45,7 @@ function scoreCard(input: PhigrosAppImageInput, card: ReturnType<typeof prepareP
     <text x="731" y="214" text-anchor="end" font-size="28">${record.difficultyConstant.toFixed(1)} → ${record.rating.toFixed(3)}</text>
     ${grade === 'NEW' ? image('app/NEW.svg', 346, 257, 117, 40) : image(`app/${grade}.svg`, 410, 250, 53, 53)}
     <text x="475" y="288" font-size="35">${record.achievements.toFixed(2)}<tspan font-size="23">%</tspan></text>
-    <text x="731" y="288" text-anchor="end" font-size="22" opacity="@/features/phigros-best-image/.78">${escape(push)}</text>
+    <text x="731" y="288" text-anchor="end" font-size="22" opacity=".78">${escape(push)}</text>
   </svg></article>`;
 }
 
@@ -70,12 +70,12 @@ export function buildPhigrosBestImageAppHtml(input: PhigrosAppImageInput): strin
     <header class="profile" data-layout-content>${profile(input)}</header>
     <div class="scores-content" data-layout-content>${sections || '<div class="empty">暂无可用于图片的成绩</div>'}<footer class="image-footer"><div>Designed by 颍川埃. Data from ${escape(input.dataSource ?? '')}.</div>${bestImageBrandFooter(width)}${input.page.pageCount > 1 ? `<div>第 ${input.page.pageIndex + 1} / ${input.page.pageCount} 页</div>` : ''}</footer></div>
   </main><script>(()=>{
-    const OUTPUT_WIDTH=${width},MINIMUM_HEIGHT=${Math.ceil(width * .75)},canvas=document.querySelector('@/features/phigros-best-image/.canvas');let lastHeight=0,pending=false,assetsReady=false;
+    const OUTPUT_WIDTH=${width},MINIMUM_HEIGHT=${Math.ceil(width * .75)},canvas=document.querySelector('.canvas');let lastHeight=0,pending=false,assetsReady=false;
     ${bestImageBridgeRuntimeScript()}
     ${bestImageBridgeMeasureScript({ layoutCall: '' })}
     ${bestImageTitleScript}
     const fitText=()=>{
-      fitScoreTitles('@/features/phigros-best-image/.song-title', (value, measure) => fitTwoLineTitle(value, measure, {
+      fitScoreTitles('.song-title', (value, measure) => fitTwoLineTitle(value, measure, {
         locale: 'zh', width: 448, wrapSize: 34, singleSize: 34, doubleSize: 29,
         x: 734, singleY: 57, doubleY: 34, lineHeight: 35
       }));

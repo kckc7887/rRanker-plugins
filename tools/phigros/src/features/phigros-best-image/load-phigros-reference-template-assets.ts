@@ -1,5 +1,5 @@
 import { File } from 'expo-file-system';
-import type { BestImageAssetSession } from '@/features/best-image/load-best-image-session';
+import type { BestImageAssetSession } from '@rranker/sdk/features/best-image/load-best-image-session';
 
 export type PhigrosReferenceTemplateAssets = {
   css: string;
@@ -23,13 +23,13 @@ export async function loadPhigrosReferenceTemplateAssets(
   ].map(path => new File(session.directory, path).text()));
   const imageUrl = (name: string) => new File(session.directory, 'game/otherimg', name).uri;
   const fallbackBackgroundUrl = imageUrl('phigros.webp');
-  const commonCss = withoutImport(commonCssSource, '@/features/phigros-best-image/theme/snow/snow.css')
-    .replace('@/features/otherimg/phigros.png', fallbackBackgroundUrl);
+  const commonCss = withoutImport(commonCssSource, './theme/snow/snow.css')
+    .replace('../otherimg/phigros.png', fallbackBackgroundUrl);
   const ratingIconUrls = Object.fromEntries([
     'A', 'B', 'C', 'F', 'FC', 'S', 'V', 'phi',
   ].map(name => [name, imageUrl(`${name}.png`)]));
   return {
-    css: `${snowCss}\n${commonCss}\n${withoutImport(b19Css, '@/features/common/common.css')}`,
+    css: `${snowCss}\n${commonCss}\n${withoutImport(b19Css, '../common/common.css')}`,
     dataIconUrl: imageUrl('data.png'),
     fallbackBackgroundUrl,
     fallbackAvatarUrl: '',

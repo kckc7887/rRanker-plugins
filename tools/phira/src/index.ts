@@ -3,6 +3,7 @@ import { pages } from './pages';
 
 export const tool = {
   kind: 'tool', id: 'tool.phira', title: "Phira 工具",
+  gameIds: ["phira"],
   tools: [
   {
     "id": "random-charts",

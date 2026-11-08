@@ -1,7 +1,7 @@
 import { preparePhigrosBestImageCards, ratingName, suggestion } from './phigros-best-image';
-import { bestImageAssetsReadyScript } from '@/features/best-image/best-image-bridge-script';
+import { bestImageAssetsReadyScript } from '@rranker/sdk/features/best-image/best-image-bridge-script';
 /** 模板来源 phi-plugin resources/html/b19/b19.art。 */
-import { formatPhigrosSongRks } from '@/domain/phigros';
+import { formatPhigrosSongRks } from '@rranker/game-phigros/domain/phigros';
 import {
   phigrosAccAverageKey,
   type PhigrosAccAverage,

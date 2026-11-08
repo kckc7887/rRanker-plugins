@@ -1,4 +1,4 @@
-import type { ChunithmScoreCardData } from '@/domain/chunithm-score-presentation';
+import type { ChunithmScoreCardData } from '@rranker/game-chunithm/domain/chunithm-score-presentation';
 
 export type ChunithmBestImageType = 'best50' | 'custom';
 export type ChunithmBestImageSelectionCount = 0 | 5 | 10;

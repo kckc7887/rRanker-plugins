@@ -1,9 +1,9 @@
-import { bestImageBrandFooter, bestImageTitleScript } from '@/features/best-image/build-best-image-html';
-import type { ChunithmPlayer } from '@/domain/chunithm-personal';
-import { normalizeChunithmPossession, resolveChunithmPossessionTheme, resolveChunithmRatingTier } from '@/domain/chunithm-rating-theme';
-import { formatChunithmRating, formatChunithmScore, type ChunithmScoreCardData } from '@/domain/chunithm-score-presentation';
-import { minimumBestImageHeight } from '@/features/best-image/best-image-messages';
-import { bestImageBridgeMeasureScript, bestImageBridgeReadyScript, bestImageBridgeRuntimeScript } from '@/features/best-image/best-image-bridge-script';
+import { bestImageBrandFooter, bestImageTitleScript } from '@rranker/sdk/features/best-image/build-best-image-html';
+import type { ChunithmPlayer } from '@rranker/game-chunithm/domain/chunithm-personal';
+import { normalizeChunithmPossession, resolveChunithmPossessionTheme, resolveChunithmRatingTier } from '@rranker/game-chunithm/domain/chunithm-rating-theme';
+import { formatChunithmRating, formatChunithmScore, type ChunithmScoreCardData } from '@rranker/game-chunithm/domain/chunithm-score-presentation';
+import { minimumBestImageHeight } from '@rranker/sdk/features/best-image/best-image-messages';
+import { bestImageBridgeMeasureScript, bestImageBridgeReadyScript, bestImageBridgeRuntimeScript } from '@rranker/sdk/features/best-image/best-image-bridge-script';
 import type { ChunithmBestImagePage, ChunithmBestImageType } from './chunithm-best-image';
 
 export type ChunithmBestImageHtmlInput = {
@@ -25,7 +25,7 @@ export type ChunithmBestImageHtmlInput = {
 
 const escape = (value: unknown) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 const image = (url: string | null | undefined, x: number, y: number, width: number, height: number, extra = '') => url ? `<image href="${escape(url)}" x="${x}" y="${y}" width="${width}" height="${height}" preserveAspectRatio="xMidYMid meet" ${extra}/>` : '';
-const gradient = (id: string, colors: readonly string[]) => `<linearGradient id="${id}" x2="1" y2="@/features/chunithm-best-image/.6">${colors.map((color, i) => `<stop offset="${i / Math.max(1, colors.length - 1)}" stop-color="${color}"/>`).join('')}</linearGradient>`;
+const gradient = (id: string, colors: readonly string[]) => `<linearGradient id="${id}" x2="1" y2=".6">${colors.map((color, i) => `<stop offset="${i / Math.max(1, colors.length - 1)}" stop-color="${color}"/>`).join('')}</linearGradient>`;
 const text = (value: unknown, x: number, y: number, size: number, width: number, extra = '') => `<text x="${x}" y="${y}" font-size="${size}" data-fit-width="${width}" ${extra}>${escape(value)}</text>`;
 const ratingColors = {
   green: ['#267B56', '#58AA67'], orange: ['#C77026', '#EBA558'], red: ['#B5374C', '#E66B72'],
@@ -60,15 +60,15 @@ export function buildChunithmBestImageCardBackground(jacket: string | null, card
       <g id="${id}-wide"><use href="#${id}-art"/><use href="#${id}-art" transform="translate(640 0) scale(-1 1)"/></g>
       <filter id="${id}-soft" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="6"/></filter>
       <filter id="${id}-blur" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="23"/></filter>
-      <linearGradient id="${id}-clear"><stop stop-color="white"/><stop offset="@/features/chunithm-best-image/.36" stop-color="white"/><stop offset="@/features/chunithm-best-image/.76" stop-color="white" stop-opacity="@/features/chunithm-best-image/.55"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
-      <linearGradient id="${id}-fade"><stop stop-color="white"/><stop offset="@/features/chunithm-best-image/.5" stop-color="white" stop-opacity="@/features/chunithm-best-image/.8"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+      <linearGradient id="${id}-clear"><stop stop-color="white"/><stop offset=".36" stop-color="white"/><stop offset=".76" stop-color="white" stop-opacity=".55"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+      <linearGradient id="${id}-fade"><stop stop-color="white"/><stop offset=".5" stop-color="white" stop-opacity=".8"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
       <mask id="${id}-clear-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="320" height="320"><rect width="320" height="320" fill="url(#${id}-clear)"/></mask>
       <mask id="${id}-soft-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="390" height="320"><rect width="390" height="320" fill="url(#${id}-fade)"/></mask>
       <mask id="${id}-blur-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="465" height="320"><rect width="465" height="320" fill="url(#${id}-fade)"/></mask>
     </defs>
     <g clip-path="url(#${id}-clip)">
       ${image(card, 0, 0, 756, 320)}
-      ${jacket ? `<g mask="url(#${id}-blur-mask)"><use href="#${id}-wide" filter="url(#${id}-blur)" opacity="@/features/chunithm-best-image/.7"/></g><g mask="url(#${id}-soft-mask)"><use href="#${id}-wide" filter="url(#${id}-soft)"/></g><use href="#${id}-art" mask="url(#${id}-clear-mask)"/>` : ''}
+      ${jacket ? `<g mask="url(#${id}-blur-mask)"><use href="#${id}-wide" filter="url(#${id}-blur)" opacity=".7"/></g><g mask="url(#${id}-soft-mask)"><use href="#${id}-wide" filter="url(#${id}-soft)"/></g><use href="#${id}-art" mask="url(#${id}-clear-mask)"/>` : ''}
     </g>
   </svg>`;
 }
@@ -90,8 +90,8 @@ function renderCard(record: ChunithmScoreCardData, index: number, id: string, in
       ${text(formatChunithmScore(record.score), 732, 192, 96, 440, `class="score" letter-spacing="-2.8" fill="url(#${id}-score)" text-anchor="end"`)}
       <text x="414" y="241" font-size="29" fill="white" text-anchor="end" class="rank">#${index}</text>
       <text x="732" y="241" font-size="32" fill="white" text-anchor="end" data-fit-width="292" class="detail">${detail}</text>
-      ${attained ? image('achievement/' + attained + '@/features/chunithm-best-image/.svg', 320, 272, 244, 34, 'data-achievement="' + attained + '"') : ''}
-      ${image('grade/' + record.rank.replace('+', 'plus') + '@/features/chunithm-best-image/.svg', 578, 272, 154, 34, 'data-grade="' + record.rank + '"')}
+      ${attained ? image('achievement/' + attained + '.svg', 320, 272, 244, 34, 'data-achievement="' + attained + '"') : ''}
+      ${image('grade/' + record.rank.replace('+', 'plus') + '.svg', 578, 272, 154, 34, 'data-grade="' + record.rank + '"')}
     </g>
   </svg></article>`;
 }
@@ -109,7 +109,7 @@ function renderProfile(input: ChunithmBestImageHtmlInput): string {
     <defs>${gradient('player-rating', ratingColors[tier])}<clipPath id="character-clip"><rect x="470" y="90" width="86" height="86" rx="4"/></clipPath></defs>
     ${input.plateDataUri ? image(input.plateDataUri, 0, 0, 576, 228, 'class="name-plate"') : '<rect x="70" y="2" width="486" height="174" fill="#F5F6F7" stroke="#D5DADF"/>'}
     ${input.hideTrophy ? '' : tone === 'image' && input.trophyDataUri ? image(input.trophyDataUri, 143, 48, 413, 34) : image('trophy/' + trophyTone + '.svg', 143, 48, 413, 34) + text(trophy?.name ?? '', 349.5, 72, 18, 391, `text-anchor="middle" fill="${tone === 'ultima' ? '#FFF' : '#29333A'}"`)}
-    ${possession === 'copper' ? `<defs>${gradient('player-field', resolveChunithmPossessionTheme(possession).fillColors)}</defs><rect x="143" y="90" width="323" height="86" fill="url(#player-field)"/>` : image('field/' + possession + '@/features/chunithm-best-image/.svg', 143, 90, 323, 86)}
+    ${possession === 'copper' ? `<defs>${gradient('player-field', resolveChunithmPossessionTheme(possession).fillColors)}</defs><rect x="143" y="90" width="323" height="86" fill="url(#player-field)"/>` : image('field/' + possession + '.svg', 143, 90, 323, 86)}
     <rect x="470" y="90" width="86" height="86" rx="4" fill="white"/>
     ${input.hideCharacter ? '' : image(input.characterDataUri, 470, 90, 86, 86, 'clip-path="url(#character-clip)"')}
     ${star ? image('star/reborn.svg', 147, 93, 25, 25) + text(star, 159.5, 109, 9, 14, 'text-anchor="middle" fill="#6D5319"') : ''}
@@ -119,8 +119,8 @@ function renderProfile(input: ChunithmBestImageHtmlInput): string {
     ${image('rating/wordmark.svg', 152, 154.3, 51, 10)}
     ${text(input.ratingDisplay, 209, 168, 24, 78, `fill="url(#player-rating)" stroke="${tier === 'platinum' ? '#927329' : '#FFF'}" stroke-width=".65" paint-order="stroke fill" class="player-rating"`)}
     <g transform="translate(365 159) scale(.8)">
-      ${base >= 1 && base <= 6 ? image('class/base-' + base + '@/features/chunithm-best-image/.svg', -43, -13, 86, 26) : ''}
-      ${medal >= 1 && medal <= 6 ? `<g transform="scale(.85)">${image('class/medal-' + medal + '@/features/chunithm-best-image/.svg', -35, -25, 70, 50)}</g>` : ''}
+      ${base >= 1 && base <= 6 ? image('class/base-' + base + '.svg', -43, -13, 86, 26) : ''}
+      ${medal >= 1 && medal <= 6 ? `<g transform="scale(.85)">${image('class/medal-' + medal + '.svg', -35, -25, 70, 50)}</g>` : ''}
     </g>
   </g></svg>`;
 }
@@ -149,12 +149,12 @@ export function buildChunithmBestImageHtml(input: ChunithmBestImageHtmlInput): s
     <div class="scores-content" data-layout-content>${sections || '<div class="empty-section">暂无可用于图片的成绩</div>'}<footer class="image-footer"><div>Designed by 颍川埃. Data from ${escape(input.dataSource ?? '')}.</div>${bestImageBrandFooter(width)}${input.page.pageCount > 1 ? `<div>第 ${input.page.pageIndex + 1} / ${input.page.pageCount} 页</div>` : ''}</footer></div>
   </main></div><script>(()=>{
     const OUTPUT_WIDTH=${width}, MINIMUM_HEIGHT=${minimumHeight};
-    const canvas=document.querySelector('@/features/chunithm-best-image/.canvas');let lastHeight=0,pending=false,assetsReady=false;
+    const canvas=document.querySelector('.canvas');let lastHeight=0,pending=false,assetsReady=false;
     ${bestImageBridgeRuntimeScript()}
     ${bestImageBridgeMeasureScript({ layoutCall: '' })}
     ${bestImageTitleScript}
     const fitText=()=>{
-      fitScoreTitles('@/features/chunithm-best-image/.song-title', (value, measure) => fitTwoLineTitle(value, measure, {
+      fitScoreTitles('.song-title', (value, measure) => fitTwoLineTitle(value, measure, {
         locale: 'ja', width: 446, wrapSize: 38, singleSize: 46, doubleSize: 37,
         x: 730, singleY: 74, doubleY: 48, lineHeight: 44
       }));

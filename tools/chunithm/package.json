@@ -20,18 +20,25 @@
     "./features/chunithm-best-image/chunithm-ui-manifest": "./src/features/chunithm-best-image/chunithm-ui-manifest.ts",
     "./features/chunithm-best-image/load-chunithm-best-image-jackets": "./src/features/chunithm-best-image/load-chunithm-best-image-jackets.ts",
     "./features/chunithm-best-image/use-chunithm-best-image-assets": "./src/features/chunithm-best-image/use-chunithm-best-image-assets.ts",
-    "./features/chunithm-random-charts-preferences": "./src/features/chunithm-random-charts-preferences.ts"
+    "./features/chunithm-random-charts-preferences": "./src/features/chunithm-random-charts-preferences.ts",
+    "./components/ChunithmOverviewPins": "./src/components/ChunithmOverviewPins.tsx",
+    "./paths": "./src/paths.ts",
+    "./storage": "./src/storage.ts",
+    "./state/pins": "./src/state/pins.ts",
+    "./state/chunithm-random-charts-filter": "./src/state/chunithm-random-charts-filter.ts",
+    "./components/ChunithmSyncGuideSheet": "./src/components/ChunithmSyncGuideSheet.tsx"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-chunithm": "0.1.0",
     "@rranker/sdk": "0.1.0",
     "react": "19.2.3",
-    "@rranker/game-chunithm": "0.1.0",
     "react-native": "0.86.3"
   },
   "dependencies": {
+    "@rranker/provider-lxns": "0.1.0",
     "expo-file-system": "~57.0.7",
     "expo-router": "~57.0.26",
     "zod": "^4.4.3"

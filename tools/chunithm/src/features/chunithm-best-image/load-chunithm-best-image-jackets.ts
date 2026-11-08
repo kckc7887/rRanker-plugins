@@ -1,5 +1,5 @@
-import { loadImageFiles, type BestImageAssetSession } from '@/features/best-image/load-best-image-session';
-import type { ChunithmCatalogSnapshot } from '@/domain/chunithm';
+import { loadImageFiles, type BestImageAssetSession } from '@rranker/sdk/features/best-image/load-best-image-session';
+import type { ChunithmCatalogSnapshot } from '@rranker/game-chunithm/domain/chunithm';
 
 export const CHUNITHM_BEST_IMAGE_JACKET_ROOT = 'https://assets2.lxns.net/chunithm/jacket';
 

@@ -1,4 +1,4 @@
-import type { UiArchive, UiManifestEntry } from '@/features/best-image/best-image-ui-cache';
+import type { UiArchive, UiManifestEntry } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 
 export const RIZLINE_UI_ZIP: UiArchive = {
   "url": "https://rranker-rizline-data.cn-nb1.rains3.com/rizline-ui.zip",

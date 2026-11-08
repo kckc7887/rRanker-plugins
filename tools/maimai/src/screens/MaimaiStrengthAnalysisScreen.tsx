@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Stack, router, useIsFocused } from 'expo-router';
-import { StrengthConclusion, StrengthPractice, StrengthSongsSheet } from '@/components/game-content/StrengthAnalysis';
-import { QueryStateView } from '@/components/QueryStateView';
-import { ScoreRecordCard } from '@/components/ScoreRecordCard';
-import { SimaiDifficultyRadar } from '@/components/game-content/SimaiDifficultyRadar';
-import { chartVersionKey } from '@/domain/catalog';
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
-import type { Chart } from '@/domain/models';
-import { useMaimaiStrength } from '@/hooks/use-maimai-strength';
-import { useAppTheme } from '@/theme/app-theme';
+import { StrengthConclusion, StrengthPractice, StrengthSongsSheet } from '@rranker/sdk/components/game-content/StrengthAnalysis';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { ScoreRecordCard } from '@rranker/game-maimai/components/ScoreRecordCard';
+import { SimaiDifficultyRadar } from '@rranker/sdk/components/game-content/SimaiDifficultyRadar';
+import { chartVersionKey } from '@rranker/game-maimai/domain/catalog';
+import { detailHref } from '@rranker/sdk/navigation';
+import type { Chart } from '@rranker/game-maimai/domain/models';
+import { useMaimaiStrength } from '@rranker/game-maimai/hooks/use-maimai-strength';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 export function MaimaiStrengthAnalysisScreen() {
   const theme = useAppTheme();
@@ -19,7 +19,7 @@ export function MaimaiStrengthAnalysisScreen() {
   const selected = selectedAxis === null ? undefined : query.analysis?.axes[selectedAxis];
   const openChart = (chart: Chart) => {
     setSelectedAxis(null);
-    router.push(detailTargetHref(encodeDetailTarget({ game: 'maimai', songId: chart.songId, chartType: chart.type, levelIndex: chart.levelIndex })));
+    router.push(detailHref({ gameId: 'maimai', params: { songId: String(chart.songId), ...(chart.type === undefined ? {} : { chartType: String(chart.type) }), levelIndex: String(chart.levelIndex) } }));
   };
   return <View style={[styles.page, { backgroundColor: theme.background }]}>
     <Stack.Screen options={{ title: '实力分析' }} />

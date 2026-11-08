@@ -1,4 +1,4 @@
-import { TrophyBadge } from '@/components/TrophyBadge';
+import { TrophyBadge } from '@rranker/sdk/components/TrophyBadge';
 import { useEffect, useMemo, useState } from 'react';
 import {
   Pressable,
@@ -6,11 +6,11 @@ import {
   Text,
   View,
 } from 'react-native';
-import { CollectionImage } from '@/components/CollectionImage';
-import type { CollectionItem } from '@/domain/models';
-import { useAppTheme } from '@/theme/app-theme';
-import { normalizeTrophyTone } from '@/domain/badge-theme';
-import { BestImageResourcePicker } from '@/features/best-image/best-image-picker-shell';
+import { CollectionImage } from '@rranker/game-maimai/components/CollectionImage';
+import type { CollectionItem } from '@rranker/game-maimai/domain/models';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { normalizeTrophyTone } from '@rranker/sdk/domain/badge-theme';
+import { BestImageResourcePicker } from '@rranker/sdk/features/best-image/best-image-picker-shell';
 import type {
   BestImageCollectionChoice,
   BestImageCollectionKind,

@@ -1,6 +1,6 @@
 import { Directory, Paths } from 'expo-file-system';
-import { invalidateResourceWrites } from '@/services/snapshot-cache-utils';
-import { prepareBestImageUi, type UiProgress } from '@/features/best-image/best-image-ui-cache';
+import { invalidateResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
+import { prepareBestImageUi, type UiProgress } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 import { CHUNITHM_UI_ENTRIES, CHUNITHM_UI_ZIP } from './chunithm-ui-manifest';
 
 export const CHUNITHM_UI_CACHE_VERSION = 'v1';

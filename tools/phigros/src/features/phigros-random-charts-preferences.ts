@@ -1,12 +1,10 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
-import type { PhigrosLevel } from '@/domain/phigros';
-import type { PhigrosRankFilter } from '@/domain/phigros-filters';
-import type {
-  PhigrosRandomChartFilters,
-  RandomChartsCount,
-} from '@/domain/random-charts';
-import type { PhigrosXingKind } from '@/domain/phigros-xing';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
+import type { PhigrosLevel } from '@rranker/game-phigros/domain/phigros';
+import type { PhigrosRankFilter } from '@rranker/game-phigros/domain/phigros-filters';
+import type { PhigrosRandomChartFilters } from '@rranker/game-phigros/domain/random-charts';
+import type { RandomChartsCount } from '@rranker/sdk/domain/random-charts';
+import type { PhigrosXingKind } from '@rranker/game-phigros/domain/phigros-xing';
 
 export type PhigrosRandomChartsCount = RandomChartsCount;
 

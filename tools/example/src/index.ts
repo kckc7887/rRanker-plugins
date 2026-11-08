@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { ToolPlugin } from '@rranker/sdk';
+import { createElement } from 'react';
 import { pages } from './pages';
 
 export const tool = {
+  detailActions: props => createElement((require('./screens/ExampleToolScreens') as typeof import('./screens/ExampleToolScreens')).ExampleDetailActions, props),
   kind: 'tool', id: 'tool.example', title: "示例游戏工具",
+  gameIds: ["example"],
   tools: [
   {
     "id": "strength-analysis",

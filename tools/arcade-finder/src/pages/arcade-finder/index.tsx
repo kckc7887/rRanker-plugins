@@ -15,14 +15,14 @@ import {
 } from 'react-native';
 import { router, Stack, useIsFocused } from 'expo-router';
 import { useHeaderHeight } from 'expo-router/react-navigation';
-import { useNotification } from '@/components/AppNotification';
-import { ArcadeBusinessStatusLabel } from '@/components/ArcadeBusinessStatusLabel';
-import { ArcadeMap } from '@/components/ArcadeMap';
-import type { ArcadeMapCamera } from '@/components/ArcadeMap.types';
-import { arcadeDistanceKm, type ArcadeCoordinate } from '@/domain/arcade-coordinates';
-import { ArcadeFilterBar } from '@/components/ArcadeFilterBar';
-import { ArcadeSearchResults } from '@/components/ArcadeSearchResults';
-import { Card } from '@/components/Card';
+import { useNotification } from '@rranker/sdk/components/AppNotification';
+import { ArcadeBusinessStatusLabel } from '@rranker/tool-arcade-finder/components/ArcadeBusinessStatusLabel';
+import { ArcadeMap } from '@rranker/tool-arcade-finder/components/ArcadeMap';
+import type { ArcadeMapCamera } from '@rranker/tool-arcade-finder/components/ArcadeMap.types';
+import { arcadeDistanceKm, type ArcadeCoordinate } from '@rranker/tool-arcade-finder/domain/arcade-coordinates';
+import { ArcadeFilterBar } from '@rranker/tool-arcade-finder/components/ArcadeFilterBar';
+import { ArcadeSearchResults } from '@rranker/tool-arcade-finder/components/ArcadeSearchResults';
+import { Card } from '@rranker/sdk/components/Card';
 import {
   FALLBACK_ARCADE_GAME_TITLES,
   formatArcadeAddress,
@@ -32,20 +32,20 @@ import {
   type ArcadeGameTitle,
   type ArcadeOrigin,
   type ArcadeShop,
-} from '@/domain/arcade-shops';
+} from '@rranker/tool-arcade-finder/domain/arcade-shops';
 import {
   arcadeFinderPreferencesStore,
   defaultArcadeFinderPreferences,
   type ArcadeFinderPreferences,
 } from '../../features/arcade-finder-preferences';
-import { useArcadeSearch } from '@/hooks/use-arcade-search';
-import { fetchNearcadeDiscover, fetchNearcadeGameTitles } from '@/services/nearcade-client';
-import { resolveArcadePlace, type ArcadePlace } from '@/services/arcade-place-search';
-import { useSession } from '@/state/session-store';
-import { getForegroundAbortSignal, useAppLifecycle } from '@/state/app-lifecycle';
-import { useAppTheme } from '@/theme/app-theme';
-import { acquireArcadeGpsOrigin } from '@/utils/acquire-arcade-gps-origin';
-import { openArcadeNavigation } from '@/utils/open-arcade-navigation';
+import { useArcadeSearch } from '@rranker/tool-arcade-finder/hooks/use-arcade-search';
+import { fetchNearcadeDiscover, fetchNearcadeGameTitles } from '@rranker/tool-arcade-finder/services/nearcade-client';
+import { resolveArcadePlace, type ArcadePlace } from '@rranker/tool-arcade-finder/services/arcade-place-search';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { getForegroundAbortSignal, useAppLifecycle } from '@rranker/sdk/state/app-lifecycle';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { acquireArcadeGpsOrigin } from '@rranker/tool-arcade-finder/utils/acquire-arcade-gps-origin';
+import { openArcadeNavigation } from '@rranker/tool-arcade-finder/utils/open-arcade-navigation';
 
 type LoadErrorKind = 'permission' | 'location' | 'network' | null;
 

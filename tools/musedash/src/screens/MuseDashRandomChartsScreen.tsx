@@ -1,12 +1,13 @@
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
+import { detailHref } from '@rranker/sdk/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { router } from 'expo-router';
-import { MuseDashDifficultyBadge } from '@/components/musedash/MuseDashDifficultyBadge';
-import { MuseDashFilterBar } from '@/components/musedash/MuseDashFilterBar';
-import { MuseDashScoreCard } from '@/components/musedash/MuseDashScoreCard';
-import { QueryStateView } from '@/components/QueryStateView';
-import { RandomChartsPage, RandomUnplayedChartCard } from '@/components/RandomChartsPage';
-import { museDashUserIdFromAccountId } from '@/domain/bound-account';
+import { MuseDashDifficultyBadge } from '@rranker/game-musedash/components/MuseDashDifficultyBadge';
+import { MuseDashFilterBar } from '@rranker/game-musedash/components/MuseDashFilterBar';
+import { MuseDashScoreCard } from '@rranker/game-musedash/components/MuseDashScoreCard';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { RandomChartsPage, RandomUnplayedChartCard } from '@rranker/sdk/components/RandomChartsPage';
+import { museDashUserIdFromAccountId } from '@rranker/game-musedash/accounts';
 import {
   buildMuseDashRandomCharts,
   buildMuseDashRawScores,
@@ -16,17 +17,16 @@ import {
   museDashSongsFromAlbums,
   type MuseDashAlbumsResponse,
   type MuseDashRandomChart,
-} from '@/domain/muse-dash';
-import { pickRandomItems } from '@/domain/random-charts';
+} from '@rranker/game-musedash/domain/muse-dash';
+import { pickRandomItems } from '@rranker/sdk/domain/random-charts';
 import {
   useMuseDashAlbums,
   useMuseDashCe,
   useMuseDashDiffdiff,
   useMuseDashPlayDetails,
-  useMuseDashPlayer,
-} from '@/hooks/use-muse-dash';
-import { useMuseDashRandomChartsFilter } from '@/state/musedash-random-charts-filter';
-import { useSession } from '@/state/session-store';
+} from '@rranker/game-musedash/hooks/use-muse-dash';
+import { useMuseDashRandomChartsFilter } from '@rranker/tool-musedash/state/musedash-random-charts-filter';
+import { useSession } from '@rranker/sdk/state/session-store';
 
 export function MuseDashRandomChartsScreen() {
   const accountId = useSession((state) => state.activeAccountId);
@@ -34,7 +34,11 @@ export function MuseDashRandomChartsScreen() {
   const albums = useMuseDashAlbums();
   const diffdiff = useMuseDashDiffdiff();
   const ce = useMuseDashCe();
-  const player = useMuseDashPlayer(userId);
+  const gameQuery = useGameData();
+  const player = {
+    ...gameQuery,
+    data: gameQuery.data?.payload.kind === 'musedash' ? gameQuery.data.payload.player : undefined,
+  };
   const {
     count, collapsed, difficultySlot, dlc, constantMin, constantMax, accMin, accMax,
     achievement, hydrate, persistenceError, setCount, setCollapsed, setDifficultySlot, setDlc,
@@ -96,7 +100,7 @@ export function MuseDashRandomChartsScreen() {
     setLastSeed(seed);
     setResults(pickRandomItems(pool, count, seed));
   };
-  const openDetail = (chart: MuseDashRandomChart) => router.push(detailTargetHref(encodeDetailTarget({ game: 'musedash', songId: chart.song.uid, levelIndex: chart.difficultyIndex })));
+  const openDetail = (chart: MuseDashRandomChart) => router.push(detailHref({ gameId: 'musedash', params: { songId: String(chart.song.uid), levelIndex: String(chart.difficultyIndex) } }));
 
   return <QueryStateView<MuseDashAlbumsResponse>
     data={catalog}

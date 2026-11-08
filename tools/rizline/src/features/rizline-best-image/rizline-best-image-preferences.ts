@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
-import type { ImageCrop } from '@/components/image-crop';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
+import type { ImageCrop } from '@rranker/sdk/components/image-crop';
 
 export type RizlineImageChoice = { mode: 'current' } | { mode: 'item' | 'random'; id: string };
 export type RizlineSignatureChoice = RizlineImageChoice | { mode: 'off' };

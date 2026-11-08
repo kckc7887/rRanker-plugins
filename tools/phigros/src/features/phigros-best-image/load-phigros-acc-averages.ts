@@ -1,6 +1,6 @@
-import type { ScoreRecord } from '@/domain/models';
-import { providerErrorFromStatus } from '@/providers/errors';
-import { requestJson } from '@/providers/http-json';
+import type { ScoreRecord } from '@rranker/game-phigros/domain/models';
+import { providerErrorFromStatus } from '@rranker/sdk/providers/errors';
+import { requestJson } from '@rranker/sdk/providers/http-json';
 import { fetch as expoFetch } from 'expo/fetch';
 import { z } from 'zod';
 
@@ -19,7 +19,7 @@ export function phigrosAccAverageKey(record: Pick<ScoreRecord, 'songId' | 'level
 }
 
 function apiSongId(songId: string): string {
-  return songId.endsWith('@/features/phigros-best-image/.0') ? songId : `${songId}.0`;
+  return songId.endsWith('.0') ? songId : `${songId}.0`;
 }
 
 async function requestAverages(

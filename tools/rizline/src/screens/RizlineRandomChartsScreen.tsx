@@ -1,19 +1,19 @@
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
+import { detailHref } from '@rranker/sdk/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { router } from 'expo-router';
-import { QueryStateView } from '@/components/QueryStateView';
-import { RandomChartsPage, RandomUnplayedChartCard } from '@/components/RandomChartsPage';
-import { useStableRangeBounds } from '@/components/game-content/RangeSelector';
-import { RizlineFilterBar } from '@/components/rizline/RizlineFilterBar';
-import { RizlineScoreCard } from '@/components/rizline/RizlineScoreCard';
-import { RizlineDifficultyBadge } from '@/components/rizline/RizlineScoreVisuals';
-import { pickRandomItems } from '@/domain/random-charts';
-import { rizlineCoverUrl, rizlineDifficultyIndex, type RizlineChart, type RizlineSong } from '@/domain/rizline';
-import { filterRizlineSongs, matchesRizlineChart, rizlinePackOptions } from '@/domain/rizline-filters';
-import { useGameData } from '@/hooks/use-game-data';
-import { useRizlineCatalog } from '@/hooks/use-rizline-catalog';
-import { useRizlineRandomChartsFilter } from '@/state/rizline-random-charts-filter';
-import { useSession } from '@/state/session-store';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { RandomChartsPage, RandomUnplayedChartCard } from '@rranker/sdk/components/RandomChartsPage';
+import { useStableRangeBounds } from '@rranker/sdk/components/game-content/RangeSelector';
+import { RizlineFilterBar } from '@rranker/game-rizline/components/RizlineFilterBar';
+import { RizlineScoreCard } from '@rranker/game-rizline/components/RizlineScoreCard';
+import { RizlineDifficultyBadge } from '@rranker/game-rizline/components/RizlineScoreVisuals';
+import { pickRandomItems } from '@rranker/sdk/domain/random-charts';
+import { rizlineCoverUrl, rizlineDifficultyIndex, type RizlineChart, type RizlineSong } from '@rranker/game-rizline/domain/rizline';
+import { filterRizlineSongs, matchesRizlineChart, rizlinePackOptions } from '@rranker/game-rizline/domain/rizline-filters';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { useRizlineCatalog } from '@rranker/game-rizline/hooks/use-rizline-catalog';
+import { useRizlineRandomChartsFilter } from '@rranker/tool-rizline/state/rizline-random-charts-filter';
+import { useSession } from '@rranker/sdk/state/session-store';
 
 type RizlinePick = { song: RizlineSong; chart: RizlineChart };
 
@@ -52,7 +52,7 @@ export function RizlineRandomChartsScreen() {
         return record ? <RizlineScoreCard key={chart.id} record={record} title={song.title} artworkSource={rizlineCoverUrl(song)} />
           : <RandomUnplayedChartCard key={chart.id} title={song.title}
             badge={<RizlineDifficultyBadge difficulty={chart.difficulty} level={chart.level} />}
-            onPress={() => router.push(detailTargetHref(encodeDetailTarget({ game: 'rizline', songId: song.id, levelIndex: rizlineDifficultyIndex(chart.difficulty) })))} />;
+            onPress={() => router.push(detailHref({ gameId: 'rizline', params: { songId: String(song.id), levelIndex: String(rizlineDifficultyIndex(chart.difficulty)) } }))} />;
       })} />}
   />;
 }

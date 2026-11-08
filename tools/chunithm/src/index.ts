@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+import { createElement } from 'react';
 import type { ToolPlugin } from '@rranker/sdk';
 import { pages } from './pages';
 
 export const tool = {
-  kind: 'tool', id: 'tool.chunithm', title: "中二工具",
+  overviewActions: props => { const { OverviewActions } = require('./overview-actions') as typeof import('./overview-actions'); return createElement(OverviewActions, props); },
+  kind: 'tool',
+  cache: gameId => require('./storage').cache(gameId), id: 'tool.chunithm', title: "中二工具",
+  gameIds: ["chunithm"],
   tools: [
   {
     "id": "chunithm-rating",
@@ -41,5 +46,6 @@ export const tool = {
     "order": 4
   }
 ],
+  overviewCards: props => createElement(require('./components/ChunithmOverviewPins').OverviewCards, props),
   pages,
 } satisfies ToolPlugin;

@@ -1,6 +1,6 @@
-import { bestImageBrandFooter } from '@/features/best-image/build-best-image-html';
-import { formatRizlineAccuracy, formatRizlineConstant, formatRizlineRks, rizlineRecordStatus, type RizlinePlayer, type RizlineRecord } from '@/domain/rizline';
-import { bestImageBridgeMeasureScript, bestImageBridgeReadyScript, bestImageBridgeRuntimeScript } from '@/features/best-image/best-image-bridge-script';
+import { bestImageBrandFooter } from '@rranker/sdk/features/best-image/build-best-image-html';
+import { formatRizlineAccuracy, formatRizlineConstant, formatRizlineRks, rizlineRecordStatus, type RizlinePlayer, type RizlineRecord } from '@rranker/game-rizline/domain/rizline';
+import { bestImageBridgeMeasureScript, bestImageBridgeReadyScript, bestImageBridgeRuntimeScript } from '@rranker/sdk/features/best-image/best-image-bridge-script';
 import type { RizlineImagePage } from './rizline-best-image';
 
 const escape = (value: unknown) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
@@ -19,7 +19,7 @@ export function buildRizlineCardBackground(sources: readonly string[]): string {
     ${fade('glow', 400, [[0, 1], [120, 1], [170, 13 / 15], [220, 10 / 15], [275, 6 / 15], [330, 3 / 15], [400, 0]])}
     <filter id="blur" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="42"/></filter>
     <filter id="blur-soft" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="12"/></filter>
-    </defs><g clip-path="url(#shape)">${image(base, 562, 238)}${art ? `<g mask="url(#glow)"><use href="#wide" filter="url(#blur)" opacity="@/features/rizline-best-image/.7"/></g><g mask="url(#soft)"><use href="#wide" filter="url(#blur-soft)"/></g><use href="#art" mask="url(#clear)"/>` : ''}</g></svg>`;
+    </defs><g clip-path="url(#shape)">${image(base, 562, 238)}${art ? `<g mask="url(#glow)"><use href="#wide" filter="url(#blur)" opacity=".7"/></g><g mask="url(#soft)"><use href="#wide" filter="url(#blur-soft)"/></g><use href="#art" mask="url(#clear)"/>` : ''}</g></svg>`;
 }
 
 export function buildRizlineHeader(sources: readonly string[], base: string, backgroundIndex: number, avatarIndex: number): string {
@@ -74,7 +74,7 @@ export function buildRizlineBestImageHtml(input: RizlineImageHtmlInput): string 
     <script>const OUTPUT_WIDTH=${width};const MINIMUM_HEIGHT=1;const canvas=document.getElementById('canvas');let pending=false,lastHeight=0,assetsReady=false;
     ${bestImageBridgeRuntimeScript()}
     function fitText(){if(!assetsReady)return;document.querySelectorAll('h3').forEach(el=>{let size=${unit(34)};el.style.fontSize=size+'px';while(el.scrollHeight>el.clientHeight+1&&size>${unit(13)})el.style.fontSize=(size-=${unit(1)})+'px';});
-    for(const [selector,start,min] of [['@/features/rizline-best-image/.name',${unit(72)},${unit(20)}],['@/features/rizline-best-image/.bio',${unit(38)},${unit(10)}]]){const el=document.querySelector(selector);let size=start;el.style.fontSize=size+'px';while(el.scrollWidth>el.clientWidth+1&&size>min)el.style.fontSize=(size-=${unit(1)})+'px';}}
+    for(const [selector,start,min] of [['.name',${unit(72)},${unit(20)}],['.bio',${unit(38)},${unit(10)}]]){const el=document.querySelector(selector);let size=start;el.style.fontSize=size+'px';while(el.scrollWidth>el.clientWidth+1&&size>min)el.style.fontSize=(size-=${unit(1)})+'px';}}
     ${bestImageBridgeMeasureScript({ layoutCall: 'fitText();' })}
     ${bestImageBridgeReadyScript()}
     schedule();</script></body></html>`;

@@ -3,6 +3,7 @@ import { pages } from './pages';
 
 export const tool = {
   kind: 'tool', id: 'tool.arcade-finder', title: "音游地图",
+  gameIds: ["example","rizline","majdata-net","maimai","phigros","phira","chunithm","adofai","musedash","osu-standard","osu-mania","osu-catch","osu-taiko"],
   tools: [
   {
     "id": "arcade-finder",

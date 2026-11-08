@@ -1,12 +1,10 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
-import type { MaimaiFcAchievement, MaimaiFsAchievement } from '@/domain/maimai-filters';
-import type { ChartType, Difficulty } from '@/domain/models';
-import type {
-  MaimaiRandomChartFilters,
-  RandomChartsCount,
-} from '@/domain/random-charts';
-import type { VersionNameLocale } from '@/domain/version-names';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
+import type { MaimaiFcAchievement, MaimaiFsAchievement } from '@rranker/game-maimai/domain/maimai-filters';
+import type { ChartType, Difficulty } from '@rranker/game-maimai/domain/models';
+import type { MaimaiRandomChartFilters } from '@rranker/game-maimai/domain/random-charts';
+import type { RandomChartsCount } from '@rranker/sdk/domain/random-charts';
+import type { VersionNameLocale } from '@rranker/game-maimai/domain/version-names';
 
 export type { RandomChartsCount };
 

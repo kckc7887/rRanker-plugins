@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { createElement } from 'react';
 import type { ToolPlugin } from '@rranker/sdk';
 

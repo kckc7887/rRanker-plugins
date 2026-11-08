@@ -1,7 +1,7 @@
-import type { BestImageRatingStyle } from "@/features/best-image/best-image-controller-types";
-import { invalidateResourceWrites } from '@/services/snapshot-cache-utils';
+import type { BestImageRatingStyle } from "@rranker/sdk/features/best-image/best-image-controller-types";
+import { invalidateResourceWrites } from '@rranker/sdk/services/snapshot-cache-utils';
 import { Directory, Paths } from 'expo-file-system';
-import { prepareBestImageUi, type UiProgress, type PreparedUi } from '@/features/best-image/best-image-ui-cache';
+import { prepareBestImageUi, type UiProgress, type PreparedUi } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 import { MAIMAI_UI_MANIFEST_ENTRIES, MAIMAI_UI_ZIP, MAIMAI_APP_UI_ZIP, MAIMAI_APP_UI_MANIFEST_ENTRIES } from './maimai-ui-manifest.generated';
 
 export const MAIMAI_UI_CACHE_VERSION = 'v1';

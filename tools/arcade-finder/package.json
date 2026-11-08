@@ -8,28 +8,44 @@
     "./pages": "./src/pages.ts",
     "./pages/arcade-finder/[shopId]": "./src/pages/arcade-finder/[shopId].tsx",
     "./pages/arcade-finder/index": "./src/pages/arcade-finder/index.tsx",
-    "./features/arcade-finder-preferences": "./src/features/arcade-finder-preferences.ts"
+    "./features/arcade-finder-preferences": "./src/features/arcade-finder-preferences.ts",
+    "./components/ArcadeBusinessStatusLabel": "./src/components/ArcadeBusinessStatusLabel.tsx",
+    "./components/ArcadeFilterBar": "./src/components/ArcadeFilterBar.tsx",
+    "./components/ArcadeMap": "./src/components/ArcadeMap.tsx",
+    "./components/ArcadeMap.types": "./src/components/ArcadeMap.types.ts",
+    "./components/ArcadeSearchResults": "./src/components/ArcadeSearchResults.tsx",
+    "./components/NativeArcadeMap.android": "./src/components/NativeArcadeMap.android.tsx",
+    "./components/NativeArcadeMap.ios": "./src/components/NativeArcadeMap.ios.tsx",
+    "./components/NativeArcadeMap": "./src/components/NativeArcadeMap.tsx",
+    "./domain/arcade-coordinates": "./src/domain/arcade-coordinates.ts",
+    "./domain/arcade-shops": "./src/domain/arcade-shops.ts",
+    "./hooks/use-arcade-search": "./src/hooks/use-arcade-search.ts",
+    "./services/arcade-map-platform": "./src/services/arcade-map-platform.ts",
+    "./services/arcade-place-search": "./src/services/arcade-place-search.ts",
+    "./services/nearcade-client": "./src/services/nearcade-client.ts",
+    "./utils/acquire-arcade-gps-origin": "./src/utils/acquire-arcade-gps-origin.ts",
+    "./utils/open-arcade-navigation": "./src/utils/open-arcade-navigation.ts",
+    "./app.plugin.cjs": "./app.plugin.cjs"
   },
   "files": [
-    "src"
+    "src",
+    "app.plugin.cjs"
   ],
   "peerDependencies": {
     "@rranker/sdk": "0.1.0",
+    "expo": "~57.0.28",
     "react": "19.2.3",
-    "@rranker/game-example": "0.1.0",
-    "@rranker/game-rizline": "0.1.0",
-    "@rranker/game-majdata-net": "0.1.0",
-    "@rranker/game-maimai": "0.1.0",
-    "@rranker/game-phigros": "0.1.0",
-    "@rranker/game-phira": "0.1.0",
-    "@rranker/game-chunithm": "0.1.0",
-    "@rranker/game-adofai": "0.1.0",
-    "@rranker/game-musedash": "0.1.0",
-    "@rranker/game-osu": "0.1.0",
     "react-native": "0.86.3"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^3.4.0",
+    "@rranker/arcade-map-support": "1.0.0",
+    "expo-location": "~57.0.21",
+    "expo-modules-core": "~57.0.22",
     "expo-router": "~57.0.26",
+    "gcoord": "1.0.7",
+    "react-native-maps": "1.27.2",
+    "react-native-svg": "15.15.4",
     "zod": "^4.4.3"
   }
 }

@@ -13,15 +13,18 @@
     "./features/rizline-best-image/rizline-best-image": "./src/features/rizline-best-image/rizline-best-image.ts",
     "./features/rizline-best-image/rizline-ui-cache": "./src/features/rizline-best-image/rizline-ui-cache.ts",
     "./features/rizline-best-image/rizline-ui-manifest": "./src/features/rizline-best-image/rizline-ui-manifest.ts",
-    "./features/rizline-random-charts-preferences": "./src/features/rizline-random-charts-preferences.ts"
+    "./features/rizline-random-charts-preferences": "./src/features/rizline-random-charts-preferences.ts",
+    "./paths": "./src/paths.ts",
+    "./storage": "./src/storage.ts",
+    "./state/rizline-random-charts-filter": "./src/state/rizline-random-charts-filter.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-rizline": "0.1.0",
     "@rranker/sdk": "0.1.0",
     "react": "19.2.3",
-    "@rranker/game-rizline": "0.1.0",
     "react-native": "0.86.3"
   },
   "dependencies": {

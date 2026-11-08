@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react';
-import { RandomChartsPage } from '@/components/RandomChartsPage';
-import { PhiraScoreCard } from '@/components/phira/PhiraScoreCard';
-import { PhiraFilterBar } from '@/components/phira/PhiraFilterBar';
-import { phiraPlayerIdFromAccountId } from '@/domain/bound-account';
-import { pickRandomItems, type RandomChartsCount } from '@/domain/random-charts';
-import type { PhiraQueriedBest } from '@/domain/phira';
-import { filterPhiraBests } from '@/domain/phira-filters';
-import { usePhiraBests } from '@/hooks/use-phira';
-import { useSession } from '@/state/session-store';
-import { usePhiraRecordsFilter } from '@/state/phira-records-filter';
+import { RandomChartsPage } from '@rranker/sdk/components/RandomChartsPage';
+import { PhiraScoreCard } from '@rranker/game-phira/components/PhiraScoreCard';
+import { PhiraFilterBar } from '@rranker/game-phira/components/PhiraFilterBar';
+import { phiraPlayerIdFromAccountId } from '@rranker/game-phira/accounts';
+import { pickRandomItems, type RandomChartsCount } from '@rranker/sdk/domain/random-charts';
+import type { PhiraQueriedBest } from '@rranker/game-phira/domain/phira';
+import { filterPhiraBests } from '@rranker/game-phira/domain/phira-filters';
+import { usePhiraBests } from '@rranker/game-phira/hooks/use-phira';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { usePhiraRecordsFilter } from '@rranker/game-phira/state/phira-records-filter';
 
 export function PhiraRandomChartsScreen() {
   const accountId = useSession((state) => state.activeAccountId);

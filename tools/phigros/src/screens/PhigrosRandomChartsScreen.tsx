@@ -1,30 +1,25 @@
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
+import { detailHref } from '@rranker/sdk/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { router } from 'expo-router';
 import {
   RandomChartsPage,
   RandomUnplayedChartCard,
-} from '@/components/RandomChartsPage';
-import { QueryStateView } from '@/components/QueryStateView';
-import { PhigrosDifficultyBadge } from '@/components/phigros/PhigrosDifficultyBadge';
-import { PhigrosFilterBar } from '@/components/phigros/PhigrosFilterBar';
-import { PhigrosScoreCard } from '@/components/phigros/PhigrosScoreCard';
-import { chartVersionKey } from '@/domain/catalog';
-import { parseAchievementBound } from '@/domain/maimai-filters';
-import type { CatalogSnapshot } from '@/domain/models';
-import { buildPhigrosKyouChartTagIndex } from '@/domain/phigros-kyou';
-import {
-  buildBestRecordMap,
-  filterPhigrosRandomCharts,
-  pickRandomItems,
-  type RandomChartPick,
-} from '@/domain/random-charts';
-import { phigrosChartNoteKey } from '@/domain/phigros-xing';
-import { buildPhigrosNoteTotalByKey } from '../features/phigros-best-image/phigros-best-image-custom';
-import { useGameData } from '@/hooks/use-game-data';
-import { usePhigrosCatalog } from '@/hooks/use-phigros-catalog';
-import { usePhigrosKyouChartTags } from '@/hooks/use-phigros-kyou';
-import { usePhigrosRandomChartsFilter } from '@/state/phigros-random-charts-filter';
+} from '@rranker/sdk/components/RandomChartsPage';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { PhigrosDifficultyBadge } from '@rranker/game-phigros/components/PhigrosDifficultyBadge';
+import { PhigrosFilterBar } from '@rranker/game-phigros/components/PhigrosFilterBar';
+import { PhigrosScoreCard } from '@rranker/game-phigros/components/PhigrosScoreCard';
+import { chartVersionKey } from '@rranker/game-phigros/domain/catalog';
+import { parseAchievementBound } from '@rranker/sdk/domain/range-filters';
+import type { CatalogSnapshot } from '@rranker/game-phigros/domain/models';
+import { buildPhigrosKyouChartTagIndex } from '@rranker/game-phigros/domain/phigros-kyou';
+import { buildBestRecordMap, filterPhigrosRandomCharts, type RandomChartPick } from '@rranker/game-phigros/domain/random-charts';
+import { pickRandomItems } from '@rranker/sdk/domain/random-charts';
+import { phigrosChartNoteKey, buildPhigrosNoteTotalByKey } from '@rranker/game-phigros/domain/phigros-xing';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { usePhigrosCatalog } from '@rranker/game-phigros/hooks/use-phigros-catalog';
+import { usePhigrosKyouChartTags } from '@rranker/game-phigros/hooks/use-phigros-kyou';
+import { usePhigrosRandomChartsFilter } from '@rranker/tool-phigros/state/phigros-random-charts-filter';
 
 export function PhigrosRandomChartsScreen() {
   const catalogQuery = usePhigrosCatalog();
@@ -91,7 +86,7 @@ export function PhigrosRandomChartsScreen() {
     setLastSeed(seed);
     setResults(pickRandomItems(pool, count, seed));
   };
-  const openDetail = (pick: RandomChartPick) => router.push(detailTargetHref(encodeDetailTarget({ game: 'phigros', songId: pick.songId, levelIndex: pick.levelIndex })));
+  const openDetail = (pick: RandomChartPick) => router.push(detailHref({ gameId: 'phigros', params: { songId: String(pick.songId), levelIndex: String(pick.levelIndex) } }));
 
   return (
     <QueryStateView<CatalogSnapshot>

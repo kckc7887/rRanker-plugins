@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { ToolPlugin } from '@rranker/sdk';
 import { pages } from './pages';
 
 export const tool = {
-  kind: 'tool', id: 'tool.phigros', title: "Phigros 工具",
+  kind: 'tool',
+  cache: gameId => require('./storage').cache(gameId), id: 'tool.phigros', title: "Phigros 工具",
+  gameIds: ["phigros"],
   tools: [
   {
     "id": "push-rks",

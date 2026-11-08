@@ -1,11 +1,11 @@
-import type { ChunithmLevelIndex } from '@/domain/chunithm';
-import { matchesChunithmConstantRange, matchesChunithmRankRange } from '@/domain/chunithm-filters';
+import type { ChunithmLevelIndex } from '@rranker/game-chunithm/domain/chunithm';
+import { matchesChunithmConstantRange, matchesChunithmRankRange } from '@rranker/game-chunithm/domain/chunithm-filters';
 import {
   compareChunithmScores,
   type ChunithmRank,
   type ChunithmScoreCardData,
-} from '@/domain/chunithm-score-presentation';
-import { parseBestImageQuantity } from '@/features/best-image/best-image-custom';
+} from '@rranker/game-chunithm/domain/chunithm-score-presentation';
+import { parseBestImageQuantity } from '@rranker/sdk/features/best-image/best-image-custom';
 import type { ChunithmBestImageSection } from './chunithm-best-image';
 
 export type CustomChunithmBestImageFilters = {

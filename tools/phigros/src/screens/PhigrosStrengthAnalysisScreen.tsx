@@ -1,28 +1,27 @@
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
+import { detailHref } from '@rranker/sdk/navigation';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, Stack } from 'expo-router';
-import { StrengthConclusion, StrengthPractice, StrengthSongsSheet } from '@/components/game-content/StrengthAnalysis';
-import { RandomUnplayedChartCard } from '@/components/RandomChartsPage';
-import { EmptyDataView } from '@/components/EmptyDataView';
-import { PhigrosDifficultyBadge } from '@/components/phigros/PhigrosDifficultyBadge';
-import { PhigrosScoreCard } from '@/components/phigros/PhigrosScoreCard';
-import { PhigrosStrengthRadar } from '@/components/phigros/PhigrosStrengthRadar';
-import { buildPhigrosKyouChartTagIndex } from '@/domain/phigros-kyou';
-import type { ScoreRecord } from '@/domain/models';
+import { StrengthConclusion, StrengthPractice, StrengthSongsSheet } from '@rranker/sdk/components/game-content/StrengthAnalysis';
+import { RandomUnplayedChartCard } from '@rranker/sdk/components/RandomChartsPage';
+import { EmptyDataView } from '@rranker/sdk/components/EmptyDataView';
+import { PhigrosDifficultyBadge } from '@rranker/game-phigros/components/PhigrosDifficultyBadge';
+import { PhigrosScoreCard } from '@rranker/game-phigros/components/PhigrosScoreCard';
+import { PhigrosStrengthRadar } from '@rranker/game-phigros/components/PhigrosStrengthRadar';
+import { buildPhigrosKyouChartTagIndex } from '@rranker/game-phigros/domain/phigros-kyou';
+import type { ScoreRecord } from '@rranker/game-phigros/domain/models';
 import {
   analyzePhigrosStrength,
   describePhigrosStrengthUnexpectedPrimaryAxes,
   type PhigrosStrengthChartSample,
   type PhigrosStrengthRecommendation,
   type PhigrosTagRksStat,
-} from '@/domain/phigros-strength-analysis';
-import { phigrosChartNoteKey } from '@/domain/phigros-xing';
-import { buildPhigrosNoteTotalByKey } from '../features/phigros-best-image/phigros-best-image-custom';
-import { useGameData } from '@/hooks/use-game-data';
-import { usePhigrosCatalog } from '@/hooks/use-phigros-catalog';
-import { usePhigrosKyouChartTags } from '@/hooks/use-phigros-kyou';
-import { useAppTheme } from '@/theme/app-theme';
+} from '@rranker/game-phigros/domain/phigros-strength-analysis';
+import { phigrosChartNoteKey, buildPhigrosNoteTotalByKey } from '@rranker/game-phigros/domain/phigros-xing';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { usePhigrosCatalog } from '@rranker/game-phigros/hooks/use-phigros-catalog';
+import { usePhigrosKyouChartTags } from '@rranker/game-phigros/hooks/use-phigros-kyou';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 const UNEXPECTED_PRIMARY_AXES = describePhigrosStrengthUnexpectedPrimaryAxes();
 
@@ -132,7 +131,7 @@ export default function PhigrosStrengthAnalysisScreen() {
   const phigrosPayload = payload?.kind === 'phigros' ? payload : null;
   const songs = catalogQuery.data?.snapshot.songs;
   const openSongChart = (songId: string, levelIndex: number) => {
-    router.push(detailTargetHref(encodeDetailTarget({ game: 'phigros', songId, levelIndex })));
+    router.push(detailHref({ gameId: 'phigros', params: { songId: String(songId), levelIndex: String(levelIndex) } }));
   };
   const openChartDetail = (chart: PhigrosStrengthChartSample) => {
     setSelectedTag(null);

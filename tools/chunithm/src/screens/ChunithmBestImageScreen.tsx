@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ChunithmFilterBar } from '@/components/chunithm/ChunithmFilterBar';
+import { ChunithmFilterBar } from '@rranker/game-chunithm/components/ChunithmFilterBar';
 import {
   appendChunithmSelectionScores,
   paginateChunithmBestImageSections,
@@ -27,8 +27,8 @@ import {
 } from '../features/chunithm-best-image/chunithm-best-image-preferences';
 import { ChunithmBestImageBackgroundPicker } from '../features/chunithm-best-image/chunithm-best-image-background-picker';
 import { ChunithmBestImageStylePicker, ChunithmBestImageTrophyPreview } from '../features/chunithm-best-image/chunithm-best-image-style-picker';
-import { useChunithmCollections } from '@/hooks/use-chunithm-collections';
-import { useBestImageAssets } from '@/features/best-image/use-best-image-assets';
+import { useChunithmCollections } from '@rranker/game-chunithm/hooks/use-chunithm-collections';
+import { useBestImageAssets } from '@rranker/sdk/features/best-image/use-best-image-assets';
 import {
   loadChunithmBestImageJackets,
   resolveChunithmBestImageJacketId,
@@ -37,18 +37,18 @@ import { buildChunithmBestImageHtml } from '../features/chunithm-best-image/buil
 import {
   buildChunithmScoreCards,
   compareChunithmScores,
-} from '@/domain/chunithm-score-presentation';
-import { CHUNITHM_DIFFICULTY_LABELS } from '@/domain/chunithm';
-import { buildChunithmCharacterUrl, buildChunithmPlateUrl, buildChunithmTrophyUrl, type ChunithmPlayer } from '@/domain/chunithm-personal';
-import { useChunithmCatalog } from '@/hooks/use-chunithm-catalog';
-import { useGameData } from '@/hooks/use-game-data';
-import { useAppTheme } from '@/theme/app-theme';
-import { bestImageExportFilename } from '@/features/best-image/best-image-export';
+} from '@rranker/game-chunithm/domain/chunithm-score-presentation';
+import { CHUNITHM_DIFFICULTY_LABELS } from '@rranker/game-chunithm/domain/chunithm';
+import { buildChunithmCharacterUrl, buildChunithmPlateUrl, buildChunithmTrophyUrl, type ChunithmPlayer } from '@rranker/game-chunithm/domain/chunithm-personal';
+import { useChunithmCatalog } from '@rranker/game-chunithm/hooks/use-chunithm-catalog';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { bestImageExportFilename } from '@rranker/sdk/features/best-image/best-image-export';
 import {
   BestImageQuantity, BestImageStyleRow, BestImageExtraCount, BestImageScreenShell,
   bestImageScreenSharedStyles,
-} from '@/features/best-image/best-image-screen-shell';
-import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate } from '@/features/best-image/use-best-image-screen-controller';
+} from '@rranker/sdk/features/best-image/best-image-screen-shell';
+import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate } from '@rranker/sdk/features/best-image/use-best-image-screen-controller';
 
 const WIDTHS = [1080, 1440, 2160] as const;
 const SELECTION_COUNTS: readonly ChunithmBestImageSelectionCount[] = [0, 5, 10];
@@ -77,7 +77,7 @@ export function ChunithmBestImageScreen() {
 
   const controller = useBestImageScreenController<ChunithmBestImageType, typeof DEFAULT_CHUNITHM_BEST_IMAGE_STYLES, 'character' | 'plate' | 'trophy' | 'background'>({
     accountId: gameData.activeAccountId,
-    game: 'chunithm',
+    game: 'chunithm', pluginId: 'tool.chunithm',
     defaultType: 'best50',
     defaultWidth: 1080,
     defaultQuantityText: String(DEFAULT_CUSTOM_CHUNITHM_BEST_IMAGE_FILTERS.quantity),

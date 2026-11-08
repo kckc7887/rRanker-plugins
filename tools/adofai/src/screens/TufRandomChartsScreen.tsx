@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useIsFocused } from 'expo-router';
-import { TufRandomFilterBar } from '@/components/adofai/TufFilterBar';
-import { TufScoreCard } from '@/components/adofai/TufScoreCard';
-import { QueryStateView } from '@/components/QueryStateView';
-import { RandomChartsPage } from '@/components/RandomChartsPage';
-import { tufPlayerIdFromAccountId } from '@/domain/bound-account';
-import { pickRandomItems } from '@/domain/random-charts';
-import { filterTufPasses, tufDifficultyBounds, uniqueTufPassesByLevel, type TufPass } from '@/domain/tuf';
-import { prefetchTufPassPage, useTufPasses } from '@/hooks/use-tuf';
-import { loadOffsetPagesBounded, offsetPageStarts } from '@/services/offset-pagination';
-import { useTufRandomChartsFilter } from '@/state/tuf-random-charts-filter';
-import { useSession } from '@/state/session-store';
-import { getForegroundAbortSignal, useAppLifecycle } from '@/state/app-lifecycle';
+import { TufRandomFilterBar } from '@rranker/game-adofai/components/TufFilterBar';
+import { TufScoreCard } from '@rranker/game-adofai/components/TufScoreCard';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { RandomChartsPage } from '@rranker/sdk/components/RandomChartsPage';
+import { tufPlayerIdFromAccountId } from '@rranker/game-adofai/accounts';
+import { pickRandomItems } from '@rranker/sdk/domain/random-charts';
+import { filterTufPasses, tufDifficultyBounds, uniqueTufPassesByLevel, type TufPass } from '@rranker/game-adofai/domain/tuf';
+import { prefetchTufPassPage, useTufPasses } from '@rranker/game-adofai/hooks/use-tuf';
+import { loadOffsetPagesBounded, offsetPageStarts } from '@rranker/sdk/services/offset-pagination';
+import { useTufRandomChartsFilter } from '@rranker/tool-adofai/state/tuf-random-charts-filter';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { getForegroundAbortSignal, useAppLifecycle } from '@rranker/sdk/state/app-lifecycle';
 
 export function TufRandomChartsScreen() {
   const focused = useIsFocused();

@@ -6,19 +6,24 @@
   "exports": {
     ".": "./src/index.ts",
     "./pages": "./src/pages.ts",
-    "./pages/tolerance": "./src/pages/tolerance.tsx"
+    "./pages/tolerance": "./src/pages/tolerance.tsx",
+    "./pages/chart-preview": "./src/pages/chart-preview.tsx",
+    "./features/simai-chart-preview/prepare-chart-preview-webview": "./src/features/simai-chart-preview/prepare-chart-preview-webview.ts",
+    "./features/maimai-chart-download/maimai-chart-download": "./src/features/maimai-chart-download/maimai-chart-download.ts"
   },
   "files": [
     "src"
   ],
   "peerDependencies": {
+    "@rranker/game-maimai": "0.1.0",
+    "@rranker/game-majdata-net": "0.1.0",
     "@rranker/sdk": "0.1.0",
     "react": "19.2.3",
-    "@rranker/game-majdata-net": "0.1.0",
-    "@rranker/game-maimai": "0.1.0",
     "react-native": "0.86.3"
   },
   "dependencies": {
+    "@rranker/chart-simai": "0.1.0",
+    "expo-file-system": "~57.0.7",
     "expo-router": "~57.0.26"
   }
 }

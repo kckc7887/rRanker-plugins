@@ -1,9 +1,9 @@
-import { RatingCalculator, RatingFields, RatingMessage, RatingTable } from '@/components/game-content/RatingCalculator';
+import { RatingCalculator, RatingFields, RatingMessage, RatingTable } from '@rranker/sdk/components/game-content/RatingCalculator';
 import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { Card } from '@/components/Card';
-import { FormField } from '@/components/FormField';
+import { Card } from '@rranker/sdk/components/Card';
+import { FormField } from '@rranker/sdk/components/FormField';
 import {
   CHUNITHM_CLEAR_TIER_LABELS,
   CHUNITHM_CLEAR_TIER_MIN_SCORE,
@@ -19,9 +19,9 @@ import {
   minimumScoreForChunithmOverPower,
   minimumScoreForChunithmRating,
   parseChunithmChartInput,
-} from '@/domain/chunithm-rating';
-import { useAppTheme } from '@/theme/app-theme';
-import { parseNumericInput } from '@/utils/numeric-input';
+} from '@rranker/game-chunithm/domain/chunithm-rating';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { parseNumericInput } from '@rranker/sdk/utils/numeric-input';
 
 const CLEAR_TIER_DESCRIPTIONS: readonly { id: ChunithmClearTier; description: string }[] = [
   { id: 'ajc', description: 'ALL JUSTICE CRITICAL' },

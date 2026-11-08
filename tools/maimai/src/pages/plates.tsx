@@ -1,28 +1,28 @@
-import { CollectionPickerCard, CollectionPinButton } from '@/components/CollectionProgress';
+import { CollectionPickerCard, CollectionPinButton } from '@rranker/sdk/components/CollectionProgress';
 import { useEffect, useMemo, useState } from 'react';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
-import { Card } from '@/components/Card';
-import { useNotification } from '@/components/AppNotification';
-import { PlateImage } from '@/components/PlateImage';
-import { PlateProgressCard } from '@/components/PlateProgressCard';
-import { QueryStateView } from '@/components/QueryStateView';
-import { DifficultyBadge } from '@/components/ScoreVisuals';
-import { difficultyFromIndex } from '@/domain/catalog';
+import { Card } from '@rranker/sdk/components/Card';
+import { useNotification } from '@rranker/sdk/components/AppNotification';
+import { PlateImage } from '@rranker/game-maimai/components/PlateImage';
+import { PlateProgressCard } from '@rranker/game-maimai/components/PlateProgressCard';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { DifficultyBadge } from '@rranker/game-maimai/components/ScoreVisuals';
+import { difficultyFromIndex } from '@rranker/game-maimai/domain/catalog';
 import {
   calculatePlateProgress,
   groupPlatesForPicker,
   parseVersionPlateName,
   type VersionPlateGroup,
-} from '@/domain/plates';
-import type { Plate } from '@/domain/models';
-import { usePlates } from '@/hooks/use-plates';
-import { useScoreSnapshot } from '@/hooks/use-score-snapshot';
-import { useDetailedCatalog } from '@/hooks/use-detailed-catalog';
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
-import { useSession } from '@/state/session-store';
-import { useToolboxPins } from '@/state/toolbox-pins';
-import { useAppTheme } from '@/theme/app-theme';
+} from '@rranker/game-maimai/domain/plates';
+import type { Plate } from '@rranker/game-maimai/domain/models';
+import { usePlates } from '@rranker/game-maimai/hooks/use-plates';
+import { useScoreSnapshot } from '@rranker/game-maimai/hooks/use-score-snapshot';
+import { useDetailedCatalog } from '@rranker/game-maimai/hooks/use-detailed-catalog';
+import { detailHref } from '@rranker/sdk/navigation';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { usePlatePins } from '../state/pins';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 function firstPlateInGroups(groups: VersionPlateGroup[]): Plate | undefined {
   return groups[0]?.entries[0]?.plate;
@@ -43,9 +43,9 @@ export default function PlatesToolScreen() {
   const scores = useScoreSnapshot();
   const songs = useDetailedCatalog();
   const activeGameId = useSession((state) => state.activeGameId);
-  const pinnedPlateIds = useToolboxPins((state) => state.pinnedPlateIdsByGame[activeGameId]);
-  const hydratePins = useToolboxPins((state) => state.hydrate);
-  const togglePinnedPlate = useToolboxPins((state) => state.togglePinnedPlate);
+  const pinnedPlateIds = usePlatePins((state) => state.pinsByGame)[activeGameId] ?? [];
+  const hydratePins = usePlatePins((state) => state.hydrate);
+  const toggle = usePlatePins((state) => state.toggle);
   const [selectedId, setSelectedId] = useState<number | undefined>(routePlateId);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [openPrefix, setOpenPrefix] = useState<string | null>(null);
@@ -103,7 +103,7 @@ export default function PlatesToolScreen() {
     if (!selected) return;
     setPinPending(true);
     try {
-      await togglePinnedPlate(activeGameId, selected.id);
+      await toggle(activeGameId, selected.id);
     } catch {
       showNotification({
         title: '保存失败',
@@ -224,7 +224,7 @@ export default function PlatesToolScreen() {
               return (
                 <Pressable
                   style={({ pressed }) => [styles.song, { backgroundColor: theme.surface }, pressed && styles.pressed]}
-                  onPress={() => router.push(detailTargetHref(encodeDetailTarget({ game: 'maimai', songId: item.songId })))}
+                  onPress={() => router.push(detailHref({ gameId: 'maimai', params: { songId: String(item.songId) } }))}
                 >
                   <View style={styles.songCopy}>
                     <Text style={[styles.songId, { color: theme.textMuted }]}>#{item.songId}</Text>

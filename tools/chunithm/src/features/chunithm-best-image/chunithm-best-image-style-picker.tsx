@@ -1,10 +1,10 @@
 import { StyleSheet, Text } from 'react-native';
-import { buildChunithmCharacterUrl, buildChunithmPlateUrl } from '@/domain/chunithm-personal';
-import { useAppTheme } from '@/theme/app-theme';
-import { BestImageResourcePicker } from '@/features/best-image/best-image-picker-shell';
-import { ChunithmCollectionPreview } from '@/components/chunithm/ChunithmCollectionImage';
-import { RemoteNativeImage as Image } from '@/components/RemoteNativeImage';
-import type { ChunithmCollection } from '@/domain/chunithm-collections';
+import { buildChunithmCharacterUrl, buildChunithmPlateUrl } from '@rranker/game-chunithm/domain/chunithm-personal';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { BestImageResourcePicker } from '@rranker/sdk/features/best-image/best-image-picker-shell';
+import { ChunithmCollectionPreview } from '@rranker/game-chunithm/components/ChunithmCollectionImage';
+import { RemoteNativeImage as Image } from '@rranker/sdk/components/RemoteNativeImage';
+import type { ChunithmCollection } from '@rranker/game-chunithm/domain/chunithm-collections';
 import type { ChunithmBestImageStyleChoice } from './chunithm-best-image-preferences';
 
 const itemKey = (item: ChunithmCollection) => String(item.id);

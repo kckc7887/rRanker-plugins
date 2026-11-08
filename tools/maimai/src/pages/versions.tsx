@@ -1,18 +1,19 @@
 import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, Stack, type Href } from 'expo-router';
-import { Card } from '@/components/Card';
-import { QueryStateView } from '@/components/QueryStateView';
-import { VersionLogo } from '@/components/VersionLogo';
-import type { CatalogSnapshot, GameVersion } from '@/domain/models';
-import { versionLogoSource } from '@/domain/version-logo-assets';
-import { VERSION_NAME_MAPPINGS } from '@/domain/version-names';
-import { calculateVersionStats, type VersionStats } from '@/domain/version-stats';
-import { useDetailedCatalog } from '@/hooks/use-detailed-catalog';
-import { useScoreSnapshot } from '@/hooks/use-score-snapshot';
-import { useRecordsFilter } from '@/state/records-filter';
-import { useCatalogFilter } from '@/state/catalog-filter';
-import { useAppTheme } from '@/theme/app-theme';
+import { Card } from '@rranker/sdk/components/Card';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { VersionLogo } from '@rranker/game-maimai/components/VersionLogo';
+import type { CatalogSnapshot } from '@rranker/game-maimai/domain/models';
+import type { GameVersion } from '@rranker/sdk/data';
+import { versionLogoSource } from '@rranker/game-maimai/domain/version-logo-assets';
+import { VERSION_NAME_MAPPINGS } from '@rranker/game-maimai/domain/version-names';
+import { calculateVersionStats, type VersionStats } from '@rranker/game-maimai/domain/version-stats';
+import { useDetailedCatalog } from '@rranker/game-maimai/hooks/use-detailed-catalog';
+import { useScoreSnapshot } from '@rranker/game-maimai/hooks/use-score-snapshot';
+import { useRecordsFilter } from '@rranker/game-maimai/state/records-filter';
+import { useCatalogFilter } from '@rranker/game-maimai/state/catalog-filter';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 interface VersionSummary { version: GameVersion; stats: VersionStats }
 

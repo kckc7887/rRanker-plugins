@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { ToolPlugin } from '@rranker/sdk';
 import { pages } from './pages';
 
 export const tool = {
+  requiredCapabilities: {"maimai":["chart.simai"],"majdata-net":["chart.simai"]},
   kind: 'tool', id: 'tool.simai', title: "达成率与容错",
+  gameIds: ["majdata-net","maimai"],
   tools: [
   {
     "id": "tolerance",
@@ -23,5 +26,9 @@ export const tool = {
     "order": 2
   }
 ],
+  chartDownloads: {
+    'maimai': (params, options) => require('./chart-download').downloadMaimai(params, options),
+    'majdata-net': (params, options) => require('./chart-download').downloadMajdata(params, options),
+  },
   pages,
 } satisfies ToolPlugin;

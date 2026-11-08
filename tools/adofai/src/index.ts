@@ -3,6 +3,7 @@ import { pages } from './pages';
 
 export const tool = {
   kind: 'tool', id: 'tool.adofai', title: "冰与火之舞工具",
+  gameIds: ["adofai"],
   tools: [
   {
     "id": "random-charts",

@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import type { RandomChartsCount } from '@/domain/random-charts';
-import { defaultRizlineFilters, type RizlineFilters } from '@/domain/rizline-filters';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
+import type { RandomChartsCount } from '@rranker/sdk/domain/random-charts';
+import { defaultRizlineFilters, type RizlineFilters } from '@rranker/game-rizline/domain/rizline-filters';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
 
 export type RizlineRandomChartsPreferences = RizlineFilters & { count: RandomChartsCount };
 export const defaultRizlineRandomChartsPreferences = (): RizlineRandomChartsPreferences => ({

@@ -1,21 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
-import { MaimaiFilterBar, dxRatingTagFilterState, type VersionFilterOption } from '@/components/MaimaiFilterBar';
-import { QueryStateView } from '@/components/QueryStateView';
-import { RandomChartsPage } from '@/components/RandomChartsPage';
-import { ScoreRecordCard, type ScoreRecordCardData } from '@/components/ScoreRecordCard';
-import { chartVersionKey, normalizeSongId } from '@/domain/catalog';
-import { maimaiGenres, parseAchievementBound } from '@/domain/maimai-filters';
-import type { CatalogSnapshot, ScoreRecord } from '@/domain/models';
-import {
-  buildBestRecordMap,
-  filterMaimaiRandomCharts,
-  pickRandomItems,
-  type RandomChartPick,
-} from '@/domain/random-charts';
-import { useDetailedCatalog } from '@/hooks/use-detailed-catalog';
-import { useDxRatingChartTags } from '@/hooks/use-dxrating-chart-tags';
-import { useScoreSnapshot } from '@/hooks/use-score-snapshot';
-import { useRandomChartsFilter } from '@/state/random-charts-filter';
+import { MaimaiFilterBar, dxRatingTagFilterState, type VersionFilterOption } from '@rranker/game-maimai/components/MaimaiFilterBar';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { RandomChartsPage } from '@rranker/sdk/components/RandomChartsPage';
+import { ScoreRecordCard, type ScoreRecordCardData } from '@rranker/game-maimai/components/ScoreRecordCard';
+import { chartVersionKey, normalizeSongId } from '@rranker/game-maimai/domain/catalog';
+import { parseAchievementBound } from '@rranker/sdk/domain/range-filters';
+import { maimaiGenres } from '@rranker/game-maimai/domain/maimai-filters';
+import type { CatalogSnapshot, ScoreRecord } from '@rranker/game-maimai/domain/models';
+import { buildBestRecordMap, filterMaimaiRandomCharts, type RandomChartPick } from '@rranker/game-maimai/domain/random-charts';
+import { pickRandomItems } from '@rranker/sdk/domain/random-charts';
+import { useDetailedCatalog } from '@rranker/game-maimai/hooks/use-detailed-catalog';
+import { useDxRatingChartTags } from '@rranker/game-maimai/hooks/use-dxrating-chart-tags';
+import { useScoreSnapshot } from '@rranker/game-maimai/hooks/use-score-snapshot';
+import { useRandomChartsFilter } from '@rranker/tool-maimai/state/random-charts-filter';
 
 function toScoreCardData(
   pick: RandomChartPick,

@@ -2,5 +2,11 @@
   "name": "@rranker/plugins",
   "private": true,
   "license": "AGPL-3.0-only",
-  "workspaces": ["games/*", "providers/*", "tools/*", "shared/*"]
+  "workspaces": [
+    "games/*",
+    "providers/*",
+    "tools/*",
+    "shared/*",
+    "native/*"
+  ]
 }

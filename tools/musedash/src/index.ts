@@ -3,6 +3,7 @@ import { pages } from './pages';
 
 export const tool = {
   kind: 'tool', id: 'tool.musedash', title: "喵斯快跑工具",
+  gameIds: ["musedash"],
   tools: [
   {
     "id": "random-charts",

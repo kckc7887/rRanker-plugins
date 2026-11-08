@@ -1,25 +1,25 @@
-import { bestImageUiProgress } from '@/features/best-image/best-image-ui-cache';
+import { bestImageUiProgress } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { File } from 'expo-file-system';
-import { RemoteNativeImage } from '@/components/RemoteNativeImage';
-import { ImageCropper } from '@/components/ImageCropper';
-import { RizlineFilterBar } from '@/components/rizline/RizlineFilterBar';
-import { RangeSelector } from '@/components/game-content/RangeSelector';
-import { useGameData } from '@/hooks/use-game-data';
-import { useRizlineCatalog } from '@/hooks/use-rizline-catalog';
-import { useAppTheme } from '@/theme/app-theme';
-import { RIZLINE_RESOURCE_BASE, rizlineCoverUrl, sortRizlineRecords } from '@/domain/rizline';
-import { rizlinePackOptions } from '@/domain/rizline-filters';
-import { BestImageQuantity, BestImageStyleRow, BestImageScreenShell, bestImageScreenSharedStyles as styles } from '@/features/best-image/best-image-screen-shell';
-import { TrophyBadge } from '@/components/TrophyBadge';
-import { BestImageResourcePicker } from '@/features/best-image/best-image-picker-shell';
-import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate, type BestImageTemplateAsset } from '@/features/best-image/use-best-image-screen-controller';
-import { useBestImageAssets } from '@/features/best-image/use-best-image-assets';
-import { copyBestImageAsset, loadImageFiles, loadRemoteImageFile } from '@/features/best-image/load-best-image-session';
-import { cropBestImageAvatar } from '@/features/best-image/crop-best-image-avatar';
-import { bestImageExportFilename } from '@/features/best-image/best-image-export';
-import { parseBestImageQuantity } from '@/features/best-image/best-image-custom';
+import { RemoteNativeImage } from '@rranker/sdk/components/RemoteNativeImage';
+import { ImageCropper } from '@rranker/sdk/components/ImageCropper';
+import { RizlineFilterBar } from '@rranker/game-rizline/components/RizlineFilterBar';
+import { RangeSelector } from '@rranker/sdk/components/game-content/RangeSelector';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { useRizlineCatalog } from '@rranker/game-rizline/hooks/use-rizline-catalog';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { RIZLINE_RESOURCE_BASE, rizlineCoverUrl, sortRizlineRecords } from '@rranker/game-rizline/domain/rizline';
+import { rizlinePackOptions } from '@rranker/game-rizline/domain/rizline-filters';
+import { BestImageQuantity, BestImageStyleRow, BestImageScreenShell, bestImageScreenSharedStyles as styles } from '@rranker/sdk/features/best-image/best-image-screen-shell';
+import { TrophyBadge } from '@rranker/sdk/components/TrophyBadge';
+import { BestImageResourcePicker } from '@rranker/sdk/features/best-image/best-image-picker-shell';
+import { useBestImageScreenController, usePreparedBestImageSources, type BestImageTemplate, type BestImageTemplateAsset } from '@rranker/sdk/features/best-image/use-best-image-screen-controller';
+import { useBestImageAssets } from '@rranker/sdk/features/best-image/use-best-image-assets';
+import { copyBestImageAsset, loadImageFiles, loadRemoteImageFile } from '@rranker/sdk/features/best-image/load-best-image-session';
+import { cropBestImageAvatar } from '@rranker/sdk/features/best-image/crop-best-image-avatar';
+import { bestImageExportFilename } from '@rranker/sdk/features/best-image/best-image-export';
+import { parseBestImageQuantity } from '@rranker/sdk/features/best-image/best-image-custom';
 import { defaultRizlineImageFilters, rizlineAvatarCrop, validRizlineImageFilters, customRizlineRecords, rizlineImagePages, type RizlineBestImageType } from '../features/rizline-best-image/rizline-best-image';
 import { DEFAULT_RIZLINE_IMAGE_PREFERENCES, rizlineImagePreferencesStore, type RizlineImagePreferences, type RizlineSignatureChoice } from '../features/rizline-best-image/rizline-best-image-preferences';
 import { prepareRizlineUi } from '../features/rizline-best-image/rizline-ui-cache';
@@ -49,7 +49,7 @@ export function RizlineBestImageScreen() {
   const [collapsed, setCollapsed] = useState(false);
   const [cropId, setCropId] = useState<string | null>(null);
   const controller = useBestImageScreenController<RizlineBestImageType, RizlineImagePreferences, Picker>({
-    accountId: query.activeAccountId, game: 'rizline', defaultType: 'best40', defaultWidth: 1080,
+    accountId: query.activeAccountId, game: 'rizline', pluginId: 'tool.rizline', defaultType: 'best40', defaultWidth: 1080,
     defaultQuantityText: '40', defaultPreferences: DEFAULT_RIZLINE_IMAGE_PREFERENCES, preferences,
     defaultExportHeight: width => Math.ceil(width * 0.75), messageScale: 1, previewRenderingGuard: true,
   });

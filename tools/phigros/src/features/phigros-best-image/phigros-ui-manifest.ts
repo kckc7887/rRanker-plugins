@@ -1,4 +1,4 @@
-import type { UiManifestEntry } from '@/features/best-image/best-image-ui-cache';
+import type { UiManifestEntry } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 
 export const PHIGROS_UI_ZIP = {
   "url": "https://rranker-phigros-data.cn-nb1.rains3.com/phigros-ui.zip",

@@ -1,0 +1,38 @@
+{
+  "name": "@rranker/tool-chart-json",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pages": "./src/pages.ts",
+    "./pages/chart-preview": "./src/pages/chart-preview.tsx",
+    "./pages/rizline-chart-preview": "./src/pages/rizline-chart-preview.tsx",
+    "./features/phigros-chart-preview/chart-preview-input": "./src/features/phigros-chart-preview/chart-preview-input.ts",
+    "./features/phigros-chart-preview/prepare-phigros-chart-preview-webview": "./src/features/phigros-chart-preview/prepare-phigros-chart-preview-webview.ts",
+    "./features/phigros-chart-preview/use-phigros-chart-variant-selection": "./src/features/phigros-chart-preview/use-phigros-chart-variant-selection.ts",
+    "./features/phira-chart-preview/chart-preview-input": "./src/features/phira-chart-preview/chart-preview-input.ts",
+    "./features/rizline-chart-preview/prepare-rizline-chart-preview-webview": "./src/features/rizline-chart-preview/prepare-rizline-chart-preview-webview.ts",
+    "./features/prepare-json-chart-preview": "./src/features/prepare-json-chart-preview.ts",
+    "./domain/chart-preview-request": "./src/domain/chart-preview-request.ts",
+    "./features/phigros-chart-download/chart-package-download": "./src/features/phigros-chart-download/chart-package-download.ts",
+    "./features/phira-chart-download/chart-package-download": "./src/features/phira-chart-download/chart-package-download.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "@rranker/game-phigros": "0.1.0",
+    "@rranker/game-phira": "0.1.0",
+    "@rranker/game-rizline": "0.1.0",
+    "@rranker/sdk": "0.1.0",
+    "react": "19.2.3",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "@rranker/chart-json": "0.1.0",
+    "expo-file-system": "~57.0.7",
+    "expo-router": "~57.0.26",
+    "jszip": "^3.10.1"
+  }
+}

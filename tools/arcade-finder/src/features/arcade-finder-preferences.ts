@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
-import type { GameId } from '@/domain/game-bind-options';
-import { ARCADE_MAX_DISTANCE_KM } from '@/domain/arcade-shops';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
+import type { GameId } from '@rranker/sdk/domain/game-bind-options';
+import { ARCADE_MAX_DISTANCE_KM } from '@rranker/tool-arcade-finder/domain/arcade-shops';
 
 export type ArcadeFinderPreferences = {
   minDistanceKm: number;

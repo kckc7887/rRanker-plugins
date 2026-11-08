@@ -1,25 +1,25 @@
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
+import { detailHref } from '@rranker/sdk/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { router } from 'expo-router';
-import { ChunithmDifficultyBadge } from '@/components/chunithm/ChunithmDifficultyBadge';
-import { ChunithmFilterBar } from '@/components/chunithm/ChunithmFilterBar';
-import { ChunithmScoreCard } from '@/components/chunithm/ChunithmScoreCard';
-import { QueryStateView } from '@/components/QueryStateView';
+import { ChunithmDifficultyBadge } from '@rranker/game-chunithm/components/ChunithmDifficultyBadge';
+import { ChunithmFilterBar } from '@rranker/game-chunithm/components/ChunithmFilterBar';
+import { ChunithmScoreCard } from '@rranker/game-chunithm/components/ChunithmScoreCard';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
 import {
   RandomChartsPage,
   RandomUnplayedChartCard,
-} from '@/components/RandomChartsPage';
-import type { ChunithmCatalogSnapshot } from '@/domain/chunithm';
+} from '@rranker/sdk/components/RandomChartsPage';
+import type { ChunithmCatalogSnapshot } from '@rranker/game-chunithm/domain/chunithm';
 import {
   chunithmRandomChartKey,
   filterChunithmRandomCharts,
   type ChunithmRandomChartPick,
-} from '@/domain/chunithm-random-charts';
-import { buildChunithmScoreCards } from '@/domain/chunithm-score-presentation';
-import { pickRandomItems } from '@/domain/random-charts';
-import { useChunithmCatalog } from '@/hooks/use-chunithm-catalog';
-import { useGameData } from '@/hooks/use-game-data';
-import { useChunithmRandomChartsFilter } from '@/state/chunithm-random-charts-filter';
+} from '@rranker/game-chunithm/domain/chunithm-random-charts';
+import { buildChunithmScoreCards } from '@rranker/game-chunithm/domain/chunithm-score-presentation';
+import { pickRandomItems } from '@rranker/sdk/domain/random-charts';
+import { useChunithmCatalog } from '@rranker/game-chunithm/hooks/use-chunithm-catalog';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { useChunithmRandomChartsFilter } from '@rranker/tool-chunithm/state/chunithm-random-charts-filter';
 
 export function ChunithmRandomChartsScreen() {
   const catalogQuery = useChunithmCatalog();
@@ -65,7 +65,7 @@ export function ChunithmRandomChartsScreen() {
     setLastSeed(seed);
     setResults(pickRandomItems(pool, count, seed));
   };
-  const openDetail = (pick: ChunithmRandomChartPick) => router.push(detailTargetHref(encodeDetailTarget({ game: 'chunithm', songId: pick.songId, levelIndex: pick.levelIndex })));
+  const openDetail = (pick: ChunithmRandomChartPick) => router.push(detailHref({ gameId: 'chunithm', params: { songId: String(pick.songId), levelIndex: String(pick.levelIndex) } }));
 
   return (
     <QueryStateView<ChunithmCatalogSnapshot>

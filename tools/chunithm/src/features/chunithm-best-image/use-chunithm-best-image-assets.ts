@@ -1,11 +1,11 @@
-import { bestImageUiProgress } from '@/features/best-image/best-image-ui-cache';
+import { bestImageUiProgress } from '@rranker/sdk/features/best-image/best-image-ui-cache';
 import { File } from 'expo-file-system';
-import { copyBestImageAsset, loadRemoteImageFile, type BestImageAssetSession } from '@/features/best-image/load-best-image-session';
-import { useBestImageAssets } from '@/features/best-image/use-best-image-assets';
-import type { BestImageTemplateAsset } from '@/features/best-image/use-best-image-screen-controller';
+import { copyBestImageAsset, loadRemoteImageFile, type BestImageAssetSession } from '@rranker/sdk/features/best-image/load-best-image-session';
+import { useBestImageAssets } from '@rranker/sdk/features/best-image/use-best-image-assets';
+import type { BestImageTemplateAsset } from '@rranker/sdk/features/best-image/use-best-image-screen-controller';
 import { prepareChunithmUi } from './chunithm-ui-cache';
 import { buildChunithmBestImageCardBackground } from './build-chunithm-best-image-html';
-import type { ChunithmLevelIndex } from '@/domain/chunithm';
+import type { ChunithmLevelIndex } from '@rranker/game-chunithm/domain/chunithm';
 
 const CARD_DIFFICULTIES = ['basic', 'advanced', 'expert', 'master', 'ultima', 'worldsend'] as const;
 

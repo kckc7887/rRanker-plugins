@@ -2,33 +2,34 @@ import { useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Stack } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
-import { Card } from '@/components/Card';
-import { EmptyDataView } from '@/components/EmptyDataView';
-import { FormField } from '@/components/FormField';
-import { PhigrosScoreCard } from '@/components/phigros/PhigrosScoreCard';
+import { Card } from '@rranker/sdk/components/Card';
+import { EmptyDataView } from '@rranker/sdk/components/EmptyDataView';
+import { FormField } from '@rranker/sdk/components/FormField';
+import { PhigrosScoreCard } from '@rranker/game-phigros/components/PhigrosScoreCard';
 import {
   PHIGROS_PUSH_LIMITS,
   formatPushSearchSummary,
   parsePhigrosPushChartCost,
   parsePhigrosPushDelta,
   type PushRecommendationsResult,
-} from '@/domain/phigros-push';
-import { usePhigrosCatalog } from '@/hooks/use-phigros-catalog';
-import { phigrosSharedScoreRecord } from '@/domain/phigros';
-import { PhigrosScoreProvider } from '@/providers/phigros-score-provider';
-import { phigrosResources } from '@/services/phigros-resources';
-import { useSession } from '@/state/session-store';
-import { useAppTheme } from '@/theme/app-theme';
-import { parseNumericInput } from '@/utils/numeric-input';
+} from '@rranker/game-phigros/domain/phigros-push';
+import { usePhigrosCatalog } from '@rranker/game-phigros/hooks/use-phigros-catalog';
+import { phigrosSharedScoreRecord } from '@rranker/game-phigros/domain/phigros';
+import type { PhigrosDataSource } from '@rranker/game-phigros/data-source';
+import { getDataSource } from '@rranker/sdk/registry';
+import { phigrosResources } from '@rranker/game-phigros/services/phigros-resources';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+import { parseNumericInput } from '@rranker/sdk/utils/numeric-input';
 
 const DELTA_ERROR = `加值至少为 ${PHIGROS_PUSH_LIMITS.minDelta}，且最多两位小数。`;
 const CHART_COST_ERROR = `成本须为 ${PHIGROS_PUSH_LIMITS.minChartCost}–${PHIGROS_PUSH_LIMITS.maxChartCost} 的整数（愿意打几张谱面）。`;
 
 export default function PushRksToolScreen() {
   const theme = useAppTheme();
-  const session = useSession((s) => s.session);
+  const providerId = useSession((s) => s.activeProviderId);
   const activeAccountId = useSession((s) => s.activeAccountId);
-  const scoreProvider = useSession((s) => s.scoreProvider);
+  const client = useSession((s) => s.sourceClient) as PhigrosDataSource | undefined;
   const catalogQuery = usePhigrosCatalog();
   const [deltaText, setDeltaText] = useState('0.01');
   const [chartCostText, setChartCostText] = useState('1');
@@ -38,8 +39,7 @@ export default function PushRksToolScreen() {
   const chartCost = parsePhigrosPushChartCost(parseNumericInput(chartCostText));
   const deltaError = delta == null ? DELTA_ERROR : null;
   const chartCostError = chartCost == null ? CHART_COST_ERROR : null;
-  const hasPhiSession = session?.mode === 'phi-session'
-    && scoreProvider instanceof PhigrosScoreProvider;
+  const canCalculate = !!client?.getPushRecommendations;
   const inputsValid = delta != null && chartCost != null;
 
   const titleMap = useMemo(() => {
@@ -50,27 +50,28 @@ export default function PushRksToolScreen() {
     return map;
   }, [catalogQuery.data?.snapshot.songs]);
 
-  const openid = session?.mode === 'phi-session' ? session.openid : null;
-  const saveUpdatedAt = scoreProvider instanceof PhigrosScoreProvider ? scoreProvider.getSaveUpdatedAt() : null;
+  const saveUpdatedAt = client?.getSaveUpdatedAt?.() ?? null;
   const resourceRevision = phigrosResources.peek()?.revision ?? null;
   const pushQuery = useQuery({
-    queryKey: ['phigros-push-rks', activeAccountId, openid, resourceRevision, saveUpdatedAt, delta, chartCost, includePhi],
-    enabled: hasPhiSession && inputsValid,
+    meta: { pluginId: 'tool.phigros', gameId: 'phigros', accountId: activeAccountId,
+      sourcePluginId: providerId ? getDataSource(providerId)?.id : undefined },
+    queryKey: ['phigros-push-rks', activeAccountId, resourceRevision, saveUpdatedAt, delta, chartCost, includePhi],
+    enabled: canCalculate && inputsValid,
     queryFn: async ({ signal }): Promise<PushRecommendationsResult> => {
-      if (!(scoreProvider instanceof PhigrosScoreProvider) || delta == null || chartCost == null) {
+      if (!client?.getPushRecommendations || delta == null || chartCost == null) {
         throw new Error('Phigros 存档未就绪');
       }
-      return scoreProvider.getPushRecommendations(delta, chartCost, includePhi, signal);
+      return client.getPushRecommendations(delta, chartCost, includePhi, signal);
     },
   });
 
-  if (!hasPhiSession) {
+  if (!canCalculate) {
     return (
       <View style={[styles.page, { backgroundColor: theme.background }]}>
         <Stack.Screen options={{ title: '推分计算' }} />
         <EmptyDataView
-          title="尚未绑定 TapTap"
-          detail="请在游戏管理中绑定 Phigros 的 TapTap 云存档后再使用推分计算。"
+          title="当前来源不支持推分计算"
+          detail="请在游戏管理中选择提供推分计算的 Phigros 账号。"
         />
       </View>
     );

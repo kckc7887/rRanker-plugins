@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+import { createElement } from 'react';
 import type { ToolPlugin } from '@rranker/sdk';
 import { pages } from './pages';
 
 export const tool = {
-  kind: 'tool', id: 'tool.maimai', title: "舞萌工具",
+  overviewActions: props => { const { OverviewActions } = require('./overview-actions') as typeof import('./overview-actions'); return createElement(OverviewActions, props); },
+  kind: 'tool',
+  cache: gameId => require('./storage').cache(gameId), id: 'tool.maimai', title: "舞萌工具",
+  gameIds: ["maimai"],
   tools: [
   {
     "id": "strength-analysis",
@@ -68,5 +73,6 @@ export const tool = {
     "order": 8
   }
 ],
+  overviewCards: props => createElement(require('./components/MaimaiOverviewPins').OverviewCards, props),
   pages,
 } satisfies ToolPlugin;

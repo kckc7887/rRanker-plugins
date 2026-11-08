@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
-import type { ChunithmLevelIndex } from '@/domain/chunithm';
-import type { ChunithmRandomChartFilters } from '@/domain/chunithm-random-charts';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
+import type { ChunithmLevelIndex } from '@rranker/game-chunithm/domain/chunithm';
+import type { ChunithmRandomChartFilters } from '@rranker/game-chunithm/domain/chunithm-random-charts';
 import {
   CHUNITHM_RANKS_ASC,
-} from '@/domain/chunithm-filters';
-import type { ChunithmRank } from '@/domain/chunithm-score-presentation';
-import type { RandomChartsCount } from '@/domain/random-charts';
+} from '@rranker/game-chunithm/domain/chunithm-filters';
+import type { ChunithmRank } from '@rranker/game-chunithm/domain/chunithm-score-presentation';
+import type { RandomChartsCount } from '@rranker/sdk/domain/random-charts';
 
 export type ChunithmRandomChartsPreferences = ChunithmRandomChartFilters & {
   count: RandomChartsCount;

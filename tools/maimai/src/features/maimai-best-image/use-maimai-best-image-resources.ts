@@ -1,15 +1,15 @@
-import { bestImageUiProgress } from '@/features/best-image/best-image-ui-cache';
-import { loadRemoteImageFile, copyBestImageAsset, type BestImageAssetSession } from '@/features/best-image/load-best-image-session';
-import { loadBestImageAssets } from '@/features/best-image/load-best-image-assets';
+import { bestImageUiProgress } from '@rranker/sdk/features/best-image/best-image-ui-cache';
+import { loadRemoteImageFile, copyBestImageAsset, type BestImageAssetSession } from '@rranker/sdk/features/best-image/load-best-image-session';
+import { loadBestImageAssets } from '@rranker/sdk/features/best-image/load-best-image-assets';
 import { loadBestImageJackets } from '../best-image/load-best-image-jackets';
 import { prepareMaimaiFonts, MAIMAI_FONT_MANIFEST } from '../best-image/maimai-font-cache';
 import { prepareMaimaiUi } from '../best-image/maimai-ui-cache';
-import { useBestImageAssets } from '@/features/best-image/use-best-image-assets';
-import type { BestImageTemplateAsset } from '@/features/best-image/use-best-image-screen-controller';
+import { useBestImageAssets } from '@rranker/sdk/features/best-image/use-best-image-assets';
+import type { BestImageTemplateAsset } from '@rranker/sdk/features/best-image/use-best-image-screen-controller';
 import { buildMaimaiBestImageCardBackground, ratingFrameIndex } from './build-maimai-best-image-html';
 import { File } from 'expo-file-system';
-import type { BestImageRatingStyle } from "@/features/best-image/best-image-controller-types";
-import type { ScoreRecord } from '@/domain/models';
+import type { BestImageRatingStyle } from "@rranker/sdk/features/best-image/best-image-controller-types";
+import type { ScoreRecord } from '@rranker/game-maimai/domain/models';
 
 const FONT_SOURCE = require('@rranker/game-maimai/assets/rating/ariblk.ttf') as number;
 const RATING_FRAME_SOURCES: number[] = [

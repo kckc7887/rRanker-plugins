@@ -1,4 +1,4 @@
-import type { ScoreRecord, Song } from '@/domain/models';
+import type { ScoreRecord } from '@rranker/game-phigros/domain/models';
 import {
   matchesPhigrosLevel,
   matchesPhigrosRankFilter,
@@ -7,15 +7,14 @@ import {
   phigrosLevelLabel,
   phigrosRankFilterLabel,
   type PhigrosRankFilter,
-} from '@/domain/phigros-filters';
-import type { PhigrosLevel } from '@/domain/phigros';
+} from '@rranker/game-phigros/domain/phigros-filters';
+import type { PhigrosLevel } from '@rranker/game-phigros/domain/phigros';
 import {
   matchesPhigrosXingFilter,
-  phigrosChartNoteKey,
   phigrosXingLabel,
   type PhigrosXingKind,
-} from '@/domain/phigros-xing';
-import { parseBestImageQuantity } from '@/features/best-image/best-image-custom';
+} from '@rranker/game-phigros/domain/phigros-xing';
+import { parseBestImageQuantity } from '@rranker/sdk/features/best-image/best-image-custom';
 import {
   sortPhigrosBestImageRecords,
   type PhigrosBestImageSection,
@@ -46,28 +45,15 @@ export const DEFAULT_CUSTOM_PHIGROS_BEST_IMAGE_FILTERS: CustomPhigrosBestImageFi
 
 export { parseBestImageQuantity };
 
-export function buildPhigrosNoteTotalByKey(songs: readonly Song[]): Record<string, number> {
-  const result: Record<string, number> = {};
-  for (const song of songs) {
-    for (const chart of song.charts ?? []) {
-      const total = chart.notes?.total;
-      if (typeof total === 'number' && Number.isInteger(total) && total > 0) {
-        result[phigrosChartNoteKey(song.id, chart.levelIndex)] = total;
-      }
-    }
-  }
-  return result;
-}
-
 export function parsePhigrosBestImageAccuracyBound(value: string): number | null | undefined {
-  const normalized = value.normalize('NFKC').trim().replace(',', '@/features/phigros-best-image');
+  const normalized = value.normalize('NFKC').trim().replace(',', '.');
   if (normalized.length === 0) return undefined;
   const parsed = Number(normalized);
   return Number.isFinite(parsed) && parsed >= 0 && parsed <= 100 ? parsed : null;
 }
 
 export function parsePhigrosBestImageScoreBound(value: string): number | null | undefined {
-  const normalized = value.normalize('NFKC').trim().replace(',', '@/features/phigros-best-image');
+  const normalized = value.normalize('NFKC').trim().replace(',', '.');
   if (normalized.length === 0) return undefined;
   const parsed = Number(normalized);
   return Number.isFinite(parsed) && parsed >= 0 && parsed <= 1_000_000 ? parsed : null;
@@ -89,7 +75,7 @@ export function isCustomPhigrosBestImageFiltersValid(input: {
 }
 
 function normalizeBoundText(value: string): string {
-  return value.normalize('NFKC').trim().replace(',', '@/features/phigros-best-image');
+  return value.normalize('NFKC').trim().replace(',', '.');
 }
 
 function formatScoreNote(scoreMin: string, scoreMax: string): string | undefined {

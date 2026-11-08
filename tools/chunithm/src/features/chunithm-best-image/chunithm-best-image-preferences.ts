@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
 import type { ChunithmBestImageSelectionCount } from './chunithm-best-image';
 
 export type ChunithmBestImageStyleMode = 'current' | 'item' | 'random' | 'off' | 'default';

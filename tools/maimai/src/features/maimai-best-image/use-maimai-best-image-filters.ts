@@ -1,17 +1,17 @@
-import { formatDxRatingTagFilterValue, type VersionFilterOption } from '@/components/MaimaiFilterBar';
-import { DIFFICULTY_VISUAL } from '@/components/ScoreVisuals';
-import { chartVersionKey } from '@/domain/catalog';
-import { buildDxRatingChartTagIndex } from '@/domain/dxrating-chart-tags';
+import { formatDxRatingTagFilterValue, type VersionFilterOption } from '@rranker/game-maimai/components/MaimaiFilterBar';
+import { DIFFICULTY_VISUAL } from '@rranker/game-maimai/components/ScoreVisuals';
+import { chartVersionKey } from '@rranker/game-maimai/domain/catalog';
+import { buildDxRatingChartTagIndex } from '@rranker/game-maimai/domain/dxrating-chart-tags';
 import {
   maimaiGenres,
   maimaiFcAchievementLabel,
   maimaiFsAchievementLabel,
   type MaimaiFcAchievement,
   type MaimaiFsAchievement,
-} from '@/domain/maimai-filters';
-import type { ChartType, Difficulty } from '@/domain/models';
-import { localizedVersionName, type VersionNameLocale } from '@/domain/version-names';
-import { parseBestImageQuantity } from "@/features/best-image/best-image-custom";
+} from '@rranker/game-maimai/domain/maimai-filters';
+import type { ChartType, Difficulty } from '@rranker/game-maimai/domain/models';
+import { localizedVersionName, type VersionNameLocale } from '@rranker/game-maimai/domain/version-names';
+import { parseBestImageQuantity } from "@rranker/sdk/features/best-image/best-image-custom";
 import { DEFAULT_CUSTOM_BEST_IMAGE_FILTERS, buildCustomBestImageSections, maximumBestImageRowsForWidth, paginateBestImageSections } from "./maimai-best-image-custom";
 import {
   type BestImageScoreSection,
@@ -20,8 +20,8 @@ import {
 import {
   useDetailedCatalog,
   useTransientDetailedMaimaiCatalog,
-} from '@/hooks/use-detailed-catalog';
-import { useDxRatingChartTags } from '@/hooks/use-dxrating-chart-tags';
+} from '@rranker/game-maimai/hooks/use-detailed-catalog';
+import { useDxRatingChartTags } from '@rranker/game-maimai/hooks/use-dxrating-chart-tags';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import type { GameDataBundle } from '@rranker/sdk/data';

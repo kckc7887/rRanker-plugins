@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import type { ChunithmSong } from '@/domain/chunithm';
-import { BestImageResourcePicker } from '@/features/best-image/best-image-picker-shell';
-import { RemoteNativeImage as Image } from '@/components/RemoteNativeImage';
+import type { ChunithmSong } from '@rranker/game-chunithm/domain/chunithm';
+import { BestImageResourcePicker } from '@rranker/sdk/features/best-image/best-image-picker-shell';
+import { RemoteNativeImage as Image } from '@rranker/sdk/components/RemoteNativeImage';
 import type { ChunithmBestImageBackgroundChoice } from './chunithm-best-image-preferences';
 import { chunithmBestImageJacketUrl } from './load-chunithm-best-image-jackets';
 

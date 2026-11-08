@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { router, Stack } from 'expo-router';
-import { useNotification } from '@/components/AppNotification';
-import { Card } from '@/components/Card';
-import { SongCover } from '@/components/SongCover';
-import { normalizeSongId } from '@/domain/catalog';
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
-import type { Song } from '@/domain/models';
+import { useNotification } from '@rranker/sdk/components/AppNotification';
+import { Card } from '@rranker/sdk/components/Card';
+import { SongCover } from '@rranker/game-maimai/components/SongCover';
+import { normalizeSongId } from '@rranker/game-maimai/domain/catalog';
+import { detailHref } from '@rranker/sdk/navigation';
+import type { Song } from '@rranker/game-maimai/domain/models';
 import {
   KALEIDX_GATES,
   KALEIDX_FINALES,
@@ -18,12 +18,12 @@ import {
   type KaleidxStageId,
   type KaleidxSchedule,
   type KaleidxSong,
-} from '@/domain/kaleidx-scope';
-import type { KaleidxAccountProgress, KaleidxRunMode } from '@/features/toolbox/kaleidx-scope-preferences';
-import { useDetailedCatalog } from '@/hooks/use-detailed-catalog';
-import { selectKaleidxGateProgress, useKaleidxScopeProgress } from '@/state/kaleidx-scope-progress';
-import { useSession } from '@/state/session-store';
-import { useAppTheme } from '@/theme/app-theme';
+} from '@rranker/tool-maimai/domain/kaleidx-scope';
+import type { KaleidxAccountProgress, KaleidxRunMode } from '@rranker/tool-maimai/features/toolbox/kaleidx-scope-preferences';
+import { useDetailedCatalog } from '@rranker/game-maimai/hooks/use-detailed-catalog';
+import { selectKaleidxGateProgress, useKaleidxScopeProgress } from '@rranker/tool-maimai/state/kaleidx-scope-progress';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 type SongResolution = { catalogSongId?: string };
 
@@ -314,7 +314,7 @@ function SongInfo({ song, resolution, role }: { song: KaleidxSong; resolution: S
     {resolution.catalogSongId ? <Text style={[styles.songArrow, { color: theme.textMuted }]}>›</Text> : null}
   </>;
   return resolution.catalogSongId
-    ? <Pressable accessibilityRole="link" accessibilityLabel={'查看歌曲 ' + song.title} onPress={() => router.push(detailTargetHref(encodeDetailTarget({ game: 'maimai', songId: resolution.catalogSongId!, chartType: song.chartType })))} style={styles.songInfo}>{content}</Pressable>
+    ? <Pressable accessibilityRole="link" accessibilityLabel={'查看歌曲 ' + song.title} onPress={() => router.push(detailHref({ gameId: 'maimai', params: { songId: String(resolution.catalogSongId!), ...(song.chartType === undefined ? {} : { chartType: String(song.chartType) }) } }))} style={styles.songInfo}>{content}</Pressable>
     : <View style={styles.songInfo}>{content}</View>;
 }
 

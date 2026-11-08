@@ -1,4 +1,4 @@
-import type { ScoreRecord } from '@/domain/models';
+import type { ScoreRecord } from '@rranker/game-phigros/domain/models';
 
 export type PhigrosBestImageType = 'best30' | 'custom';
 export type PhigrosBestImageOverflowCount = 0 | 3 | 6 | 9;

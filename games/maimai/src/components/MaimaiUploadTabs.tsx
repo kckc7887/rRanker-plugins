@@ -11,12 +11,15 @@ const methods = [
 export function MaimaiUploadTabs({
   value,
   disabled,
+  syncGuideAvailable,
   onChange,
 }: {
   value: MaimaiUploadPage;
   disabled: boolean;
+  syncGuideAvailable: boolean;
   onChange: (value: MaimaiUploadPage) => void;
 }) {
-  return <SegmentedControl label="舞萌上传方式" options={methods} value={value} disabled={disabled} onChange={onChange}
+  const options = syncGuideAvailable ? methods : methods.filter(method => method.id !== 'lxns_guide');
+  return <SegmentedControl label="舞萌上传方式" options={options} value={!syncGuideAvailable && value === 'lxns_guide' ? 'friend_code' : value} disabled={disabled} onChange={onChange}
     style={{ marginHorizontal: 20, marginBottom: 12 }} />;
 }

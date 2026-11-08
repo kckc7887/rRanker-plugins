@@ -1,17 +1,25 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Stack, router } from 'expo-router';
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
-import { StrengthConclusion, StrengthPractice, StrengthSongsSheet } from '@/components/game-content/StrengthAnalysis';
-import { QueryStateView } from '@/components/QueryStateView';
-import { RandomChartsPage } from '@/components/RandomChartsPage';
-import { ExampleScoreCard } from '@/components/example/ExampleSongContent';
-import { ScoreCardArtworkScope } from '@/components/game-content/GameScoreCard';
-import { SimaiDifficultyRadar } from '@/components/game-content/SimaiDifficultyRadar';
-import { EXAMPLE_STRENGTH_AXES, EXAMPLE_STRENGTH_SCORES, type ExampleRecord } from '@/domain/example';
-import { pickRandomItems, type RandomChartsCount } from '@/domain/random-charts';
-import { useGameData } from '@/hooks/use-game-data';
-import { useAppTheme } from '@/theme/app-theme';
+import { detailHref, pluginHref, type PluginDetailProps } from '@rranker/sdk';
+import { ChartAction } from '@rranker/sdk/components/game-content/GameChartResultCard';
+import { StrengthConclusion, StrengthPractice, StrengthSongsSheet } from '@rranker/sdk/components/game-content/StrengthAnalysis';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { RandomChartsPage } from '@rranker/sdk/components/RandomChartsPage';
+import { ExampleScoreCard } from '@rranker/game-example/components/ExampleSongContent';
+import { ScoreCardArtworkScope } from '@rranker/sdk/components/game-content/GameScoreCard';
+import { SimaiDifficultyRadar } from '@rranker/sdk/components/game-content/SimaiDifficultyRadar';
+import { EXAMPLE_STRENGTH_AXES, EXAMPLE_STRENGTH_SCORES, type ExampleRecord } from '@rranker/game-example/domain/example';
+import { pickRandomItems, type RandomChartsCount } from '@rranker/sdk/domain/random-charts';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
+
+export function ExampleDetailActions({ target }: PluginDetailProps) {
+  const theme = useAppTheme();
+  const href = target.kind === 'chart' ? pluginHref({ pluginId: 'tool.example', pageId: 'strength-analysis', gameId: target.gameId }) : null;
+  return href ? <ChartAction label="查看实力分析" stack="next" onPress={() => router.push(href)}
+    style={{ backgroundColor: theme.accent }} textStyle={{ color: theme.onAccent }} /> : null;
+}
 
 export function ExampleRandomChartsScreen() {
   const query = useGameData(); const records = query.data?.payload.kind === 'example' ? query.data.payload.records : [];
@@ -44,7 +52,7 @@ export function ExampleStrengthAnalysisScreen() {
       title={axis === null ? '' : `${EXAMPLE_STRENGTH_AXES[axis]} · ${EXAMPLE_STRENGTH_SCORES[axis].toFixed(1)}`}
       data={records?.slice(0, 10)}
       keyExtractor={record => record.song.id} renderItem={({ item }) => <ExampleScoreCard record={item} onPress={() => {
-        close(); router.push(detailTargetHref(encodeDetailTarget({ game: 'example', songId: item.song.id, levelIndex: 0 })));
+        close(); router.push(detailHref({ gameId: 'example', params: { songId: String(item.song.id), levelIndex: String(0) } }));
       }} />} />
   </View>;
 }

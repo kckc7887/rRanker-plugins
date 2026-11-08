@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { createPreferencesStore } from '@/storage/create-preferences-store';
+import { createPreferencesStore } from '@rranker/sdk/storage/create-preferences-store';
 import type {
   MuseDashAchievementFilter,
   MuseDashDifficultySlot,
   MuseDashDlcFilter,
-} from '@/domain/muse-dash';
-import type { RandomChartsCount } from '@/domain/random-charts';
+} from '@rranker/game-musedash/domain/muse-dash';
+import type { RandomChartsCount } from '@rranker/sdk/domain/random-charts';
 
 export type MuseDashRandomChartsPreferences = {
   count: RandomChartsCount;

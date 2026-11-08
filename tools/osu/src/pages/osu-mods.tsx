@@ -1,16 +1,16 @@
 import { Stack } from 'expo-router';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Card } from '@/components/Card';
-import { EmptyDataView } from '@/components/EmptyDataView';
-import { OsuModBadge } from '@/components/osu/OsuModBadge';
+import { Card } from '@rranker/sdk/components/Card';
+import { EmptyDataView } from '@rranker/sdk/components/EmptyDataView';
+import { OsuModBadge } from '@rranker/game-osu/components/OsuModBadge';
 import { isOsuGameId } from '@rranker/game-osu';
 import {
   OSU_MOD_TYPE_LABELS,
   osuUserPlayableMods,
   type OsuModType,
-} from '@/domain/osu-mods';
-import { useSession } from '@/state/session-store';
-import { useAppTheme } from '@/theme/app-theme';
+} from '@rranker/game-osu/domain/osu-mods';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 const TYPE_ORDER: readonly OsuModType[] = [
   'DifficultyReduction',

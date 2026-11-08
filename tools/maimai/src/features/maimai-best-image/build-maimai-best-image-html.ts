@@ -1,15 +1,15 @@
-import { bestImageBrandFooter, bestImageTitleScript } from '@/features/best-image/build-best-image-html';
-import type { Player, ScoreRecord } from '@/domain/models';
-import { resolveMaimaiCourseRank } from '@/domain/maimai-course-rank';
-import type { BestImageRatingStyle } from "@/features/best-image/best-image-controller-types";
-import { formatAchievement } from '@/domain/score-presentation';
-import { normalizeTrophyTone } from '@/features/best-image/best-image-badge-theme';
+import { bestImageBrandFooter, bestImageTitleScript } from '@rranker/sdk/features/best-image/build-best-image-html';
+import type { Player, ScoreRecord } from '@rranker/game-maimai/domain/models';
+import { resolveMaimaiCourseRank } from '@rranker/game-maimai/domain/maimai-course-rank';
+import type { BestImageRatingStyle } from "@rranker/sdk/features/best-image/best-image-controller-types";
+import { formatAchievement } from '@rranker/sdk/domain/simai-score';
+import { normalizeTrophyTone } from '@rranker/sdk/features/best-image/best-image-badge-theme';
 import {
   bestImageBridgeMeasureScript,
   bestImageBridgeReadyScript,
   bestImageBridgeRuntimeScript,
-} from '@/features/best-image/best-image-bridge-script';
-import { minimumBestImageHeight } from '@/features/best-image/best-image-messages';
+} from '@rranker/sdk/features/best-image/best-image-bridge-script';
+import { minimumBestImageHeight } from '@rranker/sdk/features/best-image/best-image-messages';
 
 export type BestImageType = 'best50' | 'custom';
 
@@ -106,8 +106,8 @@ export function buildMaimaiBestImageCardBackground(jacket: string | null, diffic
   return `<svg xmlns="http://www.w3.org/2000/svg" width="756" height="360" viewBox="0 0 756 360" fill="white">
     <defs>
       <clipPath id="${id}-clip"><rect width="756" height="360" rx="26"/></clipPath>
-      <linearGradient id="${id}-theme" gradientUnits="userSpaceOnUse" x1="174" y1="0" x2="756" y2="360"><stop stop-color="#9B50D1"/><stop offset="@/features/maimai-best-image/.5" stop-color="#BB57C5"/><stop offset="1" stop-color="#DD63A9"/></linearGradient>
-      <linearGradient id="${id}-footer" x1="0" y1="0" x2="0" y2="1"><stop stop-color="white" stop-opacity="0"/><stop offset="@/features/maimai-best-image/.35" stop-color="white" stop-opacity="@/features/maimai-best-image/.96"/><stop offset="1" stop-color="white"/></linearGradient>
+      <linearGradient id="${id}-theme" gradientUnits="userSpaceOnUse" x1="174" y1="0" x2="756" y2="360"><stop stop-color="#9B50D1"/><stop offset=".5" stop-color="#BB57C5"/><stop offset="1" stop-color="#DD63A9"/></linearGradient>
+      <linearGradient id="${id}-footer" x1="0" y1="0" x2="0" y2="1"><stop stop-color="white" stop-opacity="0"/><stop offset=".35" stop-color="white" stop-opacity=".96"/><stop offset="1" stop-color="white"/></linearGradient>
       <mask id="${id}-footer-mask" maskUnits="userSpaceOnUse" x="0" y="254" width="756" height="106"><rect y="254" width="756" height="106" fill="url(#${id}-footer)"/></mask>
       ${jacket ? `<image id="${id}-jacket" width="286" height="286" preserveAspectRatio="xMidYMid slice" href="${escapeHtml(jacket)}"/><g id="${id}-art"><use href="#${id}-jacket"/><use href="#${id}-jacket" transform="translate(572 0) scale(-1 1)"/></g>` : ''}
       ${[['soft', 8.1], ['medium', 22.5], ['heavy', 45]].map(([name, radius]) => `<filter id="${id}-${name}" filterUnits="userSpaceOnUse" x="-100" y="-100" width="956" height="560" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="${radius}"/></filter>`).join('')}
@@ -129,7 +129,7 @@ function renderAppScoreCard(
   record: ScoreRecord, rank: number, cardBackgroundUrls: BestImageHtmlInput['cardBackgroundUrls'], id: string,
 ): string {
   const achievement = record.achievements;
-  const [integer, fraction] = achievement.toFixed(4).split('@/features/maimai-best-image');
+  const [integer, fraction] = achievement.toFixed(4).split('.');
   const colors = achievement >= 100 ? ['#FFF0B0', '#C8FFF0', '#FBD9EC']
     : achievement >= 99 ? ['#FFF5C6', '#FFE17D', '#FFE9A5'] : ['#FFFFFF', '#FFFFFF', '#FFFFFF'];
   const grade = GAME_RANK_MAP[record.rate?.trim().toLowerCase() ?? ''];
@@ -146,12 +146,12 @@ function renderAppScoreCard(
   return `<article class="app-score-card" data-rank="${rank}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 756 360" class="app-card-art" fill="white">
     <defs>
       <clipPath id="${id}-clip"><rect width="756" height="360" rx="26"/></clipPath>
-      <linearGradient id="${id}-number" x1="0" x2="1" y1="@/features/maimai-best-image/.15" y2="@/features/maimai-best-image/.9"><stop stop-color="${colors[0]}"/><stop offset="@/features/maimai-best-image/.52" stop-color="${colors[1]}"/><stop offset="1" stop-color="${colors[2]}"/></linearGradient>
-      <filter id="${id}-ink" x="-8%" y="-8%" width="116%" height="120%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="2.2" stdDeviation="1.1" flood-color="#4A285F" flood-opacity="@/features/maimai-best-image/.6"/></filter>
+      <linearGradient id="${id}-number" x1="0" x2="1" y1=".15" y2=".9"><stop stop-color="${colors[0]}"/><stop offset=".52" stop-color="${colors[1]}"/><stop offset="1" stop-color="${colors[2]}"/></linearGradient>
+      <filter id="${id}-ink" x="-8%" y="-8%" width="116%" height="120%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="2.2" stdDeviation="1.1" flood-color="#4A285F" flood-opacity=".6"/></filter>
     </defs>
     ${backgroundUrl ? `<image href="${escapeHtml(backgroundUrl)}" width="756" height="360"/>` : ''}
     <g clip-path="url(#${id}-clip)">
-      <path d="M24 284H732" stroke="white" stroke-opacity="@/features/maimai-best-image/.26"/>
+      <path d="M24 284H732" stroke="white" stroke-opacity=".26"/>
       <g filter="url(#${id}-ink)">
         ${icon(record.type === 'DX' ? 'DX' : 'SD', 18, 224, 108, 40)}
         <text class="app-song-title" data-title="${escapeHtml(record.title)}" text-anchor="end" font-size="52" font-weight="800" x="732" y="72">${escapeHtml(record.title)}</text>
@@ -164,7 +164,7 @@ function renderAppScoreCard(
       </g>
       ${icon(combo ? `Icon_${combo}` : undefined, 570, 282, 70, 70)}
       ${icon(sync ? `Icon_${sync}` : undefined, 656, 282, 70, 70)}
-      <rect x="@/features/maimai-best-image/.6" y="@/features/maimai-best-image/.6" width="754.8" height="358.8" rx="25.4" fill="none" stroke="white" stroke-opacity="@/features/maimai-best-image/.3" stroke-width="1.2"/>
+      <rect x=".6" y=".6" width="754.8" height="358.8" rx="25.4" fill="none" stroke="white" stroke-opacity=".3" stroke-width="1.2"/>
     </g>
   </svg></article>`;
 }
@@ -357,24 +357,24 @@ export function buildBestImageHtml(input: BestImageHtmlInput): string {
       </div>`;
 
   const gameCss = [
-    '@/features/maimai-best-image/.game-head{position:relative;z-index:1;width:100%}',
-    '@/features/maimai-best-image/.game-head img,.game-head div{position:absolute}',
-    '@/features/maimai-best-image/.game-plate-fallback{border:' + u(2) + 'px solid rgba(255,255,255,.8);background:linear-gradient(100deg,#9EB5D8 0%,#E8EDF6 38%,#F5D9B4 70%,#D99591 100%)}',
-    '@/features/maimai-best-image/.game-icon-fallback{display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:' + u(12) + 'px;background:linear-gradient(145deg,#F8FBFF,#C7D5EA);color:#52647F;font-weight:900;font-family:system-ui,sans-serif}',
-    '@/features/maimai-best-image/.game-player-name{white-space:nowrap;color:#000;font-weight:700;font-family:system-ui,sans-serif;line-height:1;transform:translateY(-50%)}',
-    '@/features/maimai-best-image/.game-trophy-text{white-space:nowrap;color:#000;font-weight:700;font-family:system-ui,sans-serif;line-height:1;transform:translate(-50%,-50%)}',
-    '@/features/maimai-best-image/.game-trophy-text-compressed{max-width:' + trophyTextAvailableWidth + 'px;overflow:hidden;text-overflow:ellipsis;font-weight:400}',
-    '@/features/maimai-best-image/.game-card{position:absolute;z-index:1}',
-    '@/features/maimai-best-image/.game-card img{position:absolute;display:block}',
-    '@/features/maimai-best-image/.game-id,.game-title,.game-achievement,.game-dxscore,.game-ds-rating{position:absolute}',
-    '@/features/maimai-best-image/.game-id{white-space:nowrap;color:#fff;font-weight:700;font-family:system-ui,sans-serif;line-height:1;text-align:center;transform:translate(-50%,-50%)}',
-    '@/features/maimai-best-image/.game-title{position:absolute;white-space:nowrap;overflow:hidden;font-weight:700;font-family:system-ui,sans-serif;line-height:1.06}',
-    '@/features/maimai-best-image/.game-achievement{white-space:nowrap;font-weight:700;font-family:system-ui,sans-serif;line-height:1;font-variant-numeric:tabular-nums;transform:translateY(-50%)}',
-    '@/features/maimai-best-image/.game-dxscore{white-space:nowrap;overflow:hidden;font-weight:700;font-family:system-ui,sans-serif;line-height:1;font-variant-numeric:tabular-nums;transform:translate(-50%,-50%)}',
-    '@/features/maimai-best-image/.game-ds-rating{white-space:nowrap;overflow:hidden;font-weight:700;font-family:system-ui,sans-serif;line-height:1;font-variant-numeric:tabular-nums;transform:translateY(-50%)}',
-    '@/features/maimai-best-image/.game-section+.game-section{margin-top:' + u(30) + 'px}',
-    '@/features/maimai-best-image/.game-grid{position:relative}',
-    '@/features/maimai-best-image/.game-empty{display:flex;min-height:' + u(80) + 'px;align-items:center;justify-content:center;color:#697586;font-weight:700;font-family:system-ui,sans-serif}',
+    '.game-head{position:relative;z-index:1;width:100%}',
+    '.game-head img,.game-head div{position:absolute}',
+    '.game-plate-fallback{border:' + u(2) + 'px solid rgba(255,255,255,.8);background:linear-gradient(100deg,#9EB5D8 0%,#E8EDF6 38%,#F5D9B4 70%,#D99591 100%)}',
+    '.game-icon-fallback{display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:' + u(12) + 'px;background:linear-gradient(145deg,#F8FBFF,#C7D5EA);color:#52647F;font-weight:900;font-family:system-ui,sans-serif}',
+    '.game-player-name{white-space:nowrap;color:#000;font-weight:700;font-family:system-ui,sans-serif;line-height:1;transform:translateY(-50%)}',
+    '.game-trophy-text{white-space:nowrap;color:#000;font-weight:700;font-family:system-ui,sans-serif;line-height:1;transform:translate(-50%,-50%)}',
+    '.game-trophy-text-compressed{max-width:' + trophyTextAvailableWidth + 'px;overflow:hidden;text-overflow:ellipsis;font-weight:400}',
+    '.game-card{position:absolute;z-index:1}',
+    '.game-card img{position:absolute;display:block}',
+    '.game-id,.game-title,.game-achievement,.game-dxscore,.game-ds-rating{position:absolute}',
+    '.game-id{white-space:nowrap;color:#fff;font-weight:700;font-family:system-ui,sans-serif;line-height:1;text-align:center;transform:translate(-50%,-50%)}',
+    '.game-title{position:absolute;white-space:nowrap;overflow:hidden;font-weight:700;font-family:system-ui,sans-serif;line-height:1.06}',
+    '.game-achievement{white-space:nowrap;font-weight:700;font-family:system-ui,sans-serif;line-height:1;font-variant-numeric:tabular-nums;transform:translateY(-50%)}',
+    '.game-dxscore{white-space:nowrap;overflow:hidden;font-weight:700;font-family:system-ui,sans-serif;line-height:1;font-variant-numeric:tabular-nums;transform:translate(-50%,-50%)}',
+    '.game-ds-rating{white-space:nowrap;overflow:hidden;font-weight:700;font-family:system-ui,sans-serif;line-height:1;font-variant-numeric:tabular-nums;transform:translateY(-50%)}',
+    '.game-section+.game-section{margin-top:' + u(30) + 'px}',
+    '.game-grid{position:relative}',
+    '.game-empty{display:flex;min-height:' + u(80) + 'px;align-items:center;justify-content:center;color:#697586;font-weight:700;font-family:system-ui,sans-serif}',
     '[data-rating-style="game"] .scores-content{position:relative;left:auto;right:auto;top:auto;padding:' + u(16) + 'px 0 0}',
     '[data-rating-style="game"] .section-divider{margin:0 0 ' + u(12) + 'px}',
     ...(useCnFont ? [
@@ -439,7 +439,7 @@ export function buildBestImageHtml(input: BestImageHtmlInput): string {
       const OUTPUT_WIDTH = ${width};
       const MINIMUM_HEIGHT = ${minimumHeight};
       ${useCnFont ? 'const RATING_STYLE = ' + JSON.stringify(ratingStyle) + ';' : ''}
-      const canvas = document.querySelector('@/features/maimai-best-image/.canvas');
+      const canvas = document.querySelector('.canvas');
       let lastHeight = 0;
       let pending = false;
       let assetsReady = false;
@@ -455,9 +455,9 @@ ${bestImageBridgeMeasureScript({
       /** 定数与 DXScore 共用压缩比例，避免相互重叠或超出卡片。 */
       const fitTitleSizes = () => {
         if (RATING_STYLE !== 'game') return;
-        document.querySelectorAll('@/features/maimai-best-image/.game-card').forEach((card) => {
-          const ds = card.querySelector('@/features/maimai-best-image/.game-ds-rating');
-          const dx = card.querySelector('@/features/maimai-best-image/.game-dxscore');
+        document.querySelectorAll('.game-card').forEach((card) => {
+          const ds = card.querySelector('.game-ds-rating');
+          const dx = card.querySelector('.game-dxscore');
           if (ds && dx) {
             /** offset 相对卡片，不受画布缩放影响。 */
             const dsLeft = ds.offsetLeft;
@@ -485,7 +485,7 @@ ${bestImageBridgeMeasureScript({
             dx.style.fontWeight = '400';
             return;
           }
-          const title = card.querySelector('@/features/maimai-best-image/.game-title');
+          const title = card.querySelector('.game-title');
           if (title && title.scrollWidth > title.clientWidth) {
             title.style.transformOrigin = 'left center';
             title.style.transform = 'scaleX(' + (title.clientWidth / title.scrollWidth).toFixed(4) + ')';
@@ -499,7 +499,7 @@ ${bestImageBridgeMeasureScript({
       ${isAppStyle ? `
       ${bestImageTitleScript}
       const fitAppTitles = () => {
-        fitScoreTitles('@/features/maimai-best-image/.app-song-title', (value, measure) => {
+        fitScoreTitles('.app-song-title', (value, measure) => {
           let size = 52, weight = 800, lines = [value];
           let naturalWidth = measure(value, size, weight);
           if (naturalWidth > 520) {
@@ -521,7 +521,7 @@ ${bestImageBridgeMeasureScript({
           const scale = Math.max(.86, Math.min(1, 520 / Math.max(...lines.map(line => measure(line, size, weight)))));
           return { lines, size, weight, scale, x: 732, y: lines.length === 1 ? 52 + size * .383 : 55, lineHeight: 52 };
         });
-        document.querySelectorAll('@/features/maimai-best-image/.app-profile-text').forEach(node => {
+        document.querySelectorAll('.app-profile-text').forEach(node => {
           const size = Number(node.dataset.size), x = Number(node.dataset.x), center = Number(node.dataset.centerY);
           node.removeAttribute('transform'); node.setAttribute('x', '0'); node.setAttribute('y', '0');
           const bounds = node.getBBox();
@@ -534,7 +534,7 @@ ${bestImageBridgeMeasureScript({
       fontReady.then(schedule);
       schedule();
 
-${bestImageBridgeReadyScript({ assetReadyExpression: `Promise.all([fontReady, ...imageReady])${isAppStyle ? '@/features/maimai-best-image/.then(fitAppTitles)' : ''}` })}
+${bestImageBridgeReadyScript({ assetReadyExpression: `Promise.all([fontReady, ...imageReady])${isAppStyle ? '.then(fitAppTitles)' : ''}` })}
     })();
   </script>
 </body>

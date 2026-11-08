@@ -1,11 +1,11 @@
-import type { SimaiStatistics } from '@/features/simai-chart-preview/statistics';
-import { useMajdataSong, useMajdataParsedChart } from '@/hooks/use-majdata';
-import { QueryStateView } from '@/components/QueryStateView';
+import type { SimaiStatistics } from '@rranker/chart-simai/features/simai-chart-preview/statistics';
+import { useMajdataSong, useMajdataParsedChart } from '@rranker/game-majdata-net/hooks/use-majdata';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { Card } from '@/components/Card';
-import { FormField } from '@/components/FormField';
+import { Card } from '@rranker/sdk/components/Card';
+import { FormField } from '@rranker/sdk/components/FormField';
 import {
   calculateAchievement,
   maximumSameErrors,
@@ -16,8 +16,8 @@ import {
   type NoteCounts,
   type NoteKind,
   type AchievementMode,
-} from '@/domain/tolerance';
-import { useAppTheme } from '@/theme/app-theme';
+} from '@rranker/chart-simai/domain/tolerance';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 const KINDS = ['tap', 'hold', 'slide', 'touch', 'break'] as const;
 const MODE_OPTIONS: readonly { mode: NoteAnalysisMode; label: string; detail: string }[] = [

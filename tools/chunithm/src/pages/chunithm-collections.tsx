@@ -1,13 +1,13 @@
-import type { ChunithmLevelIndex } from '@/domain/chunithm';
-import { CollectionPickerCard, CollectionPinButton, CollectionProgress } from '@/components/CollectionProgress';
+import type { ChunithmLevelIndex } from '@rranker/game-chunithm/domain/chunithm';
+import { CollectionPickerCard, CollectionPinButton, CollectionProgress } from '@rranker/sdk/components/CollectionProgress';
 import { useEffect, useMemo, useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { Card } from '@/components/Card';
-import { ChunithmDifficultyBadge } from '@/components/chunithm/ChunithmDifficultyBadge';
-import { ChunithmCollectionImage, ChunithmCollectionPreview } from '@/components/chunithm/ChunithmCollectionImage';
-import { QueryStateView } from '@/components/QueryStateView';
-import { useNotification } from '@/components/AppNotification';
+import { Card } from '@rranker/sdk/components/Card';
+import { ChunithmDifficultyBadge } from '@rranker/game-chunithm/components/ChunithmDifficultyBadge';
+import { ChunithmCollectionImage, ChunithmCollectionPreview } from '@rranker/game-chunithm/components/ChunithmCollectionImage';
+import { QueryStateView } from '@rranker/sdk/components/QueryStateView';
+import { useNotification } from '@rranker/sdk/components/AppNotification';
 import {
   calculateChunithmCollectionProgress,
   CHUNITHM_COLLECTION_KIND_LABELS,
@@ -16,14 +16,14 @@ import {
   isChunithmCollectionKind,
   type ChunithmCollection,
   type ChunithmCollectionKind,
-} from '@/domain/chunithm-collections';
-import { useChunithmCatalog } from '@/hooks/use-chunithm-catalog';
-import { useChunithmCollections } from '@/hooks/use-chunithm-collections';
-import { useGameData } from '@/hooks/use-game-data';
-import { detailTargetHref, encodeDetailTarget } from '@/domain/detail-target';
-import { useSession } from '@/state/session-store';
-import { useToolboxPins } from '@/state/toolbox-pins';
-import { useAppTheme } from '@/theme/app-theme';
+} from '@rranker/game-chunithm/domain/chunithm-collections';
+import { useChunithmCatalog } from '@rranker/game-chunithm/hooks/use-chunithm-catalog';
+import { useChunithmCollections } from '@rranker/game-chunithm/hooks/use-chunithm-collections';
+import { useGameData } from '@rranker/sdk/hooks/use-game-data';
+import { detailHref } from '@rranker/sdk/navigation';
+import { useSession } from '@rranker/sdk/state/session-store';
+import { useCollectionPins } from '../state/pins';
+import { useAppTheme } from '@rranker/sdk/theme/app-theme';
 
 function RequirementHint({ collection }: { collection: ChunithmCollection }) {
   const theme = useAppTheme();
@@ -101,9 +101,9 @@ export default function ChunithmCollectionsToolScreen() {
   const [query, setQuery] = useState('');
   const [pinPending, setPinPending] = useState(false);
   const activeGameId = useSession((state) => state.activeGameId);
-  const pinnedIds = useToolboxPins((state) => state.pinnedCollectionIdsByGame[activeGameId]);
-  const hydratePins = useToolboxPins((state) => state.hydrate);
-  const togglePinnedCollection = useToolboxPins((state) => state.togglePinnedCollection);
+  const pinnedIds = useCollectionPins((state) => state.pinsByGame)[activeGameId] ?? [];
+  const hydratePins = useCollectionPins((state) => state.hydrate);
+  const toggle = useCollectionPins((state) => state.toggle);
   const { data, isLoading, isError, error, refetch } = useChunithmCollections(kind);
   const gameData = useGameData();
   const catalog = useChunithmCatalog();
@@ -162,7 +162,7 @@ export default function ChunithmCollectionsToolScreen() {
     if (!selected) return;
     setPinPending(true);
     try {
-      await togglePinnedCollection(activeGameId, kind, selected.id);
+      await toggle(activeGameId, { kind, id: selected.id });
     } catch {
       showNotification({
         title: '保存失败',
@@ -293,7 +293,7 @@ export default function ChunithmCollectionsToolScreen() {
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel={`查看歌曲 ${title ?? item.songId}`}
-                    onPress={() => router.push(detailTargetHref(encodeDetailTarget({ game: 'chunithm', songId: item.songId })))}
+                    onPress={() => router.push(detailHref({ gameId: 'chunithm', params: { songId: String(item.songId) } }))}
                     style={({ pressed }) => [styles.song, { backgroundColor: theme.surface }, pressed && styles.pressed]}
                   >
                     <View style={styles.songCopy}>
