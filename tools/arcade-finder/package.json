@@ -1,0 +1,35 @@
+{
+  "name": "@rranker/tool-arcade-finder",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pages": "./src/pages.ts",
+    "./pages/arcade-finder/[shopId]": "./src/pages/arcade-finder/[shopId].tsx",
+    "./pages/arcade-finder/index": "./src/pages/arcade-finder/index.tsx",
+    "./features/arcade-finder-preferences": "./src/features/arcade-finder-preferences.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "@rranker/sdk": "0.1.0",
+    "react": "19.2.3",
+    "@rranker/game-example": "0.1.0",
+    "@rranker/game-rizline": "0.1.0",
+    "@rranker/game-majdata-net": "0.1.0",
+    "@rranker/game-maimai": "0.1.0",
+    "@rranker/game-phigros": "0.1.0",
+    "@rranker/game-phira": "0.1.0",
+    "@rranker/game-chunithm": "0.1.0",
+    "@rranker/game-adofai": "0.1.0",
+    "@rranker/game-musedash": "0.1.0",
+    "@rranker/game-osu": "0.1.0",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "expo-router": "~57.0.26",
+    "zod": "^4.4.3"
+  }
+}

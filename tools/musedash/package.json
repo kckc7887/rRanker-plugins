@@ -1,0 +1,24 @@
+{
+  "name": "@rranker/tool-musedash",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pages": "./src/pages.ts",
+    "./screens/MuseDashRandomChartsScreen": "./src/screens/MuseDashRandomChartsScreen.tsx",
+    "./features/musedash-random-charts-preferences": "./src/features/musedash-random-charts-preferences.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "@rranker/sdk": "0.1.0",
+    "react": "19.2.3",
+    "@rranker/game-musedash": "0.1.0"
+  },
+  "dependencies": {
+    "expo-router": "~57.0.26",
+    "zod": "^4.4.3"
+  }
+}

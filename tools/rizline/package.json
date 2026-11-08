@@ -1,0 +1,32 @@
+{
+  "name": "@rranker/tool-rizline",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pages": "./src/pages.ts",
+    "./screens/RizlineRandomChartsScreen": "./src/screens/RizlineRandomChartsScreen.tsx",
+    "./screens/RizlineBestImageScreen": "./src/screens/RizlineBestImageScreen.tsx",
+    "./features/rizline-best-image/build-rizline-best-image-html": "./src/features/rizline-best-image/build-rizline-best-image-html.ts",
+    "./features/rizline-best-image/rizline-best-image-preferences": "./src/features/rizline-best-image/rizline-best-image-preferences.ts",
+    "./features/rizline-best-image/rizline-best-image": "./src/features/rizline-best-image/rizline-best-image.ts",
+    "./features/rizline-best-image/rizline-ui-cache": "./src/features/rizline-best-image/rizline-ui-cache.ts",
+    "./features/rizline-best-image/rizline-ui-manifest": "./src/features/rizline-best-image/rizline-ui-manifest.ts",
+    "./features/rizline-random-charts-preferences": "./src/features/rizline-random-charts-preferences.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "@rranker/sdk": "0.1.0",
+    "react": "19.2.3",
+    "@rranker/game-rizline": "0.1.0",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "expo-file-system": "~57.0.7",
+    "expo-router": "~57.0.26",
+    "zod": "^4.4.3"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@rranker/tool-phira",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pages": "./src/pages.ts",
+    "./screens/PhiraRandomChartsScreen": "./src/screens/PhiraRandomChartsScreen.tsx"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "@rranker/sdk": "0.1.0",
+    "react": "19.2.3",
+    "@rranker/game-phira": "0.1.0"
+  }
+}

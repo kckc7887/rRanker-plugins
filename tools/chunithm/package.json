@@ -1,0 +1,39 @@
+{
+  "name": "@rranker/tool-chunithm",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pages": "./src/pages.ts",
+    "./screens/ChunithmRandomChartsScreen": "./src/screens/ChunithmRandomChartsScreen.tsx",
+    "./screens/ChunithmBestImageScreen": "./src/screens/ChunithmBestImageScreen.tsx",
+    "./pages/chunithm-rating": "./src/pages/chunithm-rating.tsx",
+    "./pages/chunithm-collections": "./src/pages/chunithm-collections.tsx",
+    "./features/chunithm-best-image/build-chunithm-best-image-html": "./src/features/chunithm-best-image/build-chunithm-best-image-html.ts",
+    "./features/chunithm-best-image/chunithm-best-image-background-picker": "./src/features/chunithm-best-image/chunithm-best-image-background-picker.tsx",
+    "./features/chunithm-best-image/chunithm-best-image-custom": "./src/features/chunithm-best-image/chunithm-best-image-custom.ts",
+    "./features/chunithm-best-image/chunithm-best-image-preferences": "./src/features/chunithm-best-image/chunithm-best-image-preferences.ts",
+    "./features/chunithm-best-image/chunithm-best-image-style-picker": "./src/features/chunithm-best-image/chunithm-best-image-style-picker.tsx",
+    "./features/chunithm-best-image/chunithm-best-image": "./src/features/chunithm-best-image/chunithm-best-image.ts",
+    "./features/chunithm-best-image/chunithm-ui-cache": "./src/features/chunithm-best-image/chunithm-ui-cache.ts",
+    "./features/chunithm-best-image/chunithm-ui-manifest": "./src/features/chunithm-best-image/chunithm-ui-manifest.ts",
+    "./features/chunithm-best-image/load-chunithm-best-image-jackets": "./src/features/chunithm-best-image/load-chunithm-best-image-jackets.ts",
+    "./features/chunithm-best-image/use-chunithm-best-image-assets": "./src/features/chunithm-best-image/use-chunithm-best-image-assets.ts",
+    "./features/chunithm-random-charts-preferences": "./src/features/chunithm-random-charts-preferences.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "peerDependencies": {
+    "@rranker/sdk": "0.1.0",
+    "react": "19.2.3",
+    "@rranker/game-chunithm": "0.1.0",
+    "react-native": "0.86.3"
+  },
+  "dependencies": {
+    "expo-file-system": "~57.0.7",
+    "expo-router": "~57.0.26",
+    "zod": "^4.4.3"
+  }
+}
